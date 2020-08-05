@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateInteracaoTicketsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('INTERACAO_TICKET', function (Blueprint $table) {
+            $table->increments('ID');
+            $table->integer('ID_TICKET');
+            $table->string('USUARIO', 20);
+            $table->text('MENSAGEM');
+            $table->string('ANEXO', 100);
+            $table->dateTime('CREATED_AT');
+            $table->dateTime('UPDATED_AT');
+            $table->softDeletes('DELETED_AT');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('interacao_tickets');
+    }
+}

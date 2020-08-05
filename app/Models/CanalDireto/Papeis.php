@@ -60,12 +60,12 @@ class Papeis extends Model
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      */
-    public $collection = "\App\Http\Resources\Ticket::collection";
+    public $collection = "\App\Http\Resources\Papeis::collection";
 
     /**
      * <b>resource</b>
      */
-    public $resource = "\App\Http\Resources\Ticket";
+    public $resource = "\App\Http\Resources\Papeis";
 
     /**
      * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
