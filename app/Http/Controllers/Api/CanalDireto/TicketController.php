@@ -70,6 +70,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
         $responseValidate =  $validate->original['response']['content'];

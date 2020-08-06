@@ -42,7 +42,6 @@ class Ticket extends Model
         'CATEGORIA',
         'ASSUNTO',
         'MENSAGEM',
-        'ANEXO',
         'USUARIO_FECHAMENTO',
         'DT_FECHAMENTO',
         'STATUS'
