@@ -22,7 +22,6 @@ class CreateTicketsTable extends Migration
             $table->string('CATEGORIA');
             $table->string('ASSUNTO');
             $table->text('MENSAGEM');
-            $table->string('ANEXO')->nullable();
             $table->string('USUARIO_FECHAMENTO')->nullable();
             $table->string('DT_FECHAMENTO')->nullable();
             $table->string('STATUS');
