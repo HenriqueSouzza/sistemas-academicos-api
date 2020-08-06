@@ -53,12 +53,11 @@ class Ticket extends Model
      */
     public $rules = [
         'USUARIO'               => 'bail|required|max:20',
-        'PAPEL_USUARIO'         => 'bail|required',
+        'PAPEL_USUARIO'         => 'bail|required|integer',
         'SETOR'                 => 'bail|required|max:200',
         'CATEGORIA'             => 'bail|required|max:200',
         'ASSUNTO'               => 'bail|required|max:200',
         'MENSAGEM'              => 'bail|required|max:500',
-        'ANEXO'                 => 'bail|max:50',
         'USUARIO_FECHAMENTO'    => 'bail|max:50',
         'DT_FECHAMENTO'         => 'bail|date',
         'STATUS'                => 'bail|required|max:20',
@@ -101,7 +100,6 @@ class Ticket extends Model
         'categoria'             => 'CATEGORIA',
         'assunto'               => 'ASSUNTO',
         'mensagem'              => 'MENSAGEM',
-        'anexo'                 => 'ANEXO',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
         'dt_fechamento'         => 'DT_FECHAMENTO',
         'status'                => 'STATUS'

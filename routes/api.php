@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::resources([
     '/canal-direto/ticket'        => 'Api\CanalDireto\TicketController',
     '/canal-direto/papeis'        => 'Api\CanalDireto\PapeisController',
+    '/canal-direto/setor'        => 'Api\CanalDireto\SetorController',
 
     'usuario'                     => 'Api\UserController'
 ]);
