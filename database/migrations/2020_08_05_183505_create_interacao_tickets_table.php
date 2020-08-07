@@ -13,7 +13,7 @@ class CreateInteracaoTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('INTERACAO_TICKET', function (Blueprint $table) {
+        Schema::create('cd.INTERACAO_TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->integer('ID_TICKET');
             $table->integer('PAPEL_USUARIO');
@@ -33,6 +33,6 @@ class CreateInteracaoTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('INTERACAO_TICKET');
+        Schema::dropIfExists('cd.INTERACAO_TICKET');
     }
 }

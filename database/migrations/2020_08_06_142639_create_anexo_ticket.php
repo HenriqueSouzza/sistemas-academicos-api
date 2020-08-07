@@ -13,7 +13,7 @@ class CreateAnexoTicket extends Migration
      */
     public function up()
     {
-        Schema::create('ANEXO_TICKET', function (Blueprint $table) {
+        Schema::create('cd.ANEXO_TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->integer('ID_TICKET');
             $table->integer('ID_INTERACAO');
@@ -31,6 +31,6 @@ class CreateAnexoTicket extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ANEXO_TICKET');
+        Schema::dropIfExists('cd.ANEXO_TICKET');
     }
 }

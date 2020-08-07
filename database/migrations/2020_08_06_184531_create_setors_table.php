@@ -13,7 +13,7 @@ class CreateSetorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('SETOR', function (Blueprint $table) {
+        Schema::create('cd.SETOR', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('DESCRICAO');
             $table->string('ATIVO');
@@ -31,6 +31,6 @@ class CreateSetorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('SETOR');
+        Schema::dropIfExists('cd.SETOR');
     }
 }

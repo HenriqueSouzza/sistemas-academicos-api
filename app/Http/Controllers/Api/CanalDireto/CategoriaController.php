@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api\CanalDireto;
 
-
-use App\Models\CanalDireto\Ticket;
+use App\Models\CanalDireto\Categoria;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
 
-class TicketController extends Controller
+class CategoriaController extends Controller
 {
 
-     /**
+
+    /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
      * que esta utilizando a mesma. Sendo assim temos um método index neste classe e um na ApiControllerTrait. 
      * Para não causar conflito é alterado o seu nome exemplo: index as protected indexTrait;
@@ -35,6 +35,7 @@ class TicketController extends Controller
      */
 
     protected $model;
+    
 
     /**
      * <b>relationships</b> Atributo responsável em guardar informações sobre relacionamentos especificados na models
@@ -43,15 +44,15 @@ class TicketController extends Controller
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
     protected $relationships = [];
-
+    
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Ticket $model)
+    public function __construct(Categoria $model)
     {
         $this->model = $model;
-    }
+    }    
 
     /**
      * Display a listing of the resource.
@@ -61,6 +62,16 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         return $this->indexTrait($request);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -81,31 +92,15 @@ class TicketController extends Controller
         }
 
         //Verifica se já existe o papel que foi informado
-        $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario,"Papel");
-
-         //Verifica se já existe o setor que foi informado
-         $ruleSetor = (Object) $this->model->ruleUnique($request->setor,"Setor");
-
-         //Verifica se já existe a categoria que foi informado
-         $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria,"Categoria");         
+        $ruleUnique = (Object) $this->model->ruleUnique($request->id_setor);
     
-        
-        if(isset($rulePapel->error))
+        if(isset($ruleUnique->error))
         {
-            return $this->createResponse($rulePapel, 422);
-
-        }else if (isset($ruleSetor->error))
-        {
-            return $this->createResponse($ruleSetor, 422);
-
-        }else if (isset($ruleCategoria->error))
-        {
-            return $this->createResponse($ruleCategoria, 422);
+            return $this->createResponse($ruleUnique, 422);
         }
 
         return $this->storeTrait($request);
     }
-
     /**
      * Display the specified resource.
      *
@@ -114,6 +109,17 @@ class TicketController extends Controller
     public function show($id)
     {
         return $this->showTrait($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -136,5 +142,4 @@ class TicketController extends Controller
     {
         return $this->destroyTrait($id);
     }
-
 }

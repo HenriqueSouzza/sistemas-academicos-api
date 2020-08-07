@@ -16,7 +16,7 @@ class Papeis extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'PAPEIS';
+    protected $table = 'cd.PAPEIS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela

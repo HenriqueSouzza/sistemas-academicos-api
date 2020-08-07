@@ -13,7 +13,7 @@ class CreatePapeisTable extends Migration
      */
     public function up()
     {
-        Schema::create('PAPEIS', function (Blueprint $table) {
+        Schema::create('cd.PAPEIS', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('PAPEL', 50);
             $table->string('DESCRICAO', 100);
@@ -30,6 +30,6 @@ class CreatePapeisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('PAPEIS');
+        Schema::dropIfExists('cd.PAPEIS');
     }
 }

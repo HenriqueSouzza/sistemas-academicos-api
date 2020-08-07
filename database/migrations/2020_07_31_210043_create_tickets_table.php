@@ -14,7 +14,7 @@ class CreateTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::create('TICKET', function (Blueprint $table) {
+        Schema::create('cd.TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('USUARIO');
             $table->integer('PAPEL_USUARIO');
@@ -38,6 +38,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('TICKET');
+        Schema::dropIfExists('cd.TICKET');
     }
 }

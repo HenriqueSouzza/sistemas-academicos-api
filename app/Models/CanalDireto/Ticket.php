@@ -16,7 +16,7 @@ class Ticket extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'TICKET';
+    protected $table = 'cd.TICKET';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -123,6 +123,24 @@ class Ticket extends Model
         return $this->belongsTo(Papeis::class, 'PAPEL_USUARIO', 'ID');
     }
 
+    /**
+     * <b>setor</b> Método responsável em definir o relacionamento entre as de Ticket e Setor e suas
+     * respectivas tabelas.
+     */
+    public function setor()
+    {
+        return $this->belongsTo(Setor::class, 'SETOR', 'ID');
+    }
+
+ /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Papeis e suas
+     * respectivas tabelas.
+     */
+    public function categoria()
+    {
+        return $this->belongsTo(Categotia::class, 'categoria', 'ID');
+    }    
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////// REGRAS DE NEGOCIO ////////////////////////////
     ///////////////////////////////////////////////////////////////////
@@ -134,15 +152,25 @@ class Ticket extends Model
     * @param $idPapel (id do papel)
     */
 
-    public function ruleUnique($idPapel)
-    {
-        $query = (Object) Papeis::whereRaw("ID={$idPapel}");
+    public function ruleUnique($id, $model)
+    {   
+            switch ($model) {
+                    case 'Setor':
+                        $query = (Object) Setor::whereRaw("ID={$id}");
+                    break;  
+                    case 'Categoria':
+                        $query = (Object) Categoria::whereRaw("ID={$id}");
+                    break;                                            
+                default:
+                    $query = (Object) Papeis::whereRaw("ID={$id}");
+                    break;
+            }
         
         $count = $query->get()->count();
 
         if($count < 1)
         {
-            $error['message'] = "O papel do usuário não existe!";
+            $error['message'] = $model." não Cadastrado (a).";
             $error['error']   = true;
 
             return $error;

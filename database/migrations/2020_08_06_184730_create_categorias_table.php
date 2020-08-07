@@ -13,9 +13,15 @@ class CreateCategoriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('cd.CATEGORIA', function (Blueprint $table) {
+            $table->increments('ID');
+            $table->integer('ID_SETOR');
+            $table->string('DESCRICAO');
+            $table->string('ATIVO');
+            $table->string('USUARIO');
+            $table->dateTime('CREATED_AT');
+            $table->dateTime('UPDATED_AT');
+            $table->softDeletes('DELETED_AT');  
         });
     }
 
@@ -26,6 +32,6 @@ class CreateCategoriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('cd.CATEGORIA');
     }
 }

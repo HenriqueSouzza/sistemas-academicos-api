@@ -18,7 +18,7 @@ class Setor extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'SETOR';    
+    protected $table = 'cd.SETOR';    
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
