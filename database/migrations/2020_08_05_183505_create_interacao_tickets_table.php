@@ -16,7 +16,7 @@ class CreateInteracaoTicketsTable extends Migration
         Schema::create('cd.INTERACAO_TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->integer('ID_TICKET');
-            $table->integer('PAPEL_USUARIO');
+            $table->integer('ID_PAPEL_USUARIO');
             $table->string('USUARIO', 20);
             $table->text('MENSAGEM');
             $table->string('SITUACAO', 100);

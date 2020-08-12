@@ -92,7 +92,7 @@ class CategoriaController extends Controller
         }
 
         //Verifica se já existe o papel que foi informado
-        $ruleUnique = (Object) $this->model->ruleUnique($request->id_setor);
+        $ruleUnique = (Object) $this->model->ruleUnique($request->setor);
     
         if(isset($ruleUnique->error))
         {

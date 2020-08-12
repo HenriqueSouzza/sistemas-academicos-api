@@ -35,10 +35,10 @@ class Categoria extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'ID_SETOR' => 'bail|required|integer',
+        'ID_SETOR'  => 'bail|required|integer',
         'DESCRICAO' => 'bail|required',
-        'ATIVO' => 'bail|required|max:1',
-        'USUARIO' => 'bail|required'
+        'ATIVO'     => 'bail|required|max:1',
+        'USUARIO'   => 'bail|required'
     ];   
     
 
@@ -73,7 +73,7 @@ class Categoria extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'id_setor'         => 'ID_SETOR',
+        'setor'             => 'ID_SETOR',
         'descricao'         => 'DESCRICAO',
         'ativo'             => 'ATIVO',
         'usuario'           => 'USUARIO',
