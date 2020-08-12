@@ -51,7 +51,7 @@ class Ticket extends Model
      */
     public $rules = [
         'USUARIO'               => 'bail|required|max:20',
-        'ID_PAPEL_USUARIO'         => 'bail|required|integer',
+        'ID_PAPEL_USUARIO'      => 'bail|required|integer',
         'ID_SETOR'              => 'bail|required|integer',
         'ID_CATEGORIA'          => 'bail|required|integer',
         'ASSUNTO'               => 'bail|required|max:200',
@@ -136,7 +136,7 @@ class Ticket extends Model
      */
     public function categoria()
     {
-        return $this->belongsTo(Categotia::class, 'ID_CATEGORIA', 'ID');
+        return $this->belongsTo(Categoria::class, 'ID_CATEGORIA', 'ID');
     }    
 
     ///////////////////////////////////////////////////////////////////

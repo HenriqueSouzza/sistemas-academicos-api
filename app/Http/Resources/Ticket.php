@@ -17,9 +17,9 @@ class Ticket extends JsonResource
         return [
             'id'                    => $this->ID,
             'usuario_abertura'      => $this->USUARIO,
-            'papel_usuario'         => $this->PAPEL_USUARIO,
-            'setor'                 => $this->SETOR,
-            'categoria'             => $this->CATEGORIA,
+            'papel_usuario'         => $this->ID_PAPEL_USUARIO,
+            'setor'                 => $this->SETOR->DESCRICAO,
+            'categoria'             => $this->CATEGORIA->DESCRICAO,
             'assunto'               => $this->ASSUNTO,
             'mensagem'              => $this->MENSAGEM,
             'usuario_fechamento'    => $this->USUARIO_FECHAMENTO,
