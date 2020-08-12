@@ -35,9 +35,7 @@ class Ticket extends Model
      */
     protected $fillable = [
         'USUARIO',
-        'PAPEL_USUARIO',
-        'USUARIO',
-        'TIPO_USUARIO',
+        'ID_PAPEL_USUARIO',
         'ID_SETOR',
         'ID_CATEGORIA',
         'ASSUNTO',
@@ -53,7 +51,7 @@ class Ticket extends Model
      */
     public $rules = [
         'USUARIO'               => 'bail|required|max:20',
-        'PAPEL_USUARIO'         => 'bail|required|integer',
+        'ID_PAPEL_USUARIO'         => 'bail|required|integer',
         'ID_SETOR'              => 'bail|required|integer',
         'ID_CATEGORIA'          => 'bail|required|integer',
         'ASSUNTO'               => 'bail|required|max:200',
@@ -95,7 +93,7 @@ class Ticket extends Model
      */
     public $map = [
         'usuario'               => 'USUARIO',
-        'papel_usuario'         => 'PAPEL_USUARIO',
+        'papel_usuario'         => 'ID_PAPEL_USUARIO',
         'setor'                 => 'ID_SETOR',
         'categoria'             => 'ID_CATEGORIA',
         'assunto'               => 'ASSUNTO',
@@ -120,7 +118,7 @@ class Ticket extends Model
      */
     public function papeis()
     {
-        return $this->belongsTo(Papeis::class, 'PAPEL_USUARIO', 'ID');
+        return $this->belongsTo(Papeis::class, 'ID_PAPEL_USUARIO', 'ID');
     }
 
     /**
@@ -132,7 +130,7 @@ class Ticket extends Model
         return $this->belongsTo(Setor::class, 'ID_SETOR', 'ID');
     }
 
- /**
+    /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Papeis e suas
      * respectivas tabelas.
      */

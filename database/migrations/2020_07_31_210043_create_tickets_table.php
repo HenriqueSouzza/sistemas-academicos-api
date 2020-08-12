@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
         Schema::create('cd.TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('USUARIO');
-            $table->integer('PAPEL_USUARIO');
+            $table->integer('ID_PAPEL_USUARIO');
             $table->string('ID_SETOR');
             $table->string('ID_CATEGORIA');
             $table->string('ASSUNTO');

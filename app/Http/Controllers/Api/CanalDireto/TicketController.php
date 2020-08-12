@@ -83,12 +83,11 @@ class TicketController extends Controller
         //Verifica se já existe o papel que foi informado
         $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario,"Papel");
 
-         //Verifica se já existe o setor que foi informado
-         $ruleSetor = (Object) $this->model->ruleUnique($request->setor,"Setor");
+        //Verifica se já existe o setor que foi informado
+        $ruleSetor = (Object) $this->model->ruleUnique($request->setor,"Setor");
 
-         //Verifica se já existe a categoria que foi informado
-         $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria,"Categoria");         
-    
+        //Verifica se já existe a categoria que foi informado
+        $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria,"Categoria");         
         
         if(isset($rulePapel->error))
         {
