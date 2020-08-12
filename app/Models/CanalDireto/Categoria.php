@@ -77,7 +77,6 @@ class Categoria extends Model
         'descricao'         => 'DESCRICAO',
         'ativo'             => 'ATIVO',
         'usuario'           => 'USUARIO',
-
     ];    
 
     /**
