@@ -38,8 +38,8 @@ class Ticket extends Model
         'PAPEL_USUARIO',
         'USUARIO',
         'TIPO_USUARIO',
-        'SETOR',
-        'CATEGORIA',
+        'ID_SETOR',
+        'ID_CATEGORIA',
         'ASSUNTO',
         'MENSAGEM',
         'USUARIO_FECHAMENTO',
@@ -54,8 +54,8 @@ class Ticket extends Model
     public $rules = [
         'USUARIO'               => 'bail|required|max:20',
         'PAPEL_USUARIO'         => 'bail|required|integer',
-        'SETOR'                 => 'bail|required|max:200',
-        'CATEGORIA'             => 'bail|required|max:200',
+        'ID_SETOR'              => 'bail|required|integer',
+        'ID_CATEGORIA'          => 'bail|required|integer',
         'ASSUNTO'               => 'bail|required|max:200',
         'MENSAGEM'              => 'bail|required|max:500',
         'USUARIO_FECHAMENTO'    => 'bail|max:50',
@@ -96,8 +96,8 @@ class Ticket extends Model
     public $map = [
         'usuario'               => 'USUARIO',
         'papel_usuario'         => 'PAPEL_USUARIO',
-        'setor'                 => 'SETOR',
-        'categoria'             => 'CATEGORIA',
+        'setor'                 => 'ID_SETOR',
+        'categoria'             => 'ID_CATEGORIA',
         'assunto'               => 'ASSUNTO',
         'mensagem'              => 'MENSAGEM',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
@@ -129,7 +129,7 @@ class Ticket extends Model
      */
     public function setor()
     {
-        return $this->belongsTo(Setor::class, 'SETOR', 'ID');
+        return $this->belongsTo(Setor::class, 'ID_SETOR', 'ID');
     }
 
  /**
@@ -138,7 +138,7 @@ class Ticket extends Model
      */
     public function categoria()
     {
-        return $this->belongsTo(Categotia::class, 'categoria', 'ID');
+        return $this->belongsTo(Categotia::class, 'ID_CATEGORIA', 'ID');
     }    
 
     ///////////////////////////////////////////////////////////////////
@@ -154,23 +154,23 @@ class Ticket extends Model
 
     public function ruleUnique($id, $model)
     {   
-            switch ($model) {
-                    case 'Setor':
-                        $query = (Object) Setor::whereRaw("ID={$id}");
-                    break;  
-                    case 'Categoria':
-                        $query = (Object) Categoria::whereRaw("ID={$id}");
-                    break;                                            
-                default:
-                    $query = (Object) Papeis::whereRaw("ID={$id}");
-                    break;
-            }
+        switch ($model) {
+            case 'Setor':
+                $query = (Object) Setor::whereRaw("ID={$id}");
+            break;  
+            case 'Categoria':
+                $query = (Object) Categoria::whereRaw("ID={$id}");
+            break;                                            
+            default:
+                $query = (Object) Papeis::whereRaw("ID={$id}");
+            break;
+        }
         
         $count = $query->get()->count();
 
         if($count < 1)
         {
-            $error['message'] = $model." não Cadastrado (a).";
+            $error['message'] = $model . " não Cadastrado (a).";
             $error['error']   = true;
 
             return $error;

@@ -18,8 +18,8 @@ class CreateTicketsTable extends Migration
             $table->increments('ID');
             $table->string('USUARIO');
             $table->integer('PAPEL_USUARIO');
-            $table->string('SETOR');
-            $table->string('CATEGORIA');
+            $table->string('ID_SETOR');
+            $table->string('ID_CATEGORIA');
             $table->string('ASSUNTO');
             $table->text('MENSAGEM');
             $table->string('USUARIO_FECHAMENTO')->nullable();
