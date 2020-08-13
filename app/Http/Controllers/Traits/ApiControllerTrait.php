@@ -139,8 +139,19 @@ trait ApiControllerTrait
         $result = $this->model->findOrFail($id);
         $values = $this->columnsInsert($request);
 
-        $validate = validator($values, $this->model->rules, $this->model->messages);
+        //If para validar somente as chaves que foram passadas
+        if(in_array(key($values), array_keys($this->model->rules))){ 
 
+            $arrayRole = [
+                key($values)=> $this->model->rules[key($values)]
+            ];
+
+            $validate = validator($values, $arrayRole, $this->model->messages);
+            
+        }else{
+            $validate = validator($values, $this->model->rules, $this->model->messages);
+        }
+        
         if ($validate->fails()) {
             $errors['messages'] = $this->columnsShow($validate->errors());
             $errors['error']    = true;
