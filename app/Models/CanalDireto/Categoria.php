@@ -23,6 +23,10 @@ class Categoria extends Model
      */
     protected $primaryKey = "ID";  
     
+    /**
+     * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
+     *  
+     */
     protected $fillable = [
         'ID_SETOR',
         'DESCRICAO',

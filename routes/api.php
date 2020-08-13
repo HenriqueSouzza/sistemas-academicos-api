@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::resources([
-    '/canal-direto/ticket'        => 'Api\CanalDireto\TicketController',
-    '/canal-direto/papeis'        => 'Api\CanalDireto\PapeisController',
-    '/canal-direto/setor'        => 'Api\CanalDireto\SetorController',
-    '/canal-direto/categoria'        => 'Api\CanalDireto\CategoriaController',
-
-    'usuario'                     => 'Api\UserController'
+    '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
+    '/canal-direto/interacao-ticket'    => 'Api\CanalDireto\InteracaoTicketController',
+    '/canal-direto/papeis'              => 'Api\CanalDireto\PapeisController',
+    '/canal-direto/setor'               => 'Api\CanalDireto\SetorController',
+    '/canal-direto/categoria'           => 'Api\CanalDireto\CategoriaController',
+    // 'usuario'                     => 'Api\UserController'
 ]);

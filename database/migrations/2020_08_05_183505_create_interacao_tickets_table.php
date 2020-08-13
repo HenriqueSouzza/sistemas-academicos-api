@@ -17,9 +17,9 @@ class CreateInteracaoTicketsTable extends Migration
             $table->increments('ID');
             $table->integer('ID_TICKET');
             $table->integer('ID_PAPEL_USUARIO');
-            $table->string('USUARIO', 20);
+            $table->string('USUARIO_INTERACAO', 20);
             $table->text('MENSAGEM');
-            $table->string('SITUACAO', 100);
+            $table->string('ACAO', 100);
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');

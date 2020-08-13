@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Api\CanalDireto;
 
-
-use App\Models\CanalDireto\Ticket;
+use App\Models\CanalDireto\InteracaoTicket;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
 
-class TicketController extends Controller
+class InteracaoTicketController extends Controller
 {
 
-    /**
+     /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
      * que esta utilizando a mesma. Sendo assim temos um método index neste classe e um na ApiControllerTrait. 
      * Para não causar conflito é alterado o seu nome exemplo: index as protected indexTrait;
@@ -28,7 +27,7 @@ class TicketController extends Controller
         destroy as protected destroyTrait;
     }
 
-     /**
+    /**
      * <b>model</b> Atributo responsável em guardar informações a respeito de qual model a controller ira utilizar. 
      * Por causa do D.I (injeção de dependencia feita) o mesmo armazena um objeto da classe que ira ser utilizada.
      * OBS: Este atributo é utilizado na ApiControllerTrait, para diferenciar qual classe esta utilizando os seus recursos
@@ -41,13 +40,13 @@ class TicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = [];
+    protected $relationships = ['Ticket', 'Papeis'];
 
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Ticket $model)
+    public function __construct(InteracaoTicket $model)
     {
         $this->model = $model;
     }
@@ -61,6 +60,7 @@ class TicketController extends Controller
     {
         return $this->indexTrait($request);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -79,32 +79,26 @@ class TicketController extends Controller
             return $validate;
         }
 
+
         //Verifica se já existe o papel que foi informado
-        $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario,"Papel");
+        $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario, "Papel");
 
-        //Verifica se já existe o setor que foi informado
-        $ruleSetor = (Object) $this->model->ruleUnique($request->setor,"Setor");
-
-        //Verifica se já existe a categoria que foi informado
-        $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria,"Categoria");         
+        //Verifica se já existe o ticket que foi informado
+        $ruleTicket = (Object) $this->model->ruleUnique($request->id_ticket, "Ticket");         
         
         if(isset($rulePapel->error))
         {
             return $this->createResponse($rulePapel, 422);
 
-        }else if (isset($ruleSetor->error))
+        }else if (isset($ruleTicket->error))
         {
-            return $this->createResponse($ruleSetor, 422);
-
-        }else if (isset($ruleCategoria->error))
-        {
-            return $this->createResponse($ruleCategoria, 422);
+            return $this->createResponse($ruleTicket, 422);
         }
 
         return $this->storeTrait($request);
     }
 
-    /**
+   /**
      * Display the specified resource.
      *
      * @return \Illuminate\Http\Response
@@ -134,5 +128,4 @@ class TicketController extends Controller
     {
         return $this->destroyTrait($id);
     }
-
 }

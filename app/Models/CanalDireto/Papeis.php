@@ -24,6 +24,12 @@ class Papeis extends Model
     protected $primaryKey = "ID";
 
     /**
+     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
+     *
+     */
+    // protected $dateFormat = 'ymd';
+
+    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
@@ -72,8 +78,8 @@ class Papeis extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'papel'       => 'PAPEL',
-        'descricao'  => 'DESCRICAO',
+        'papel'     => 'PAPEL',
+        'descricao' => 'DESCRICAO',
     ];
 
     /**

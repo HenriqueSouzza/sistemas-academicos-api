@@ -14,6 +14,14 @@ class InteracaoTicket extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'                => $this->ID,
+            'id_ticket'         => $this->ID_TICKET,
+            'papel_usuario'     => $this->ID_PAPEL_USUARIO,
+            'usuario_interacao' => $this->USUARIO_INTERACAO,
+            'mensagem'          => $this->MENSAGEM,
+            'acao'              => $this->ACAO,
+            'dt_criacao'        => $this->CREATED_AT
+        ];
     }
 }
