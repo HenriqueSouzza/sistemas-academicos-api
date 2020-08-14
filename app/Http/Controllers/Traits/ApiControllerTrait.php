@@ -139,18 +139,25 @@ trait ApiControllerTrait
         $result = $this->model->findOrFail($id);
         $values = $this->columnsInsert($request);
 
-        //If para validar somente as chaves que foram passadas
-        if(in_array(key($values), array_keys($this->model->rules))){ 
+        $arrayRole = array();
 
-            $arrayRole = [
-                key($values)=> $this->model->rules[key($values)]
-            ];
+        foreach($values as $key => $val):
 
-            $validate = validator($values, $arrayRole, $this->model->messages);
+            if(in_array($key, array_keys($this->model->rules))){
+                $arrayRole[$key] = $this->model->rules[$key];
+            }
             
-        }else{
+        endforeach;
+
+        if(count($arrayRole) > 0):
+            
+            $validate = validator($values, $arrayRole, $this->model->messages);
+
+        else:
+
             $validate = validator($values, $this->model->rules, $this->model->messages);
-        }
+
+        endif;
         
         if ($validate->fails()) {
             $errors['messages'] = $this->columnsShow($validate->errors());
@@ -243,6 +250,7 @@ trait ApiControllerTrait
                     $valueInsert = $request->input($column);
                     $columnsAndValues[$columnInsert] = $valueInsert;
                 }
+
             } else {
                 if (array_key_exists($column, $columnsModel)) {
                     $columnInsert = $columnsModel[$column];
