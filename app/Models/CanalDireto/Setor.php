@@ -29,8 +29,7 @@ class Setor extends Model
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
-    protected $fillable = [
-                            'DESCRICAO',
+    protected $fillable = [ 'DESCRICAO',
                             'ATIVO',
                             'USUARIO'
                         ];    
@@ -79,6 +78,7 @@ class Setor extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
+        "setor" => 'ID',
         "descricao" => 'DESCRICAO',
         "ativo" => 'ATIVO',
         "usuario" => 'USUARIO'
