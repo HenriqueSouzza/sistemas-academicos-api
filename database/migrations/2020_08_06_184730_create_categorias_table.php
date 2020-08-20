@@ -18,6 +18,10 @@ class CreateCategoriasTable extends Migration
             $table->integer('ID_SETOR');
             $table->string('DESCRICAO');
             $table->string('ATIVO');
+            $table->string('PERMITE_ABERTURA');
+            $table->string('PERMITE_INTERACAO');
+            //PERMITE A ABERTURA DE VARIOS TICKETS DA MESMA CATEGORIA
+            $table->string('PERMITE_N_TICKETS');
             $table->string('USUARIO');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');

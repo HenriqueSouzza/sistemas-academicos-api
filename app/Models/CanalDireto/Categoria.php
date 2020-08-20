@@ -31,6 +31,9 @@ class Categoria extends Model
         'ID_SETOR',
         'DESCRICAO',
         'ATIVO',
+        'PERMITE_ABERTURA',
+        'PERMITE_INTERACAO',
+        'PERMITE_N_TICKETS',      
         'USUARIO',
     ];   
     
@@ -39,10 +42,13 @@ class Categoria extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'ID_SETOR'  => 'bail|required|integer',
-        'DESCRICAO' => 'bail|required',
-        'ATIVO'     => 'bail|required|max:1',
-        'USUARIO'   => 'bail|required'
+        'ID_SETOR'          => 'bail|required|integer',
+        'DESCRICAO'         => 'bail|required',
+        'ATIVO'             => 'bail|required|max:1',
+        'PERMITE_ABERTURA'  => 'bail|required|max:1',
+        'PERMITE_INTERACAO' => 'bail|required|max:1',
+        'PERMITE_N_TICKETS' => 'bail|required|max:1',        
+        'USUARIO'           => 'bail|required'
     ];   
     
 
@@ -77,10 +83,13 @@ class Categoria extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'setor'             => 'ID_SETOR',
-        'descricao'         => 'DESCRICAO',
-        'ativo'             => 'ATIVO',
-        'usuario'           => 'USUARIO',
+        'setor'              => 'ID_SETOR',
+        'descricao'          => 'DESCRICAO',
+        'ativo'              => 'ATIVO',
+        'permite_abertura'   => 'PERMITE_ABERTURA',
+        'permite_interacao'  => 'PERMITE_INTERACAO',
+        'permite_n_tickets'  => 'PERMITE_N_TICKETS',
+        'usuario'            => 'USUARIO',
     ];    
 
     /**
