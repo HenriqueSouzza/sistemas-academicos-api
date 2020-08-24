@@ -6,12 +6,13 @@ use App\Models\CanalDireto\InteracaoTicket;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
+use App\Http\Controllers\Api\CanalDireto\AnexoTicketController;
 use App\Http\Controllers\Controller;
 
 class InteracaoTicketController extends Controller
 {
 
-     /**
+    /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
      * que esta utilizando a mesma. Sendo assim temos um método index neste classe e um na ApiControllerTrait. 
      * Para não causar conflito é alterado o seu nome exemplo: index as protected indexTrait;
@@ -40,15 +41,18 @@ class InteracaoTicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = ['Ticket', 'Papeis'];
+    protected $relationships = [];
+
+    protected $AnexoTicketController;
 
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(InteracaoTicket $model)
+    public function __construct(InteracaoTicket $model, AnexoTicketController $anexo)
     {
         $this->model = $model;
+        $this->AnexoTicketController = $anexo;
     }
 
     /**
@@ -70,8 +74,23 @@ class InteracaoTicketController extends Controller
     public function store(Request $request)
     {
 
+
+        $this->AnexoTicketController->setPathFile('CanalDireto/interacoes');
+
+        var_dump($this->AnexoTicketController->getPathFile());die();
+
+        $this->AnexoTicketController->saveArchive($request);
+        // $path = $request->file('canalDireto')->store('interacoes');
+
+        // var_dump($path);die();
+
+        // $name = $this->saveArchive($request->arquivo);
+
+        // var_dump($name);die();
+
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
+
         $responseValidate =  $validate->original['response']['content'];
 
         if(isset($responseValidate->error))
@@ -79,12 +98,12 @@ class InteracaoTicketController extends Controller
             return $validate;
         }
 
-
         //Verifica se já existe o papel que foi informado
         $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario, "Papel");
-
+        
         //Verifica se já existe o ticket que foi informado
         $ruleTicket = (Object) $this->model->ruleUnique($request->id_ticket, "Ticket");         
+
         
         if(isset($rulePapel->error))
         {
@@ -128,4 +147,10 @@ class InteracaoTicketController extends Controller
     {
         return $this->destroyTrait($id);
     }
+
+
+    private function saveArchive($file){
+
+        
+    }   
 }
