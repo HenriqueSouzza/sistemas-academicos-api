@@ -115,15 +115,15 @@ class InteracaoTicket extends Model
     }
 
     ///////////////////////////////////////////////////////////////////
-    ///////////////////// REGRAS DE NEGOCIO ////////////////////////////
+    ///////////////////// REGRAS DE NEGOCIO ///////////////////////////
     ///////////////////////////////////////////////////////////////////
 
     /**
-    * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
-    * REGRA : Verifica se existe o papel e o ticket informado, caso não exista retornará uma mensagem de erro
-    * caso contrario retorna true
-    * @param $id 
-    * @param $model 
+     * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
+     * REGRA : Verifica se existe o papel e o ticket informado, caso não exista retornará uma mensagem de erro
+     * caso contrario retorna true
+     * @param $id 
+     * @param $model 
     */
     public function ruleUnique($id, $model)
     {   

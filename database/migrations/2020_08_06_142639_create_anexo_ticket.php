@@ -16,7 +16,7 @@ class CreateAnexoTicket extends Migration
         Schema::create('cd.ANEXO_TICKET', function (Blueprint $table) {
             $table->increments('ID');
             $table->integer('ID_TICKET');
-            $table->integer('ID_INTERACAO');
+            $table->integer('ID_INTERACAO_TICKET')->nullable();
             $table->integer('ARQUIVO');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');

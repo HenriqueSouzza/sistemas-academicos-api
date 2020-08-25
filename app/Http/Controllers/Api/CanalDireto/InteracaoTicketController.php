@@ -74,20 +74,6 @@ class InteracaoTicketController extends Controller
     public function store(Request $request)
     {
 
-
-        $this->AnexoTicketController->setPathFile('CanalDireto/interacoes');
-
-        var_dump($this->AnexoTicketController->getPathFile());die();
-
-        $this->AnexoTicketController->saveArchive($request);
-        // $path = $request->file('canalDireto')->store('interacoes');
-
-        // var_dump($path);die();
-
-        // $name = $this->saveArchive($request->arquivo);
-
-        // var_dump($name);die();
-
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
 
@@ -112,6 +98,16 @@ class InteracaoTicketController extends Controller
         }else if (isset($ruleTicket->error))
         {
             return $this->createResponse($ruleTicket, 422);
+        }
+
+        $insert = $this->storeTrait($request);
+
+        $dados = json_decode($insert->getContent());
+
+        $resultUpload = $this->saveArchive($request, $dados);
+        
+        if(isset($data->response->errorUpload)){
+            return $data->response->errorUpload->message;
         }
 
         return $this->storeTrait($request);
@@ -148,9 +144,36 @@ class InteracaoTicketController extends Controller
         return $this->destroyTrait($id);
     }
 
+    /**
+     * Tratar os arquivos que serão salvos
+     */
+    private function saveArchive($request, $data){
 
-    private function saveArchive($file){
+        $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png']);
 
+        $this->AnexoTicketController->setPathFile('CanalDireto/interacoes');
         
+        $this->AnexoTicketController->setNameFile('teste');
+
+        $addFile = $this->AnexoTicketController->addFile($request->arquivo);
+
+        if(!$addFile){
+            
+            $error['message'] = $this->AnexoTicketController->getErrorSaveFile();
+
+            $data->response->errorUpload = (object) $error;
+
+            return $data;
+        }
+
+        $data = [
+            'ID_TICKET' => $request->id_ticket,
+            'ID_INTERACAO_TICKET' => $data->response->content->id,
+            'ARQUIVO' => $addFile
+        ];
+
+        $result = $this->AnexoTicketController->store($data);
+
+        return $result;
     }   
 }

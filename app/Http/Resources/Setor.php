@@ -15,12 +15,12 @@ class Setor extends JsonResource
     public function toArray($request)
     {
         return [
-           'id'             => $this->ID,
+            'id'            => $this->ID,
             'descricao'     => $this->DESCRICAO,
             'ativo'         => $this->ATIVO,
             'usuario'       => $this->USUARIO,
             'created_at'    => $this->CREATED_AT,
-            'updated_at'    =>$this->UPDATED_AT,
+            'updated_at'    => $this->UPDATED_AT,
             'deleted_at'    => $this->DELETED_AT
         ];
     }

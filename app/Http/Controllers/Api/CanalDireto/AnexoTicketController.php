@@ -11,23 +11,40 @@ use App\Http\Controllers\Controller;
 class AnexoTicketController extends Controller
 {
 
-
     /**
-     * Define os tipos de arquivos permitidos
+     * 
      */
-    private $extensionPermitted = [];
-
+    private $idInteracaoTicket = '';
 
     /**
-     * Define o caminho que será salvo dentro da pasta "Storage\App"
+     * 
+     */
+    private $idTicket = '';
+
+    /**
+     * Atributo para definir os tipos de arquivo permitidos;
+     */
+    private $AcceptFile = [];
+
+    /**
+     * Atributo para definir o caminho que será salvo dentro da pasta "Storage\App"
      */
     private $pathFile = '';
 
     /**
-     * Define o nome do arquivo que será salvo
+     * Atributo para definir o nome do arquivo que será salvo
      */
     private $nameFile = '';
 
+    /**
+     * Atributo para definir o tamanho do arquivo que será aceito em byte
+     */
+    private $sizeFile = 5000000;
+
+    /**
+     * Atributo para guardar as mensagens caso tive algum erro
+     */
+    private $errorSaveFile = '';
 
     /**
      * <b>model</b> Atributo responsável em guardar informações a respeito de qual model a controller ira utilizar. 
@@ -53,36 +70,106 @@ class AnexoTicketController extends Controller
         $this->model = $model;
     }
 
-    private function setPathFile($path){
+    public function setIdTicket($idTicket){
+        $this->idTicket = $idTicket;
+    }
+
+    public function setIdInteracaoTicket($idInteracaoTicket){
+        $this->idInteracaoTicket = $idInteracaoTicket;
+    }
+
+    public function setAcceptFile($acceptFile){
+        $this->AcceptFile = $acceptFile;
+    }
+
+    public function setPathFile($path){
         $this->pathFile = $path;
     }
 
-    private function setNameFile($nameFile){
-        $this->nameFile = $path;
+    public function setNameFile($nameFile){
+        $this->nameFile = $nameFile;
     }
 
-    private function getPathFile(){
+    public function getIdTicket(){
+        return $this->idTicket;
+    }
+
+    public function getIdInteracaoTicket(){
+        return $this->idInteracaoTicket;
+    }
+
+    public function getAcceptFile(){
+        return $this->AcceptFile;
+    }
+
+    public function getPathFile(){
         return $this->pathFile;
     }
 
-    private function getNameFile(){
-        return $this->nameFile = $path;
+    public function getNameFile(){
+        return $this->nameFile;
+    }
+
+    public function getErrorSaveFile(){
+        return $this->errorSaveFile;
+    }
+
+    /**
+     * Faz as validações e guarda o arquivo dentro da pasta "Storage\app" na raíz do projeto
+     */
+    public function addFile($file){
+
+        //Nome do arquivo original
+        $nameFileOriginal = $file->getClientOriginalName();
+
+        //pega o mime(type) do arquivo
+        $acceptFile = $file->getClientMimeType();
+
+        if(!in_array($acceptFile, $this->AcceptFile)){
+
+            $this->errorSaveFile = "O arquivo ('$nameFileOriginal') possui o tipo não permitido";
+
+            return false;
+        }
+
+        //pega tamanho do arquivo
+        $sizeFile = $file->getSize();
+
+        //Valida o tamanho do arquivo
+        if($sizeFile > $this->sizeFile):
+
+            $this->errorSaveFile = "O arquivo ('$nameFileOriginal') possui o tamanho não permitido";
+
+            return false;
+
+        endif;
+
+        $pathFile = $file->storeAs($this->pathFile, $this->nameFile . '.' . $file->extension());
+
+        return $pathFile;
+
     }
 
     /**
      * 
      */
-    public function saveArchive($request){
+    public function store($values){
+
+        $validate = validator($values, $this->model->rules, $this->model->messages);
         
-        //pega o type do arquivo
-        $typeArchive = $request->arquivo->getClientMimeType();
+        if ($validate->fails()) {
 
-        //pega extensao do arquivo
-        $extension = $request->file('img_itens')->getClientOriginalExtension();
+            $errors['message'] = $validate->errors();
+            $errors['error'] = true;
+            
+            return $errors;
+        }
 
-        $result = $request->file('arquivo')->storeAs(
-            $this->pathFile, $this->nameFile . '.' .$request->file('arquivo')->extension()
-        );
+        $result = $this->model->create($values);
+
+        return $result;
 
     }
+
+    
 }
