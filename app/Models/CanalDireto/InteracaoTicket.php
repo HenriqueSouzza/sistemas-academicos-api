@@ -105,13 +105,22 @@ class InteracaoTicket extends Model
         return $this->belongsTo(Setor::class, 'ID_TICKET', 'ID');
     }   
 
-     /**
+    /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as de InteracaoTickets e Papeis e suas
      * respectivas tabelas.
      */
     public function papeis()
     {
         return $this->belongsTo(Papeis::class, 'ID_PAPEL_USUARIO', 'ID');
+    }
+
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de InteracaoTickets e anexoTicket e suas
+     * respectivas tabelas.
+     */
+    public function anexoTicket()
+    {
+        return $this->hasMany(AnexoTicket::class, 'ID_INTERACAO_TICKET', 'ID');
     }
 
     ///////////////////////////////////////////////////////////////////

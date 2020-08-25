@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class InteracaoTicket extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -14,6 +15,14 @@ class InteracaoTicket extends JsonResource
      */
     public function toArray($request)
     {
+
+        $arquivo = array();
+
+        //Anexos da interacao
+        foreach($this->AnexoTicket as $key => $val):
+            $arquivo[$key] = $this->AnexoTicket[$key]->ARQUIVO;
+        endforeach;
+
         return [
             'id'                => $this->ID,
             'id_ticket'         => $this->ID_TICKET,
@@ -21,6 +30,7 @@ class InteracaoTicket extends JsonResource
             'usuario_interacao' => $this->USUARIO_INTERACAO,
             'mensagem'          => $this->MENSAGEM,
             'acao'              => $this->ACAO,
+            'arquivo'           => $arquivo,
             'dt_criacao'        => $this->CREATED_AT
         ];
     }

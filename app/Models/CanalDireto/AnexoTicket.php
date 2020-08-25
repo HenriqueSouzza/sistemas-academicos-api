@@ -28,7 +28,6 @@ class AnexoTicket extends Model
      *  
      */
     protected $fillable = [
-        'ID',
         'ID_TICKET',
         'ID_INTERACAO_TICKET',
         'ARQUIVO',

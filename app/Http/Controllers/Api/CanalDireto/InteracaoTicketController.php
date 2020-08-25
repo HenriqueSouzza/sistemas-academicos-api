@@ -41,8 +41,11 @@ class InteracaoTicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = [];
+    protected $relationships = ['AnexoTicket'];
 
+    /**
+     * Reponsável para impressa de anexos 
+     */
     protected $AnexoTicketController;
 
     /**
@@ -104,13 +107,15 @@ class InteracaoTicketController extends Controller
 
         $dados = json_decode($insert->getContent());
 
-        $resultUpload = $this->saveArchive($request, $dados);
-        
-        if(isset($data->response->errorUpload)){
-            return $data->response->errorUpload->message;
+        if($request->arquivo){
+            
+            $resultUpload = $this->saveArchive($request, $dados);
+
+            $insert->setContent(json_encode($resultUpload));
+
         }
 
-        return $this->storeTrait($request);
+        return $insert;
     }
 
    /**
@@ -149,31 +154,44 @@ class InteracaoTicketController extends Controller
      */
     private function saveArchive($request, $data){
 
-        $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png']);
+        $files = $request->arquivo;
 
-        $this->AnexoTicketController->setPathFile('CanalDireto/interacoes');
-        
-        $this->AnexoTicketController->setNameFile('teste');
+        $error = [];
 
-        $addFile = $this->AnexoTicketController->addFile($request->arquivo);
+        foreach($files as $key => $val):
 
-        if(!$addFile){
+            $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png']);
+
+            $this->AnexoTicketController->setPathFile('canal-direto/interacoes');
             
-            $error['message'] = $this->AnexoTicketController->getErrorSaveFile();
+            $this->AnexoTicketController->setNameFile('teste');
 
-            $data->response->errorUpload = (object) $error;
+            $addFile = $this->AnexoTicketController->addFile($val);
 
-            return $data;
-        }
+            if(!$addFile){
+            
+                $error['error'][$key] = true;
+                $error['message'][$key] = $this->AnexoTicketController->getErrorSaveFile();
+    
+                $data->response->errorUpload = (object) $error;
+    
+            }
 
-        $data = [
-            'ID_TICKET' => $request->id_ticket,
-            'ID_INTERACAO_TICKET' => $data->response->content->id,
-            'ARQUIVO' => $addFile
-        ];
+            if(!isset($data->response->errorUpload)):
 
-        $result = $this->AnexoTicketController->store($data);
-
-        return $result;
+                $dataInsert = [
+                    'ID_TICKET' => $request->id_ticket,
+                    'ID_INTERACAO_TICKET' => $data->response->content->id,
+                    'ARQUIVO' => asset('storage/'.$addFile)
+                ];
+        
+                $result = $this->AnexoTicketController->store($dataInsert);
+    
+            endif;
+            
+        endforeach;
+        
+        return $data;
+        
     }   
 }

@@ -17,7 +17,7 @@ class CreateAnexoTicket extends Migration
             $table->increments('ID');
             $table->integer('ID_TICKET');
             $table->integer('ID_INTERACAO_TICKET')->nullable();
-            $table->integer('ARQUIVO');
+            $table->string('ARQUIVO');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');  

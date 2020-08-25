@@ -59,7 +59,7 @@ class AnexoTicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = [];
+    protected $relationships = ['InteracaoTicket'];
 
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
@@ -144,7 +144,8 @@ class AnexoTicketController extends Controller
 
         endif;
 
-        $pathFile = $file->storeAs($this->pathFile, $this->nameFile . '.' . $file->extension());
+        // $pathFile = $file->storeAs($this->pathFile, $this->nameFile . '.' . $file->extension(), 'public');
+        $pathFile = $file->store($this->pathFile, 'public');
 
         return $pathFile;
 
