@@ -160,12 +160,10 @@ class InteracaoTicketController extends Controller
 
         foreach($files as $key => $val):
 
-            $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png']);
+            $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png', 'application/pdf']);
 
             $this->AnexoTicketController->setPathFile('canal-direto/interacoes');
             
-            $this->AnexoTicketController->setNameFile('teste');
-
             $addFile = $this->AnexoTicketController->addFile($val);
 
             if(!$addFile){

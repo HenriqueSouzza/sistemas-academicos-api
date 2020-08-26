@@ -92,6 +92,7 @@ class Ticket extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
+        'id'                    => 'ID',
         'usuario'               => 'USUARIO',
         'papel_usuario'         => 'ID_PAPEL_USUARIO',
         'setor'                 => 'ID_SETOR',
@@ -138,6 +139,15 @@ class Ticket extends Model
     {
         return $this->belongsTo(Categoria::class, 'ID_CATEGORIA', 'ID');
     }    
+
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as Ticket e anexoTicket e suas
+     * respectivas tabelas.
+     */
+    public function anexoTicket()
+    {
+        return $this->hasMany(AnexoTicket::class, 'ID_TICKET', 'ID');
+    }
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////// REGRAS DE NEGOCIO ////////////////////////////

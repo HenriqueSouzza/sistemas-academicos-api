@@ -7,6 +7,7 @@ use App\Models\CanalDireto\Ticket;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
+use App\Http\Controllers\Api\CanalDireto\AnexoTicketController;
 use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
@@ -41,15 +42,21 @@ class TicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = [];
+    protected $relationships = ['AnexoTicket'];
+
+    /**
+     * Reponsável para impressa de anexos 
+     */
+    protected $AnexoTicketController;
 
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Ticket $model)
+    public function __construct(Ticket $model, AnexoTicketController $anexo)
     {
         $this->model = $model;
+        $this->AnexoTicketController = $anexo;
     }
 
     /**
@@ -72,6 +79,7 @@ class TicketController extends Controller
 
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
+
         $responseValidate =  $validate->original['response']['content'];
 
         if(isset($responseValidate->error))
@@ -101,7 +109,19 @@ class TicketController extends Controller
             return $this->createResponse($ruleCategoria, 422);
         }
 
-        return $this->storeTrait($request);
+        $insert = $this->storeTrait($request);
+        
+        $dados = json_decode($insert->getContent());
+        
+        if($request->arquivo){
+            
+            $resultUpload = $this->saveArchive($request, $dados);
+            
+            $insert->setContent(json_encode($resultUpload));
+
+        }
+
+        return $insert;
     }
 
     /**
@@ -133,6 +153,53 @@ class TicketController extends Controller
     public function destroy($id)
     {
         return $this->destroyTrait($id);
+    }
+
+    /**
+     * Tratar os arquivos que serão salvos
+     */
+    private function saveArchive($request, $data){
+
+        $files = $request->arquivo;
+
+        $error = [];
+
+        foreach($files as $key => $val):
+
+            $this->AnexoTicketController->setAcceptFile(['image/jpeg', 'image/png', 'application/pdf']);
+
+            $this->AnexoTicketController->setPathFile('canal-direto/tickets');
+            
+            $addFile = $this->AnexoTicketController->addFile($val);
+
+            if(!$addFile){
+            
+                $error['error'][$key] = true;
+                $error['message'][$key] = $this->AnexoTicketController->getErrorSaveFile();
+    
+                $data->response->errorUpload = (object) $error;
+    
+            }
+
+            if(!isset($data->response->errorUpload)):
+
+                $dataInsert = [
+                    'ID_TICKET' => $data->response->content->id,
+                    'ID_INTERACAO_TICKET' => '',
+                    'ARQUIVO' => asset('storage/'.$addFile)
+                ];
+        
+                $result = $this->AnexoTicketController->store($dataInsert);
+    
+            endif;
+            
+        endforeach;
+
+        //remove a chave "ID" da resposta para não mostrar para o cliente
+        unset($data->response->content->id);
+
+        return $data;
+        
     }
 
 }
