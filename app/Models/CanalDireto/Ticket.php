@@ -132,7 +132,7 @@ class Ticket extends Model
     }
 
     /**
-     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Papeis e suas
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Categoria e suas
      * respectivas tabelas.
      */
     public function categoria()

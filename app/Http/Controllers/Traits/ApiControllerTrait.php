@@ -23,7 +23,6 @@ trait ApiControllerTrait
      * http://www.apirestfull/api/entidades?like=title,abc
      * http://www.apirestfull/api/entidades?where[id]=107
      * http://www.apirestfull/api/entidades?order=id,asc
-     * http://www.apirestfull/api/entidades?limit=25
      * 
      * OBS: Todas as operações descritas acima, deverão usar o verbo GET(HTTP)
      * @param  \Illuminate\Http\Request  $request
@@ -32,8 +31,24 @@ trait ApiControllerTrait
     public function index(Request $request)
     {
 
-        //limita a quantidade de itens por pagina pega 15 por padrão 
-        $limit = $request->all()['limit'] ?? 15;
+        /**
+         * apelido dos campos definido na model para não referenciar o nome original da coluna no banco
+         * usado para tratar os parametros que são passados na url
+         */
+        $columnsModel = $this->model->map;
+
+        //verifica se tem o parametro where na url
+        $where = $request->all()['where'] ?? [];
+        
+        //validaton e referencia na clausula where 
+        if(count($where) > 0):
+            foreach($where as $key => $value):
+                if(isset($columnsModel[$key])):
+                    $where[$columnsModel[$key]] = $value;
+                    unset($where[$key]);
+                endif;
+            endforeach;
+        endif;
 
         //possibilita a ordenação de itens 
         $order = $request->all()['order'] ?? null;
@@ -42,13 +57,10 @@ trait ApiControllerTrait
         if ($order !== null) {
             $order = explode(',', $order);
         }
-        
+
         //Após da o explode lá em cima, criasse dois indice caso os mesmos não seja informado,eles pegam um valor padrão 
         $order[0] = $order[0] ?? $this->model->getPrimaryKey();
         $order[1] = $order[1] ?? 'asc';
-        
-        //verifica se tem o parametro where na url
-        $where = $request->all()['where'] ?? [];
         
         $like = $request->all()['like'] ?? null;
 
@@ -69,7 +81,7 @@ trait ApiControllerTrait
             })
             ->where($where)
             ->with($this->relationships()) //metodo responsável por verificar e trazer dados de relacionamento entre tabelas
-            ->paginate($limit));
+            ->get())->collect();
 
         return $this->createResponse($result);
     }
@@ -143,9 +155,9 @@ trait ApiControllerTrait
 
         foreach($values as $key => $val):
 
-            if(in_array($key, array_keys($this->model->rules))){
+            if(in_array($key, array_keys($this->model->rules))):
                 $arrayRole[$key] = $this->model->rules[$key];
-            }
+            endif;
             
         endforeach;
 
@@ -272,7 +284,7 @@ trait ApiControllerTrait
      */
     protected function columnsShow($result)
     {
-        $response = (Object)$result;
+        $response = (Object) $result;
         $arrayResult = $response->toArray($result);
         $columnsResult = array_keys($arrayResult);
         $columnsModel = $this->model->map;
@@ -305,8 +317,8 @@ trait ApiControllerTrait
         $response = (Object) $result;
         $statusCode = is_null ($statusCode) ? app('Illuminate\Http\Response')->status() : $statusCode;
 
-
         if (property_exists($response, 'collects')) {
+
 
             $data['content']       = (Array) $result->items();
             $data['status']         = $statusCode; //alterar a atribuição de status
@@ -332,10 +344,9 @@ trait ApiControllerTrait
                 'total'          => $response->total(),
             ];
         } else {
-            $data['content']       = $response;
-            $data['status']         = $statusCode; //alterar a atribuição de status
-            $data['code']           = 01; //alterar a atribuição de code
-
+            $data['content']    = $response;
+            $data['status']     = $statusCode; //alterar a atribuição de status
+            $data['code']       = 01; //alterar a atribuição de code
         }
 
         //retorna os dados em formato json

@@ -18,7 +18,7 @@ class Ticket extends JsonResource
 
         //Anexos da interacao
         foreach($this->AnexoTicket as $key => $val):
-            //para buscar somente o anexos do ticket, sem as interações
+            //Para buscar somente o anexos do ticket, sem as interações
             if($this->AnexoTicket[$key]->ID_INTERACAO_TICKET == 0):
                 $arquivo[$key] = $this->AnexoTicket[$key]->ARQUIVO;
             endif;

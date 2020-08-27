@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Api\CanalDireto\AnexoTicketController;
+use App\Http\Controllers\Api\CanalDireto\InteracaoTicketController;
 use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
@@ -45,18 +46,24 @@ class TicketController extends Controller
     protected $relationships = ['AnexoTicket'];
 
     /**
-     * Reponsável para impressa de anexos 
+     * Atributo Responsável para receber os metodos da classe "AnexoTicketController"  
      */
     protected $AnexoTicketController;
+
+    /**
+     * Atributo Responsável para receber os metodos da classe "InteracaoTicketController"  
+     */
+    protected $InteracaoTicketController;
 
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Ticket $model, AnexoTicketController $anexo)
+    public function __construct(Ticket $model, AnexoTicketController $anexo, InteracaoTicketController $InteracaoTicket)
     {
         $this->model = $model;
         $this->AnexoTicketController = $anexo;
+        $this->InteracaoTicketController = $InteracaoTicket;
     }
 
     /**
@@ -141,7 +148,11 @@ class TicketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->updateTrait($request, $id);
+        $updated = $this->updateTrait($request, $id);
+
+        $request->merge(['id_ticket' => $id]);
+
+        return $this->InteracaoTicketController->store($request);
     }
 
     /**

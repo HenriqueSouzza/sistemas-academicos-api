@@ -57,7 +57,7 @@ class InteracaoTicketController extends Controller
         $this->model = $model;
         $this->AnexoTicketController = $anexo;
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -76,7 +76,6 @@ class InteracaoTicketController extends Controller
      */
     public function store(Request $request)
     {
-
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
 

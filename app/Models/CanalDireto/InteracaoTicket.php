@@ -33,7 +33,9 @@ class InteracaoTicket extends Model
         'ID_PAPEL_USUARIO',
         'USUARIO_INTERACAO',
         'MENSAGEM',
-        'ACAO',
+        'ENCAMINHAR',
+        'RESPONDER',
+        'FECHAR',
     ];
 
     /**
@@ -45,7 +47,9 @@ class InteracaoTicket extends Model
         'ID_PAPEL_USUARIO'  => 'bail|required|max:1',
         'USUARIO_INTERACAO' => 'bail|required|max:200',
         'MENSAGEM'          => 'bail|required|max:350',
-        'ACAO'              => 'bail|required|'
+        'ENCAMINHAR'        => 'bail|integer',
+        'RESPONDER'         => 'bail|integer',
+        'FECHAR'            => 'bail|integer',
     ]; 
 
     /**
@@ -84,7 +88,9 @@ class InteracaoTicket extends Model
         'papel_usuario'     => 'ID_PAPEL_USUARIO',
         'usuario_interacao' => 'USUARIO_INTERACAO',
         'mensagem'          => 'MENSAGEM',
-        'acao'              => 'ACAO'
+        'encaminhar'        => 'ENCAMINHAR',
+        'responder'         => 'RESPONDER',
+        'fechar'            => 'FECHAR'
     ];  
 
     /**
