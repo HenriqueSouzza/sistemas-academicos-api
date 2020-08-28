@@ -148,9 +148,15 @@ class TicketController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $mensagem = $request->mensagem;
+        
+        $request->request->remove('mensagem');
+
         $updated = $this->updateTrait($request, $id);
 
         $request->merge(['id_ticket' => $id]);
+        $request->merge(['mensagem' => $mensagem]);
 
         return $this->InteracaoTicketController->store($request);
     }
