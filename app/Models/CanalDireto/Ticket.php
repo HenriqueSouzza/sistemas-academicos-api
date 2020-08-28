@@ -42,7 +42,9 @@ class Ticket extends Model
         'MENSAGEM',
         'USUARIO_FECHAMENTO',
         'DT_FECHAMENTO',
-        'STATUS'
+        'ABERTO',
+        'PENDENTE',
+        'FECHADO'
     ];
 
     /**
@@ -58,7 +60,9 @@ class Ticket extends Model
         'MENSAGEM'              => 'bail|required|max:500',
         'USUARIO_FECHAMENTO'    => 'bail|max:50',
         'DT_FECHAMENTO'         => 'bail|date',
-        'STATUS'                => 'bail|required|max:20',
+        'ABERTO'                => 'bail|integer',
+        'PENDENTE'              => 'bail|integer',
+        'FECHADO'               => 'bail|integer',
     ];
 
     /**
@@ -101,7 +105,9 @@ class Ticket extends Model
         'mensagem'              => 'MENSAGEM',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
         'dt_fechamento'         => 'DT_FECHAMENTO',
-        'status'                => 'STATUS'
+        'aberto'                => 'ABERTO',
+        'pendente'              => 'PENDENTE',
+        'fechado'               => 'FECHADO'
     ];
 
     /**
@@ -147,6 +153,15 @@ class Ticket extends Model
     public function anexoTicket()
     {
         return $this->hasMany(AnexoTicket::class, 'ID_TICKET', 'ID');
+    }
+
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as Ticket e InteracaoTicket e suas
+     * respectivas tabelas.
+     */
+    public function interacaoTicket()
+    {
+        return $this->hasMany(interacaoTicket::class, 'ID_TICKET', 'ID');
     }
 
     ///////////////////////////////////////////////////////////////////

@@ -43,7 +43,7 @@ class TicketController extends Controller
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
-    protected $relationships = ['AnexoTicket'];
+    protected $relationships = ['AnexoTicket', 'InteracaoTicket'];
 
     /**
      * Atributo Responsável para receber os metodos da classe "AnexoTicketController"  

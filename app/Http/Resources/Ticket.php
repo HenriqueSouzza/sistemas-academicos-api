@@ -24,6 +24,14 @@ class Ticket extends JsonResource
             endif;
         endforeach;
 
+        $dt_interacao = null;
+        //Dados para pegar a ultima data de interacao
+        foreach($this->InteracaoTicket as $key => $val):
+            $dt_interacao = $this->InteracaoTicket[$key]->CREATED_AT;
+        endforeach;
+
+
+
         return [
             'id'                    => $this->ID,
             'usuario_abertura'      => $this->USUARIO,
@@ -35,7 +43,10 @@ class Ticket extends JsonResource
             'arquivo'               => $arquivo,
             'usuario_fechamento'    => $this->USUARIO_FECHAMENTO,
             'dt_fechamento'         => $this->DT_FECHAMENTO,
-            'status'                => $this->STATUS,
+            'dt_interacao'          => $dt_interacao,
+            'aberto'                => $this->ABERTO,
+            'pendente'              => $this->PENDENTE,
+            'fechado'               => $this->FECHADO,
             'created_at'            => $this->CREATED_AT
         ];
 

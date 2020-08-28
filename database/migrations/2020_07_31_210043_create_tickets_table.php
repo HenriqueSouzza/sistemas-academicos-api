@@ -24,7 +24,9 @@ class CreateTicketsTable extends Migration
             $table->text('MENSAGEM');
             $table->string('USUARIO_FECHAMENTO')->nullable();
             $table->string('DT_FECHAMENTO')->nullable();
-            $table->string('STATUS');
+            $table->string('ABERTO')->nullable();;
+            $table->string('PENDENTE')->nullable();;
+            $table->string('FECHADO')->nullable();;
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');
