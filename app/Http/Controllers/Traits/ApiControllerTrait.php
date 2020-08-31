@@ -56,6 +56,21 @@ trait ApiControllerTrait
             endforeach;
         endif;
 
+        $whereDate = $request->all()['whereDate'] ?? [];
+
+        if(count($whereDate) > 0):
+            foreach($whereDate as $key => $value):
+                if(isset($columnsModel[$key])):
+                    $query = $query->whereDate($columnsModel[$key], $value);
+                else:
+                    $errors['messages'] = 'Unprocessable Entity';
+                    $errors['error']    = true;
+                    return $this->createResponse($errors, 422);
+                endif;
+            endforeach;
+        endif;
+
+
         $whereBetween = $request->all()['whereBetween'] ?? [];
 
         if(count($whereBetween) > 0):
