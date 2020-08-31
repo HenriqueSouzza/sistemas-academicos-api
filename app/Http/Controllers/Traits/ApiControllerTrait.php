@@ -23,6 +23,7 @@ trait ApiControllerTrait
      * http://www.apirestfull/api/entidades?like=title,abc
      * http://www.apirestfull/api/entidades?where[id]=107
      * http://www.apirestfull/api/entidades?order=id,asc
+     * http://www.apirestfull/api/entidades?whereBetween[id]=1,10
      * 
      * OBS: Todas as operações descritas acima, deverão usar o verbo GET(HTTP)
      * @param  \Illuminate\Http\Request  $request
@@ -37,9 +38,14 @@ trait ApiControllerTrait
          */
         $columnsModel = $this->model->map;
 
+        /**
+         * Parametro inicial para iniciar as query 
+         */
+        $query = $this->model;
+
         //verifica se tem o parametro where na url
         $where = $request->all()['where'] ?? [];
-        
+
         //validaton e referencia na clausula where 
         if(count($where) > 0):
             foreach($where as $key => $value):
@@ -50,6 +56,21 @@ trait ApiControllerTrait
             endforeach;
         endif;
 
+        $whereBetween = $request->all()['whereBetween'] ?? [];
+
+        if(count($whereBetween) > 0):
+            foreach($whereBetween as $key => $value):
+                $value = explode(',', $value);
+                if(isset($columnsModel[$key]) && count($value) > 1):
+                    $query = $query->whereBetween($columnsModel[$key], $value);
+                else:
+                    $errors['messages'] = 'Unprocessable Entity';
+                    $errors['error']    = true;
+                    return $this->createResponse($errors, 422);
+                endif;
+            endforeach;
+        endif;
+        
         //possibilita a ordenação de itens 
         $order = $request->all()['order'] ?? null;
 
@@ -62,27 +83,29 @@ trait ApiControllerTrait
         $order[0] = $order[0] ?? $this->model->getPrimaryKey();
         $order[1] = $order[1] ?? 'asc';
         
+
         $like = $request->all()['like'] ?? null;
 
         if ($like) {
-            //like[0] = campo like[1] = condição
+
             $like = explode(',', $like);
-            $like[1] = '%' . $like[1] . '%';
+            if(isset($columnsModel[$like[0]])):
+                $query = $query->where($columnsModel[$like[0]], 'like', "%" . $like[1] . "%");
+            endif;
+
         }
 
+        $query = $query->orderBy($order[0], $order[1])
+                        ->where($where)
+                        ->with($this->relationships()) //metodo responsável por verificar e trazer dados de relacionamento entre tabelas
+                        ->get();
+        
+                        
         $class = $this->model->collection;
-
-        $result = $class($this->model->orderBy($order[0], $order[1])
-            ->where(function ($query) use ($like) {
-                if ($like) {
-                    return $query->where($like[0], 'like', $like[1]);
-                }
-                return $query;
-            })
-            ->where($where)
-            ->with($this->relationships()) //metodo responsável por verificar e trazer dados de relacionamento entre tabelas
-            ->get())->collect();
-
+        
+        $result = $class($query)->collect();
+                        
+        // return $query;
         return $this->createResponse($result);
     }
 
@@ -170,7 +193,7 @@ trait ApiControllerTrait
             $validate = validator($values, $this->model->rules, $this->model->messages);
 
         endif;
-        
+
         if ($validate->fails()) {
             $errors['messages'] = $this->columnsShow($validate->errors());
             $errors['error']    = true;

@@ -60,9 +60,9 @@ class Ticket extends Model
         'MENSAGEM'              => 'bail|required|max:500',
         'USUARIO_FECHAMENTO'    => 'bail|max:50',
         'DT_FECHAMENTO'         => 'bail|date',
-        'ABERTO'                => 'bail|integer',
-        'PENDENTE'              => 'bail|integer',
-        'FECHADO'               => 'bail|integer',
+        'ABERTO'                => 'bail|integer|nullable',
+        'PENDENTE'              => 'bail|integer|nullable',
+        'FECHADO'               => 'bail|integer|nullable',
     ];
 
     /**
@@ -107,7 +107,8 @@ class Ticket extends Model
         'dt_fechamento'         => 'DT_FECHAMENTO',
         'aberto'                => 'ABERTO',
         'pendente'              => 'PENDENTE',
-        'fechado'               => 'FECHADO'
+        'fechado'               => 'FECHADO',
+        'dt_criacao'            => 'CREATED_AT'
     ];
 
     /**
