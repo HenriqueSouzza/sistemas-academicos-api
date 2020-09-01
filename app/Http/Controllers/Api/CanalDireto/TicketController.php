@@ -165,7 +165,15 @@ class TicketController extends Controller
         
         $updated = $this->updateTrait($request, $id);
         
-        $usuario_interacao = $request->usuario_fechamento ? $request->usuario_fechamento : $request->usuario_atendente;
+        $usuario_interacao = '';
+
+        if($request->usuario_fechamento){
+            $usuario_interacao = $request->usuario_fechamento;
+        }else if($request->usuario_interacao) {
+            $usuario_interacao = $request->usuario_interacao;
+        }else {
+            $usuario_interacao = $request->usuario_atendente;
+        }
 
         $request->merge(['usuario_interacao' => $usuario_interacao]);
         $request->merge(['id_ticket' => $id]);
