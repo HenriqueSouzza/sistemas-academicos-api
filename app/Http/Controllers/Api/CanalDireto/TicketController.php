@@ -156,9 +156,8 @@ class TicketController extends Controller
         /**
          * validação para caso for fechar o ticket, setar os campos (aberto, pendentes) como null
          */
-        if($request->fechar){
+        if($request->fechado){
             
-            $request->merge(['fechado' => $request->fechar]);
             $request->merge(['aberto' => null]);
             $request->merge(['pendente' => null]);
             
@@ -166,7 +165,9 @@ class TicketController extends Controller
         
         $updated = $this->updateTrait($request, $id);
         
-        $request->merge(['usuario_interacao' => $request->usuario_fechamento]);
+        $usuario_interacao = $request->usuario_fechamento ? $request->usuario_fechamento : $request->usuario_atendente;
+
+        $request->merge(['usuario_interacao' => $usuario_interacao]);
         $request->merge(['id_ticket' => $id]);
         $request->merge(['mensagem' => $mensagem]);
 
