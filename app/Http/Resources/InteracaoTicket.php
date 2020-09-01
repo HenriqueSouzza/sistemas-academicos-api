@@ -29,6 +29,8 @@ class InteracaoTicket extends JsonResource
             'papel_usuario'     => $this->ID_PAPEL_USUARIO,
             'usuario_interacao' => $this->USUARIO_INTERACAO,
             'mensagem'          => $this->MENSAGEM,
+            'publico'           => $this->PUBLICO,
+            'privado'           => $this->PRIVADO,
             'arquivo'           => $arquivo,
             'dt_criacao'        => $this->CREATED_AT
         ];

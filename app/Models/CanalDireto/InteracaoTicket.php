@@ -33,6 +33,8 @@ class InteracaoTicket extends Model
         'ID_PAPEL_USUARIO',
         'USUARIO_INTERACAO',
         'MENSAGEM',
+        'PUBLICO',
+        'PRIVADO',
     ];
 
     /**
@@ -41,9 +43,11 @@ class InteracaoTicket extends Model
      */
     public $rules = [
         'ID_TICKET'         => 'bail|required|integer',
-        'ID_PAPEL_USUARIO'  => 'bail|required|max:1',
+        'ID_PAPEL_USUARIO'  => 'bail|required|max:1|integer',
         'USUARIO_INTERACAO' => 'bail|required|max:200',
         'MENSAGEM'          => 'bail|required|max:350',
+        'PUBLICO'           => 'bail|max:1|integer',
+        'PRIVADO'           => 'bail|max:1|integer',
     ]; 
 
     /**
@@ -82,6 +86,8 @@ class InteracaoTicket extends Model
         'papel_usuario'     => 'ID_PAPEL_USUARIO',
         'usuario_interacao' => 'USUARIO_INTERACAO',
         'mensagem'          => 'MENSAGEM',
+        'publico'           => 'PUBLICO',
+        'privado'           => 'PRIVADO',
     ];  
 
     /**
