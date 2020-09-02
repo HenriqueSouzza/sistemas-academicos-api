@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\CanalDireto\AnexoTicketController;
 use App\Http\Controllers\Api\CanalDireto\InteracaoTicketController;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\Mail; //dependencia de envio de email
+use App\Mail\SendEmail; //dependencia de envio de email
+
 class TicketController extends Controller
 {
 
@@ -84,6 +87,17 @@ class TicketController extends Controller
     public function store(Request $request)
     {
 
+        try{
+            Mail::to('henriquetsi10@gmail.com')->send(new SendEmail());
+            // Mostra uma mensagem de sucesso se enviado
+            var_dump('sucesso');
+        }catch(Exception $e){
+            // Mostra uma mensagem de falha senão enviado
+            var_dump('falha ao enviar email');
+        }
+
+        die();
+
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
 
@@ -118,6 +132,8 @@ class TicketController extends Controller
 
         $insert = $this->storeTrait($request);
         
+        $this->envioEmail();
+
         $dados = json_decode($insert->getContent());
         
         if($request->arquivo){
@@ -238,6 +254,13 @@ class TicketController extends Controller
 
         return $data;
         
+    }
+
+    private function envioEmail(){
+        $this->emailFrom(); // de quem enviado 
+        $this->emailBody('canal.views'); // corpo do email 
+        $this->emailSubjtects(''); //assunto 
+        $this->sendEmail(''); //assunto 
     }
 
 }
