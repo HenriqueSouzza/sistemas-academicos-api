@@ -17,6 +17,7 @@ class Formularios extends JsonResource
         return [
             'nome'              => $this->NOME,
             'descricao'         => $this->DESCRICAO,
+            'campos'            => $this->camposForm,
             'created_at'        => $this->CREATED_AT,
             'updated_at'        => $this->UPDATED_AT,
         ];

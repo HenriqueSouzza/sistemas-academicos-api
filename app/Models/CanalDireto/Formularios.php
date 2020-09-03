@@ -85,4 +85,13 @@ class Formularios extends Model
     {
         return $this->primaryKey;
     }
+
+    /** 
+     * <b>camposForm</b> Método responsável por realizar o relacionamento muito para muitos entre a tabela de campos_formularios e a tabela de campos_forms
+     * Sendo o primeiro parametro a model e o segundo a tabela
+     */
+    public function camposForm()
+    {
+        return $this->belongsToMany(CamposForm::class, 'CD.CAMPOS_FORMULARIOS', 'ID_FORMULARIOS', 'ID_CAMPOS_FORMS');
+    }
 }
