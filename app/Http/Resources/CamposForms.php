@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnexoTicket extends JsonResource
+class CamposForms extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class AnexoTicket extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => $this->ID,
-            'ticket'            => $this->ID_TICKET,
-            'interacao_ticket'  => $this->ID_INTERACAO_TICKET,
-            'arquivo'           => $this->ARQUIVO,
+            'formulario'        => $this->ID,
+            'nome'              => $this->NOME,
+            'descricao'         => $this->DESCRICAO,
             'created_at'        => $this->CREATED_AT,
             'updated_at'        => $this->UPDATED_AT,
         ];

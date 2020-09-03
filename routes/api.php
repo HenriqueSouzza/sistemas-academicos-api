@@ -24,5 +24,7 @@ Route::resources([
     '/canal-direto/papeis'              => 'Api\CanalDireto\PapeisController',
     '/canal-direto/setor'               => 'Api\CanalDireto\SetorController',
     '/canal-direto/categoria'           => 'Api\CanalDireto\CategoriaController',
-    // 'usuario'                     => 'Api\UserController'
+    '/canal-direto/formularios'         => 'Api\CanalDireto\FormulariosController',
+    '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
+    '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
 ]);

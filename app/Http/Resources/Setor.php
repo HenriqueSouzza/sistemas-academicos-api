@@ -21,7 +21,6 @@ class Setor extends JsonResource
             'usuario'       => $this->USUARIO,
             'created_at'    => $this->CREATED_AT,
             'updated_at'    => $this->UPDATED_AT,
-            'deleted_at'    => $this->DELETED_AT
         ];
     }
 }
