@@ -19,7 +19,7 @@ class CreateCamposFormsTable extends Migration
             $table->string('LABEL');
             $table->string('NAME');
             $table->string('CAMPO_ID');
-            $table->string('VALUE');
+            $table->string('VALUE')->nullable();
             $table->integer('OBRIGATORIO');
             $table->integer('VISIVEL');
             $table->integer('EDITAVEL');

@@ -3,6 +3,7 @@
 namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CamposForm extends Model
 {
@@ -46,7 +47,7 @@ class CamposForm extends Model
         'LABEL'             => 'bail|required|max:20',
         'NAME'              => 'bail|required|max:20',
         'CAMPO_ID'          => 'bail|required|max:20',
-        'VALUE'             => 'bail|required|max:20',
+        'VALUE'             => 'bail|max:20',
         'OBRIGATORIO'       => 'bail|required|integer|max:1',
         'VISIVEL'           => 'bail|required|integer|max:1',
         'EDITAVEL'          => 'bail|required|integer|max:1'

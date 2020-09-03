@@ -15,11 +15,16 @@ class CamposForms extends JsonResource
     public function toArray($request)
     {
         return [
-            'formulario'        => $this->ID,
-            'nome'              => $this->NOME,
-            'descricao'         => $this->DESCRICAO,
-            'created_at'        => $this->CREATED_AT,
-            'updated_at'        => $this->UPDATED_AT,
+            'descricao'     => $this->DESCRICAO,
+            'label'         => $this->LABEL,
+            'name'          => $this->NAME,
+            'campo_id'      => $this->CAMPO_ID,
+            'value'         => $this->VALUE,
+            'obrigatorio'   => (int) $this->OBRIGATORIO,
+            'visivel'       => (int) $this->VISIVEL,
+            'editavel'      => (int) $this->EDITAVEL,
+            'created_at'    => $this->CREATED_AT,
+            'updated_at'    => $this->UPDATED_AT,
         ];
     }
 }

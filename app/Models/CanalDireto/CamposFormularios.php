@@ -3,6 +3,7 @@
 namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CamposFormularios extends Model
 {
@@ -121,7 +122,7 @@ class CamposFormularios extends Model
                 $query = (Object) Formularios::whereRaw("ID={$id}");
                 break;  
             case 'CamposForm':
-                $query = (Object) CamposForms::whereRaw("ID={$id}");
+                $query = (Object) CamposForm::whereRaw("ID={$id}");
                 break;   
         }
         

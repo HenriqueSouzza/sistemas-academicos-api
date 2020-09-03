@@ -28,7 +28,7 @@ class CategoriaController extends Controller
         destroy as protected destroyTrait;
     }
 
-     /**
+    /**
      * <b>model</b> Atributo responsável em guardar informações a respeito de qual model a controller ira utilizar. 
      * Por causa do D.I (injeção de dependencia feita) o mesmo armazena um objeto da classe que ira ser utilizada.
      * OBS: Este atributo é utilizado na ApiControllerTrait, para diferenciar qual classe esta utilizando os seus recursos
@@ -62,16 +62,6 @@ class CategoriaController extends Controller
     public function index(Request $request)
     {
         return $this->indexTrait($request);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
