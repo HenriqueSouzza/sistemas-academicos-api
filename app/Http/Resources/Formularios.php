@@ -15,6 +15,7 @@ class Formularios extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'                => $this->ID,
             'nome'              => $this->NOME,
             'descricao'         => $this->DESCRICAO,
             'campos'            => $this->camposForm,

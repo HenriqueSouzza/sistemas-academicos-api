@@ -120,8 +120,6 @@ class TicketController extends Controller
 
         $insert = $this->storeTrait($request);
         
-        $this->envioEmail();
-
         $dados = json_decode($insert->getContent());
         
         if($request->arquivo){
