@@ -86,6 +86,15 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+            Mail::to('henrique.lindao10@gmail.com')->send(new SendEmail());
+            var_dump('sucesso');
+        } catch (\Throwable $th) {
+            var_dump('error');
+        }
+
+        die();
+
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
 
