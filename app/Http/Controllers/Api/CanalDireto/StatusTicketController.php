@@ -81,7 +81,7 @@ class StatusTicketController extends Controller
      * @param  \App\Model\canalDireto\StatusTicket  $statusTicket
      * @return \Illuminate\Http\Response
      */
-    public function show(StatusTicket $statusTicket)
+    public function show($id)
     {
         return $this->showTrait($id);
     }
@@ -93,7 +93,7 @@ class StatusTicketController extends Controller
      * @param  \App\Model\canalDireto\StatusTicket  $statusTicket
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StatusTicket $statusTicket)
+    public function update(Request $request, $id)
     {
         return $this->updateTrait($request, $id);
     }

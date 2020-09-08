@@ -14,6 +14,10 @@ class StatusTicket extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+                'id'                => $this->ID,
+                'nome'              => $this->NOME,
+                'descricao'         => $this->DESCRICAO
+        ];
     }
 }
