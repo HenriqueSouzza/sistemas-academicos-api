@@ -104,7 +104,7 @@ class StatusTicketController extends Controller
      * @param  \App\Model\canalDireto\StatusTicket  $statusTicket
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StatusTicket $statusTicket)
+    public function destroy($id)
     {
         return $this->destroyTrait($id);
     }

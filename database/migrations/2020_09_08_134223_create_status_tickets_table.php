@@ -30,6 +30,6 @@ class CreateStatusTicketsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cd.STATUS_TICKET');
+        // Schema::dropIfExists('cd.STATUS_TICKET');
     }
 }

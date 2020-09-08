@@ -43,6 +43,10 @@ trait ApiControllerTrait
          */
         $query = $this->model;
 
+        /*******************************************************/
+        /**************** Quando passar WHERE ******************/
+        /*******************************************************/
+
         //verifica se tem o parametro where na url
         $where = $request->all()['where'] ?? [];
 
@@ -55,6 +59,29 @@ trait ApiControllerTrait
                 endif;
             endforeach;
         endif;
+
+
+        /*******************************************************/
+        /**************** Quando passar WHEREIN ****************/
+        /*******************************************************/
+
+        //verifica se tem o parametro where na url
+        $whereIn = $request->all()['whereIn'] ?? [];
+
+        //validaton e referencia na clausula whereIn 
+        if(count($whereIn) > 0):
+            foreach($whereIn as $key => $value):
+                if(isset($columnsModel[$key])):
+                    $value = explode(',', $value);
+                    $query = $query->whereIn($columnsModel[$key], $value);
+                endif;
+            endforeach;
+        endif;
+
+
+        /*******************************************************/
+        /**************** Quando passar WHEREDATE **************/
+        /*******************************************************/
 
         $whereDate = $request->all()['whereDate'] ?? [];
 
@@ -71,6 +98,10 @@ trait ApiControllerTrait
         endif;
 
 
+        /*******************************************************/
+        /************* Quando passar WHEREBETWEEN **************/
+        /*******************************************************/
+
         $whereBetween = $request->all()['whereBetween'] ?? [];
 
         if(count($whereBetween) > 0):
@@ -85,6 +116,10 @@ trait ApiControllerTrait
                 endif;
             endforeach;
         endif;
+
+        /*******************************************************/
+        /***************** Quando passar ORDER *****************/
+        /*******************************************************/
         
         //possibilita a ordenação de itens 
         $order = $request->all()['order'] ?? null;
@@ -99,6 +134,10 @@ trait ApiControllerTrait
         $order[1] = $order[1] ?? 'asc';
         
 
+        /*******************************************************/
+        /***************** Quando passar LIKE ******************/
+        /*******************************************************/
+
         $like = $request->all()['like'] ?? null;
 
         if ($like) {
@@ -110,6 +149,10 @@ trait ApiControllerTrait
 
         }
 
+        /*******************************************************/
+        /********************* EXECUTA QUERY *******************/
+        /*******************************************************/
+
         $query = $query->orderBy($order[0], $order[1])
                         ->where($where)
                         ->with($this->relationships()) //metodo responsável por verificar e trazer dados de relacionamento entre tabelas
@@ -120,7 +163,6 @@ trait ApiControllerTrait
         
         $result = $class($query)->collect();
                         
-        // return $query;
         return $this->createResponse($result);
     }
 
