@@ -27,4 +27,5 @@ Route::resources([
     '/canal-direto/formularios'         => 'Api\CanalDireto\FormulariosController',
     '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
     '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
+    '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
 ]);

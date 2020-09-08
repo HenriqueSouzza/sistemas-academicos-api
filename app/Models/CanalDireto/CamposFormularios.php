@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CamposFormularios extends Model
 {
-     /**
+    /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
      * Usado no campo deleted_at da tabela 
      */

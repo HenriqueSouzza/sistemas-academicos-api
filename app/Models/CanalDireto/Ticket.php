@@ -43,9 +43,7 @@ class Ticket extends Model
         'USUARIO_ATENDENTE',
         'USUARIO_FECHAMENTO',
         'DT_FECHAMENTO',
-        'ABERTO',
-        'PENDENTE',
-        'FECHADO'
+        'STATUS'
     ];
 
     /**
@@ -59,13 +57,10 @@ class Ticket extends Model
         'ID_CATEGORIA'          => 'bail|required|integer',
         'ASSUNTO'               => 'bail|required|max:200',
         'MENSAGEM'              => 'bail|required|max:500',
-        'ABERTO'                => 'bail|integer|nullable',
         'USUARIO_ATENDENTE'     => 'bail|max:50|nullable',
         'USUARIO_FECHAMENTO'    => 'bail|max:50|nullable',
         'DT_FECHAMENTO'         => 'bail|date|nullable',
-        'ABERTO'                => 'bail|integer|nullable',
-        'PENDENTE'              => 'bail|integer|nullable',
-        'FECHADO'               => 'bail|integer|nullable',
+        'STATUS'                => 'bail|integer|max:1',
     ];
 
     /**
@@ -109,9 +104,7 @@ class Ticket extends Model
         'usuario_atendente'     => 'USUARIO_ATENDENTE',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
         'dt_fechamento'         => 'DT_FECHAMENTO',
-        'aberto'                => 'ABERTO',
-        'pendente'              => 'PENDENTE',
-        'fechado'               => 'FECHADO',
+        'status'                => 'STATUS',
         'dt_criacao'            => 'CREATED_AT'
     ];
 
