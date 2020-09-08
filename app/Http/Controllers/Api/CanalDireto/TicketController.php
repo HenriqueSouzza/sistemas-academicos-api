@@ -155,8 +155,10 @@ class TicketController extends Controller
     {
 
         $mensagem = $request->mensagem;
+        $arquivo = $request->arquivo;
 
         $request->request->remove('mensagem');
+        $request->request->remove('arquivo');
 
         $updated = $this->updateTrait($request, $id);
         
@@ -179,6 +181,7 @@ class TicketController extends Controller
         $request->merge(['usuario_interacao' => $usuario_interacao]);
         $request->merge(['id_ticket' => $id]);
         $request->merge(['mensagem' => $mensagem]);
+        $request->merge(['arquivo' => $arquivo]);
 
         return $this->InteracaoTicketController->store($request);
     }
