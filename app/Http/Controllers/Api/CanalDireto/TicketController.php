@@ -158,18 +158,14 @@ class TicketController extends Controller
 
         $request->request->remove('mensagem');
 
-        /**
-         * validação para caso for fechar o ticket, setar os campos (aberto, pendentes) como null
-         */
-        if($request->fechado){
-            
-            $request->merge(['aberto' => null]);
-            $request->merge(['pendente' => null]);
-            
-        }
-        
         $updated = $this->updateTrait($request, $id);
         
+        $dataUpdate = json_decode($updated->getContent());
+
+        if(isset($dataUpdate->response->content->error)){
+            return $updated;
+        }
+
         $usuario_interacao = '';
 
         if($request->usuario_fechamento){

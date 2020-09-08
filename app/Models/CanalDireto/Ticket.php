@@ -60,7 +60,7 @@ class Ticket extends Model
         'USUARIO_ATENDENTE'     => 'bail|max:50|nullable',
         'USUARIO_FECHAMENTO'    => 'bail|max:50|nullable',
         'DT_FECHAMENTO'         => 'bail|date|nullable',
-        'STATUS'                => 'bail|required|integer|max:1',
+        'STATUS'                => 'bail|required|integer',
     ];
 
     /**
