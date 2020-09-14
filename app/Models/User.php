@@ -5,10 +5,12 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Yajra\Acl\Traits\HasRole;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRole;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'NAME', 'EMAIL', 'PASSWORD',
     ];
 
     /**
@@ -25,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'PASSWORD', 'REMEMBER_TOKEN',
     ];
 
     /**
@@ -34,6 +36,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'EMAIL_VERIFIED_AT' => 'datetime',
     ];
 }

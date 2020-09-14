@@ -63,5 +63,13 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        /**
+         * Adiciona pelo Henrique
+         * Dependência de acl   
+         */
+        'canAtLeast' => \Yajra\Acl\Middleware\CanAtLeastMiddleware::class,
+        'permission' => \Yajra\Acl\Middleware\PermissionMiddleware::class,
+        'role' => \Yajra\Acl\Middleware\RoleMiddleware::class,
     ];
 }

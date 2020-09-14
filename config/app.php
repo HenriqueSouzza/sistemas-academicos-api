@@ -166,6 +166,13 @@ return [
          * Package Service Providers...
          */
 
+        /**
+         * Adicionado pelo Henrique          
+         * Dependências de acl
+         */
+          Yajra\Acl\AclServiceProvider::class,
+
+
         /*
          * Application Service Providers...
          */

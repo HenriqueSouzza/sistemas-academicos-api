@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::resources([
     '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
@@ -29,3 +29,10 @@ Route::resources([
     '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
     '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
 ]);
+
+Route::post('login', 'Api\UserController@login');
+
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('logout', 'Api\UserController@logout');
+    Route::get('user', 'Api\UserController@user');
+});

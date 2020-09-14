@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6558f74828bca9ebecac73d90cea4b1a",
+    "content-hash": "86d50712b693b3271cc18a35379e646d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -919,6 +919,61 @@
                 "psysh"
             ],
             "time": "2020-07-07T15:10:00+00:00"
+        },
+        {
+            "name": "laravel/ui",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "ec838c75ba1886d014c5465b1ecc79b2071f46c7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/ec838c75ba1886d014c5465b1ecc79b2071f46c7",
+                "reference": "ec838c75ba1886d014c5465b1ecc79b2071f46c7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^7.0",
+                "illuminate/filesystem": "^7.0",
+                "illuminate/support": "^7.0",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ui\\UiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Ui\\": "src/",
+                    "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel UI utilities and presets.",
+            "keywords": [
+                "laravel",
+                "ui"
+            ],
+            "time": "2020-03-03T13:43:00+00:00"
         },
         {
             "name": "league/commonmark",
@@ -3923,6 +3978,68 @@
                 "php"
             ],
             "time": "2020-07-22T23:32:04+00:00"
+        },
+        {
+            "name": "yajra/laravel-acl",
+            "version": "v5.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yajra/laravel-acl.git",
+                "reference": "ea0a511839acab64f2c36cbdc6ed693d7589bade"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-acl/zipball/ea0a511839acab64f2c36cbdc6ed693d7589bade",
+                "reference": "ea0a511839acab64f2c36cbdc6ed693d7589bade",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^7|^8",
+                "illuminate/support": "^7|^8",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Yajra\\Acl\\AclServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yajra\\Acl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjay Angeles",
+                    "email": "aqangeles@gmail.com",
+                    "homepage": "http://yajrabox.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel ACL is a simple role, permission ACL for Laravel Framework.",
+            "homepage": "https://github.com/yajra/laravel-acl",
+            "keywords": [
+                "acl",
+                "laravel",
+                "permissions",
+                "role",
+                "user",
+                "yajra"
+            ],
+            "time": "2020-09-09T05:12:43+00:00"
         }
     ],
     "packages-dev": [
@@ -5064,6 +5181,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
