@@ -155,47 +155,37 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {   
+        if(!Auth::attempt(['email' => $request->login, 'password' => $request->password])){
 
-        switch ($request->tipo) {
+            switch ($request->tipo) {
 
-            case 'aluno':
-                $result = (object) $this->lyceum->setTable('LY_ALUNO')
-                                ->select(['LY_ALUNO.ALUNO as LOGIN', 'LY_PESSOA.SENHA_TAC as SENHA'])
-                                ->join('LY_PESSOA', 'LY_PESSOA.PESSOA', '=', 'LY_ALUNO.PESSOA')
-                                ->where(['LY_ALUNO.ALUNO' => $request->login])
-                                ->first();
-                break;
+                case 'aluno':
+                    $result = $this->lyceum->loginAluno($request->login, $request->password);
+                    break;
+    
+                case 'docente':
+                    $result = $this->lyceum->loginDocente($request->login, $request->password);
+                    break;
 
-            case 'docente':
-                $result = (object) $this->lyceum->setTable('LY_DOCENTE')
-                                ->select(['NUM_FUNC as LOGIN', 'SENHA_DOL as SENHA'])
-                                ->where('NUM_FUNC', $request->login)
-                                ->first();
-                break;
+                default:
+                    $result = [];
+                    break;
+            }
 
-            case 'fornecedor':
-                $result = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-                break;
-            
-            default:
-                $errors['messages'] = 'Solicitação Inválida !';
+            if(count($result) < 1){
+                $errors['messages'] = 'Usuário ou senha invalidos !';
                 $errors['error']    = true;
                 
-                return $this->createResponse($errors, 400);
-                break;
+                return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
+            }
+
+            $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
+
+            Auth::attempt(['email' => $result[0]->LOGIN, 'password' => $result[0]->SENHA]);
         }
 
-        if((array) !$result){
-            $errors['messages'] = 'Usuário ou senha invalidos !';
-            $errors['error']    = true;
-
-            return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
-        }
-
-        var_dump($result);die();
-        
         $user = Auth::user(); //ou  $user = $request->user();
-
+        
         //cria o token com base em uma string randomica, o time e o id do usuário
         $token = $user->createToken(Str::random(10) . time() . $user->id);
 
@@ -269,63 +259,63 @@ class UserController extends Controller
     /**
      * 
      */
-    public function callback(Request $request)
-    {
+    // public function callback(Request $request)
+    // {
         
-       try
-        {
-             $googleUser = Socialite::driver('google')->stateless()->user();
+    //    try
+    //     {
+    //          $googleUser = Socialite::driver('google')->stateless()->user();
             
 
-            if(! strripos($googleUser->email, '@cnec.br'))
-            {
-                $errors['messages'] = "O dominio do e-mail deverá conter CNEC.BR";
-                $errors['error']    = true;
+    //         if(! strripos($googleUser->email, '@cnec.br'))
+    //         {
+    //             $errors['messages'] = "O dominio do e-mail deverá conter CNEC.BR";
+    //             $errors['error']    = true;
 
-                return $this->createResponse($errors, 401);
+    //             return $this->createResponse($errors, 401);
              
-            }
+    //         }
 
-            $exist = User::where('email', $googleUser->email)->first();
+    //         $exist = User::where('email', $googleUser->email)->first();
 
-            if($exist)
-            {
-                $user =  Auth::loginUsingId($exist->id);
-                //cria o token com base em uma string randomica, o time e o id do usuário
-                $token = $user->createToken(Str::random(10) . time() . $user->id);
+    //         if($exist)
+    //         {
+    //             $user =  Auth::loginUsingId($exist->id);
+    //             //cria o token com base em uma string randomica, o time e o id do usuário
+    //             $token = $user->createToken(Str::random(10) . time() . $user->id);
 
-                //cria o response com os dados do token tais como: access_token (token de acesso) expires_at (data e hora de expiração do token)
-                $response['access_token'] = $token->accessToken;
-                $response['token_type']   = 'Bearer';
-                $response['avatar']       = $googleUser->avatar;
-                $response['avatar_original'] = $googleUser->avatar_original;
-                $response['user'] = $user;
-                $response['expires_at']   = Carbon::parse(
-                    $token->token->expires_at
-                )->toDateTimeString();
+    //             //cria o response com os dados do token tais como: access_token (token de acesso) expires_at (data e hora de expiração do token)
+    //             $response['access_token'] = $token->accessToken;
+    //             $response['token_type']   = 'Bearer';
+    //             $response['avatar']       = $googleUser->avatar;
+    //             $response['avatar_original'] = $googleUser->avatar_original;
+    //             $response['user'] = $user;
+    //             $response['expires_at']   = Carbon::parse(
+    //                 $token->token->expires_at
+    //             )->toDateTimeString();
             
-                return $this->createResponse($response);
-            }
-            else
-            {
-                $user = User::create([
-                    'name'        => $googleUser->name,
-                    'email'       => $googleUser->email,
-                    'password'    =>  \Hash::make(rand(1,10000)),
-                    'provider'    => 'google',
-                    'provider_id' => $googleUser->id,
-                ]);
+    //             return $this->createResponse($response);
+    //         }
+    //         else
+    //         {
+    //             $user = User::create([
+    //                 'name'        => $googleUser->name,
+    //                 'email'       => $googleUser->email,
+    //                 'password'    =>  \Hash::make(rand(1,10000)),
+    //                 'provider'    => 'google',
+    //                 'provider_id' => $googleUser->id,
+    //             ]);
                 
-            }
+    //         }
             
-            return $this->createResponse($googleUser);
+    //         return $this->createResponse($googleUser);
 
-        } 
-        catch (Exception $e)
-        {
-            dd($e);
-            abort(422, "Ocorreu um erro");
-        }
-    }
+    //     } 
+    //     catch (Exception $e)
+    //     {
+    //         dd($e);
+    //         abort(422, "Ocorreu um erro");
+    //     }
+    // }
 
 }

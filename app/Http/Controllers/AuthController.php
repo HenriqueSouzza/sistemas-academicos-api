@@ -24,8 +24,8 @@ class AuthController extends Controller
      */
     public function callback()
     {
-        try
-        {
+        // try
+        // {
             // $googleUser = Socialite::driver('google')->user();
          
 
@@ -51,13 +51,13 @@ class AuthController extends Controller
             //     ]);
             //     Auth::loginUsingId($user->id);
             // }
-            return redirect()->to('/home');
+            // return redirect()->to('/home');
 
-        } 
-        catch (Exception $e)
-        {
-            dd($e);
-            abort(422, "Ocorreu um erro");
-        }
+        // } 
+        // catch (Exception $e)
+        // {
+        //     dd($e);
+        //     abort(422, "Ocorreu um erro");
+        // }
     }
 }
