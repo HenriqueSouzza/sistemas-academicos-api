@@ -16,20 +16,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-    
 });
 
-Route::resources([
-    '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
-    '/canal-direto/interacao-ticket'    => 'Api\CanalDireto\InteracaoTicketController',
-    '/canal-direto/papeis'              => 'Api\CanalDireto\PapeisController',
-    '/canal-direto/setor'               => 'Api\CanalDireto\SetorController',
-    '/canal-direto/categoria'           => 'Api\CanalDireto\CategoriaController',
-    '/canal-direto/formularios'         => 'Api\CanalDireto\FormulariosController',
-    '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
-    '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
-    '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
-]);
+Route::group(['middleware' => 'auth:api'], function() {
+
+    Route::resources([
+        '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
+        '/canal-direto/interacao-ticket'    => 'Api\CanalDireto\InteracaoTicketController',
+        '/canal-direto/papeis'              => 'Api\CanalDireto\PapeisController',
+        '/canal-direto/setor'               => 'Api\CanalDireto\SetorController',
+        '/canal-direto/categoria'           => 'Api\CanalDireto\CategoriaController',
+        '/canal-direto/formularios'         => 'Api\CanalDireto\FormulariosController',
+        '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
+        '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
+        '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
+    ]);
+
+});
 
 Route::post('login', 'Api\UserController@login');
 Route::post('register', 'Api\UserController@register');

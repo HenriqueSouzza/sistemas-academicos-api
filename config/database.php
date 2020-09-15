@@ -91,6 +91,20 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'lyceum' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL_LYCEUM'),
+            'host' => env('DB_HOST_LYCEUM', 'localhost'),
+            'port' => env('DB_PORT_LYCEUM', '1433'),
+            'database' => env('DB_DATABASE_LYCEUM', 'forge'),
+            'username' => env('DB_USERNAME_LYCEUM', 'forge'),
+            'password' => env('DB_PASSWORD_LYCEUM', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ]
+
+
     ],
 
     /*

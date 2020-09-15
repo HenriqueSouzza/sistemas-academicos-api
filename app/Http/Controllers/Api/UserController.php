@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 
+use App\Models\Lyceum;
+
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
 
@@ -39,8 +41,12 @@ class UserController extends Controller
      * Por causa do D.I (injeção de dependencia feita) o mesmo armazena um objeto da classe que ira ser utilizada.
      * OBS: Este atributo é utilizado na ApiControllerTrait, para diferenciar qual classe esta utilizando os seus recursos
      */
+    protected $model;
 
-     protected $model;
+    /**
+     * Atributo responsável por realizar as conexão com o banco LYCEUM
+     */
+    protected $lyceum;
 
     /**
      * <b>relationships</b> Atributo responsável em guardar informações sobre relacionamentos especificados na models
@@ -54,9 +60,10 @@ class UserController extends Controller
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-     public function __construct(User $model)
+     public function __construct(User $model, Lyceum $lyceum)
      {
-         $this->model = $model;
+        $this->model = $model;
+        $this->lyceum = $lyceum;
      }
      /**
      * Display a listing of the resource.
@@ -144,28 +151,60 @@ class UserController extends Controller
     }
 
     /**
-     * 
+     * Responsável pelo processo de login da API
      */
     public function login(Request $request)
     {   
-        if(! Auth::attempt(['email' => $request->email, 'password' => $request->password]))
-        {
-            return $this->createResponse('Usuário ou senha invalidos !', 401);
-        }
-        else
-        {
-            $user = Auth::user(); //ou  $user = $request->user();
 
-            //cria o token com base em uma string randomica, o time e o id do usuário
-            $token = $user->createToken(Str::random(10) . time() . $user->id);
+        switch ($request->tipo) {
 
-            //cria o response com os dados do token tais como: access_token (token de acesso) expires_at (data e hora de expiração do token)
-            $response['access_token'] = $token->accessToken;
-            $response['token_type']   = 'Bearer';
-            $response['expires_at']   = Carbon::parse($token->token->expires_at)->toDateTimeString();
+            case 'aluno':
+                $result = (object) $this->lyceum->setTable('LY_ALUNO')
+                                ->select(['LY_ALUNO.ALUNO as LOGIN', 'LY_PESSOA.SENHA_TAC as SENHA'])
+                                ->join('LY_PESSOA', 'LY_PESSOA.PESSOA', '=', 'LY_ALUNO.PESSOA')
+                                ->where(['LY_ALUNO.ALUNO' => $request->login])
+                                ->first();
+                break;
+
+            case 'docente':
+                $result = (object) $this->lyceum->setTable('LY_DOCENTE')
+                                ->select(['NUM_FUNC as LOGIN', 'SENHA_DOL as SENHA'])
+                                ->where('NUM_FUNC', $request->login)
+                                ->first();
+                break;
+
+            case 'fornecedor':
+                $result = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+                break;
             
-            return $this->createResponse($response);
+            default:
+                $errors['messages'] = 'Solicitação Inválida !';
+                $errors['error']    = true;
+                
+                return $this->createResponse($errors, 400);
+                break;
         }
+
+        if((array) !$result){
+            $errors['messages'] = 'Usuário ou senha invalidos !';
+            $errors['error']    = true;
+
+            return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
+        }
+
+        var_dump($result);die();
+        
+        $user = Auth::user(); //ou  $user = $request->user();
+
+        //cria o token com base em uma string randomica, o time e o id do usuário
+        $token = $user->createToken(Str::random(10) . time() . $user->id);
+
+        //cria o response com os dados do token tais como: access_token (token de acesso) expires_at (data e hora de expiração do token)
+        $response['access_token'] = $token->accessToken;
+        $response['token_type']   = 'Bearer';
+        $response['expires_at']   = Carbon::parse($token->token->expires_at)->toDateTimeString();
+        
+        return $this->createResponse($response);
     }
 
 
@@ -192,7 +231,7 @@ class UserController extends Controller
         }
         
         
-        $password =  bcrypt($request->password);
+        $password = bcrypt($request->password);
         $request->merge(['password' => $password]);
 
         $data = $this->model->create($request->all());
