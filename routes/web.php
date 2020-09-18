@@ -18,6 +18,40 @@ Route::get('/', function () {
 });
 
 Route::get('/mailable', function () {
-    // $user = App\User::find(1);
-    return new App\Mail\SendEmail();
+    
+
+
+    $ticket = App\Models\CanalDireto\Ticket::findOrFail("1");
+
+    $categoria = App\Models\CanalDireto\Categoria::findOrFail($ticket->ID_CATEGORIA);
+
+    $setor = App\Models\CanalDireto\Setor::findOrFail($ticket->ID_SETOR);
+    //InteracaoTicket($ticket)
+
+    //var_dump($ticket);
+    //Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket));
+    
+    //$user = App\User::find(1);
+    return new App\Mail\InteracaoTicket($ticket, $categoria, $setor);
 });
+
+
+Route::get('/mailable2', function () {
+    
+
+
+    $ticket = App\Models\CanalDireto\Ticket::findOrFail("1");
+
+    $categoria = App\Models\CanalDireto\Categoria::findOrFail($ticket->ID_CATEGORIA);
+
+    $setor = App\Models\CanalDireto\Setor::findOrFail($ticket->ID_SETOR);
+    //InteracaoTicket($ticket)
+
+    //var_dump($ticket);
+    //Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket));
+    
+    //$user = App\User::find(1);
+    return new App\Mail\TicketEmail($ticket, $categoria, $setor);
+});
+
+

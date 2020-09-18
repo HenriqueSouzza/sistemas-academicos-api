@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\CanalDireto;
 
 
 use App\Models\CanalDireto\Ticket;
+use App\Models\CanalDireto\Categoria;
+use App\Models\CanalDireto\Setor;
+
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
@@ -12,7 +15,7 @@ use App\Http\Controllers\Api\CanalDireto\InteracaoTicketController;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Mail; //dependencia de envio de email
-use App\Mail\SendEmail; //dependencia de envio de email
+use App\Mail\Ticket; //dependencia de envio de email
 
 class TicketController extends Controller
 {
@@ -86,14 +89,8 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            Mail::to('henrique.lindao10@gmail.com')->send(new SendEmail());
-            var_dump('sucesso');
-        } catch (\Throwable $th) {
-            var_dump('error');
-        }
+ 
 
-        die();
 
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
@@ -138,6 +135,25 @@ class TicketController extends Controller
             $insert->setContent(json_encode($resultUpload));
 
         }
+
+        try {
+
+            $ticket = Ticket::findOrFail($dados->response->content->id);
+
+            $categoria = Categoria::findOrFail($ticket->ID_CATEGORIA);
+        
+            $setor = Setor::findOrFail($ticket->ID_SETOR);
+
+            //var_dump($dados->response->content->id);
+            Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket, $categoria, $setor));
+            var_dump('sucesso');
+        } catch (\Throwable $th) {
+            var_dump('error');
+        }
+
+        die();
+
+
 
         return $insert;
     }

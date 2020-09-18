@@ -9,6 +9,13 @@ use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Api\CanalDireto\AnexoTicketController;
 use App\Http\Controllers\Controller;
 
+use App\Models\CanalDireto\Ticket;
+use App\Models\CanalDireto\Categoria;
+use App\Models\CanalDireto\Setor;
+
+use Illuminate\Support\Facades\Mail; //dependencia de envio de email
+
+
 class InteracaoTicketController extends Controller
 {
 
@@ -112,6 +119,21 @@ class InteracaoTicketController extends Controller
 
             $insert->setContent(json_encode($resultUpload));
 
+        }
+
+        try {
+
+            $ticket = Ticket::findOrFail($dados->response->content->id);
+
+            $categoria = Categoria::findOrFail($ticket->ID_CATEGORIA);
+        
+            $setor = Setor::findOrFail($ticket->ID_SETOR);
+
+            //var_dump($dados->response->content->id);
+            Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket, $categoria, $setor));
+            var_dump('sucesso');
+        } catch (\Throwable $th) {
+            var_dump('error');
         }
 
         return $insert;
