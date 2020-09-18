@@ -205,6 +205,7 @@ class TicketController extends Controller
         }else {
             $usuario_interacao = $request->usuario_atendente;
         }
+        
 
         $request->merge(['usuario_interacao' => $usuario_interacao]);
         $request->merge(['id_ticket' => $id]);
