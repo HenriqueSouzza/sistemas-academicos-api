@@ -45,7 +45,7 @@ class Ticket extends JsonResource
             'usuario_fechamento'    => $this->USUARIO_FECHAMENTO,
             'dt_fechamento'         => $this->DT_FECHAMENTO,
             'dt_interacao'          => $dt_interacao,
-            'status'                => $this->status->NOME,
+            'status'                => ['nome' => $this->status->NOME, 'ordem' => $this->STATUS],
             'dt_criacao'            => $this->CREATED_AT
         ];
 

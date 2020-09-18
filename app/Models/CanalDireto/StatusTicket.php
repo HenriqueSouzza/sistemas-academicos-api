@@ -40,14 +40,15 @@ class StatusTicket extends Model
     public $rules = [
         'NOME'              => 'bail|required',
         'DESCRICAO'         => 'bail|required',
-        'ORDEM'             => 'bail|integer|required',
+        'ORDEM'             => 'bail|integer|required|unique:App\Models\CanalDireto\StatusTicket,ORDEM',
     ];
 
     /**
      * <b>messages</b>  Atributo responsável em definir mensagem de validação de acordo com as regras especificadas no atributo $rules
      */
     public $messages = [
-       
+       'unique' => 'The :attribute já existe',
+       'required' => 'The :attribute é obrigatório'
     ];   
     
     /**
