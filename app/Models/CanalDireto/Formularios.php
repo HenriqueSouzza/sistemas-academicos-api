@@ -73,6 +73,7 @@ class Formularios extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
+        'id'            => 'ID',
         'nome'          => 'NOME',
         'descricao'     => 'DESCRICAO',
     ];    
@@ -92,6 +93,6 @@ class Formularios extends Model
      */
     public function camposForm()
     {
-        return $this->belongsToMany(CamposForm::class, 'CD.CAMPOS_FORMULARIOS', 'ID_FORMULARIOS', 'ID_CAMPOS_FORMS');
+        return $this->belongsToMany(CamposForm::class, 'cd.CAMPOS_FORMULARIOS', 'ID_FORMULARIOS', 'ID_CAMPOS_FORMS');
     }
 }

@@ -15,8 +15,11 @@ class CamposForms extends JsonResource
     public function toArray($request)
     {
         return [
+            'id'            => $this->ID,
             'descricao'     => $this->DESCRICAO,
             'label'         => $this->LABEL,
+            'type'          => $this->TYPE,
+            'icon'          => $this->ICON,
             'name'          => $this->NAME,
             'campo_id'      => $this->CAMPO_ID,
             'value'         => $this->VALUE,

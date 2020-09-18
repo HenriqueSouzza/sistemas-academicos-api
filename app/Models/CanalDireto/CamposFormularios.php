@@ -3,15 +3,15 @@
 namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CamposFormularios extends Model
 {
-     /**
+    /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
      * Usado no campo deleted_at da tabela 
      */
-    use SoftDeletes;
+    // use SoftDeletes;
 
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar

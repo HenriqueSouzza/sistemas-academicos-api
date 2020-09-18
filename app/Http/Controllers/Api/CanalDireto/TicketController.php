@@ -89,9 +89,12 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
  
 
 
+=======
+>>>>>>> 89b8a55c12237dfcdf227d01a56b8282a6614c20
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
 
@@ -103,37 +106,40 @@ class TicketController extends Controller
         }
 
         //Verifica se já existe o papel que foi informado
-        $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario,"Papel");
+        $rulePapel = (Object) $this->model->ruleUnique($request->papel_usuario, "Papel");
+
+        if(isset($rulePapel->error)):
+            return $this->createResponse($rulePapel, 422);
+        endif;
 
         //Verifica se já existe o setor que foi informado
-        $ruleSetor = (Object) $this->model->ruleUnique($request->setor,"Setor");
+        $ruleSetor = (Object) $this->model->ruleUnique($request->setor, "Setor");
+
+        if(isset($ruleSetor->error)):
+            return $this->createResponse($ruleSetor, 422);
+        endif;
 
         //Verifica se já existe a categoria que foi informado
-        $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria,"Categoria");         
+        $ruleCategoria = (Object) $this->model->ruleUnique($request->categoria, "Categoria");   
         
-        if(isset($rulePapel->error))
-        {
-            return $this->createResponse($rulePapel, 422);
-
-        }else if (isset($ruleSetor->error))
-        {
-            return $this->createResponse($ruleSetor, 422);
-
-        }else if (isset($ruleCategoria->error))
-        {
+        if(isset($ruleCategoria->error)):
             return $this->createResponse($ruleCategoria, 422);
-        }
+        endif;
 
+        //Verifica se já existe a categoria que foi informado
+        $ruleStatus = (Object) $this->model->ruleUnique($request->status, "Status");  
+        
+        if(isset($ruleStatus->error)):
+            return $this->createResponse($ruleStatus, 422);
+        endif;
+        
         $insert = $this->storeTrait($request);
         
         $dados = json_decode($insert->getContent());
         
         if($request->arquivo){
-            
             $resultUpload = $this->saveArchive($request, $dados);
-            
             $insert->setContent(json_encode($resultUpload));
-
         }
 
         try {
@@ -177,21 +183,19 @@ class TicketController extends Controller
     {
 
         $mensagem = $request->mensagem;
+        $arquivo = $request->arquivo;
 
         $request->request->remove('mensagem');
+        $request->request->remove('arquivo');
 
-        /**
-         * validação para caso for fechar o ticket, setar os campos (aberto, pendentes) como null
-         */
-        if($request->fechado){
-            
-            $request->merge(['aberto' => null]);
-            $request->merge(['pendente' => null]);
-            
-        }
-        
         $updated = $this->updateTrait($request, $id);
         
+        $dataUpdate = json_decode($updated->getContent());
+
+        if(isset($dataUpdate->response->content->error)){
+            return $updated;
+        }
+
         $usuario_interacao = '';
 
         if($request->usuario_fechamento){
@@ -205,6 +209,7 @@ class TicketController extends Controller
         $request->merge(['usuario_interacao' => $usuario_interacao]);
         $request->merge(['id_ticket' => $id]);
         $request->merge(['mensagem' => $mensagem]);
+        $request->merge(['arquivo' => $arquivo]);
 
         return $this->InteracaoTicketController->store($request);
     }

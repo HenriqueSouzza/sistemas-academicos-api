@@ -15,7 +15,8 @@ class CamposFormularios extends JsonResource
     public function toArray($request)
     {
         return [
-            'Id_formulario'     => $this->ID_FORMULARIO,
+            'id'                => $this->ID,
+            'Id_formulario'     => $this->ID_FORMULARIOS,
             'id_campoForm'      => $this->ID_CAMPOS_FORMS,
             'created_at'        => $this->CREATED_AT,
             'updated_at'        => $this->UPDATED_AT,

@@ -99,7 +99,6 @@ class InteracaoTicketController extends Controller
         //Verifica se já existe o ticket que foi informado
         $ruleTicket = (Object) $this->model->ruleUnique($request->id_ticket, "Ticket");         
 
-        
         if(isset($rulePapel->error))
         {
             return $this->createResponse($rulePapel, 422);

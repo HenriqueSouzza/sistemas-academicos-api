@@ -17,6 +17,8 @@ class CreateCamposFormsTable extends Migration
             $table->increments('ID');
             $table->string('DESCRICAO');
             $table->string('LABEL');
+            $table->string('TYPE');
+            $table->string('ICON')->nullable();
             $table->string('NAME');
             $table->string('CAMPO_ID');
             $table->string('VALUE')->nullable();

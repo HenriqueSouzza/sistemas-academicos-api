@@ -6,6 +6,7 @@ use App\Models\CanalDireto\Formularios;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
+use App\Http\Controllers\Api\CanalDireto\CamposFormulariosController;
 use App\Http\Controllers\Controller;
 
 class FormulariosController extends Controller
@@ -34,6 +35,11 @@ class FormulariosController extends Controller
      */
 
     protected $model;
+
+    /**
+     * Atributo Responsável para receber os metodos da classe "CamposFormulariosController"  
+     */
+    protected $camposFormulariosController;
     
 
     /**
@@ -49,9 +55,10 @@ class FormulariosController extends Controller
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Formularios $model)
+    public function __construct(Formularios $model, CamposFormulariosController $CamposFormulariosController)
     {
         $this->model = $model;
+        $this->camposFormulariosController = $CamposFormulariosController;
     } 
 
     /**
@@ -72,7 +79,27 @@ class FormulariosController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->storeTrait($request);
+        $inserted =  $this->storeTrait($request);
+
+        $dataInserted = json_decode($inserted->getContent());
+
+        if(isset($dataInserted->response->content->error)):
+            return $inserted;
+        endif;
+        
+        $request->merge(['id_formulario' => $dataInserted->response->content->id]);
+
+        foreach($request->id_campos as $key => $value):
+
+            $request->merge(['id_campos' => $value]);
+
+            $this->camposFormulariosController->store($request);
+
+        endforeach;
+
+        $result = $this->camposFormulariosController->index($request);
+
+        return $result;
     }
 
     /**
@@ -95,7 +122,39 @@ class FormulariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->updateTrait($request, $id);
+        $updated = $this->updateTrait($request, $id);
+
+        $dataUpdated = json_decode($updated->getContent());
+
+        if(isset($dataUpdated->response->content->error)):
+            return $updated;
+        endif;
+        
+        $request->merge(['id_formulario' => $dataUpdated->response->content->id]);
+
+        $request->merge(['where'=> array('id_formulario' => $dataUpdated->response->content->id)]);
+
+        $resultCampos = $this->camposFormulariosController->index($request);
+
+        $dataDeleted = json_decode($resultCampos->getContent());
+
+        foreach($dataDeleted->response->content as $key => $value):
+
+            $this->camposFormulariosController->destroy($value->id);
+            
+        endforeach;
+
+        foreach($request->id_campos as $key => $value):
+
+            $request->merge(['id_campos' => $value]);
+
+            $this->camposFormulariosController->store($request);
+
+        endforeach;
+
+        $result = $this->camposFormulariosController->index($request);
+
+        return $result;
     }
 
     /**

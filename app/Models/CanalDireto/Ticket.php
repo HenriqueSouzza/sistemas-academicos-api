@@ -43,9 +43,7 @@ class Ticket extends Model
         'USUARIO_ATENDENTE',
         'USUARIO_FECHAMENTO',
         'DT_FECHAMENTO',
-        'ABERTO',
-        'PENDENTE',
-        'FECHADO'
+        'STATUS'
     ];
 
     /**
@@ -59,13 +57,10 @@ class Ticket extends Model
         'ID_CATEGORIA'          => 'bail|required|integer',
         'ASSUNTO'               => 'bail|required|max:200',
         'MENSAGEM'              => 'bail|required|max:500',
-        'ABERTO'                => 'bail|integer|nullable',
         'USUARIO_ATENDENTE'     => 'bail|max:50|nullable',
         'USUARIO_FECHAMENTO'    => 'bail|max:50|nullable',
         'DT_FECHAMENTO'         => 'bail|date|nullable',
-        'ABERTO'                => 'bail|integer|nullable',
-        'PENDENTE'              => 'bail|integer|nullable',
-        'FECHADO'               => 'bail|integer|nullable',
+        'STATUS'                => 'bail|required|integer',
     ];
 
     /**
@@ -109,9 +104,7 @@ class Ticket extends Model
         'usuario_atendente'     => 'USUARIO_ATENDENTE',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
         'dt_fechamento'         => 'DT_FECHAMENTO',
-        'aberto'                => 'ABERTO',
-        'pendente'              => 'PENDENTE',
-        'fechado'               => 'FECHADO',
+        'status'                => 'STATUS',
         'dt_criacao'            => 'CREATED_AT'
     ];
 
@@ -143,13 +136,22 @@ class Ticket extends Model
     }
 
     /**
-     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Categoria e suas
+     * <b>categoria</b> Método responsável em definir o relacionamento entre as de Ticket e Categoria e suas
      * respectivas tabelas.
      */
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'ID_CATEGORIA', 'ID');
-    }    
+    }
+    
+    /**
+     * <b>status</b> Método responsável em definir o relacionamento entre as de Ticket e Status e suas
+     * respectivas tabelas.
+     */
+    public function status()
+    {
+        return $this->belongsTo(StatusTicket::class, 'STATUS', 'ID');
+    }
 
     /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as Ticket e anexoTicket e suas
@@ -188,6 +190,9 @@ class Ticket extends Model
             break;  
             case 'Categoria':
                 $query = (Object) Categoria::whereRaw("ID={$id}");
+            break;                                            
+            case 'Status':
+                $query = (Object) StatusTicket::whereRaw("ID={$id}");
             break;                                            
             default:
                 $query = (Object) Papeis::whereRaw("ID={$id}");

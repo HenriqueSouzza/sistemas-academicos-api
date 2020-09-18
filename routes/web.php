@@ -12,10 +12,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Auth::routes();
+
+Route::get('/redirect', 'AuthController@redirect');
+Route::get('/callback', 'AuthController@callback');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/mailable', function () {
     
@@ -35,6 +40,7 @@ Route::get('/mailable', function () {
     return new App\Mail\InteracaoTicket($ticket, $categoria, $setor);
 });
 
+<<<<<<< HEAD
 
 Route::get('/mailable2', function () {
     
@@ -55,3 +61,8 @@ Route::get('/mailable2', function () {
 });
 
 
+=======
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+>>>>>>> 89b8a55c12237dfcdf227d01a56b8282a6614c20
