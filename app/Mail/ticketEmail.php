@@ -45,6 +45,7 @@ class TicketEmail extends Mailable
         return $this->markdown('canalDireto.ticket')        
         ->with([
             'ticket' => $this->ticket,'categoria' => $this->categoria, 'setor' => $this->setor 
+            
         ]);
     }
 }
