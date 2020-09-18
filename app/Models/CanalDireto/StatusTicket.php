@@ -30,6 +30,7 @@ class StatusTicket extends Model
     protected $fillable = [
         'NOME',
         'DESCRICAO',
+        'ORDEM',
     ];
 
     /**
@@ -39,6 +40,7 @@ class StatusTicket extends Model
     public $rules = [
         'NOME'              => 'bail|required',
         'DESCRICAO'         => 'bail|required',
+        'ORDEM'             => 'bail|integer|required',
     ];
 
     /**
@@ -73,7 +75,8 @@ class StatusTicket extends Model
      */
     public $map = [
         'nome'              => 'NOME',
-        'descricao'         => 'DESCRICAO'
+        'descricao'         => 'DESCRICAO',
+        'ordem'             => 'ORDEM'
     ];
 
     /**

@@ -17,7 +17,8 @@ class StatusTicket extends JsonResource
         return [
                 'id'                => $this->ID,
                 'nome'              => $this->NOME,
-                'descricao'         => $this->DESCRICAO
+                'descricao'         => $this->DESCRICAO,
+                'ordem'             => $this->ORDEM
         ];
     }
 }

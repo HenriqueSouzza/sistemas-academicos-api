@@ -17,6 +17,7 @@ class CreateStatusTicketsTable extends Migration
             $table->increments('ID');
             $table->string('NOME');
             $table->string('DESCRICAO');
+            $table->integer('ORDEM');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');
