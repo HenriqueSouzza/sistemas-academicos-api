@@ -260,9 +260,6 @@ class TicketController extends Controller
             
         endforeach;
 
-        //remove a chave "ID" da resposta para não mostrar para o cliente
-        unset($data->response->content->id);
-
         return $data;
         
     }

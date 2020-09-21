@@ -30,8 +30,6 @@ class Ticket extends JsonResource
             $dt_interacao = $this->InteracaoTicket[$key]->CREATED_AT;
         endforeach;
 
-
-
         return [
             'id'                    => $this->ID,
             'usuario_abertura'      => $this->USUARIO,
@@ -45,7 +43,7 @@ class Ticket extends JsonResource
             'usuario_fechamento'    => $this->USUARIO_FECHAMENTO,
             'dt_fechamento'         => $this->DT_FECHAMENTO,
             'dt_interacao'          => $dt_interacao,
-            'status'                => $this->status->NOME,
+            'status'                => ['nome' => $this->status->NOME, 'ordem' => $this->STATUS],
             'dt_criacao'            => $this->CREATED_AT
         ];
 
