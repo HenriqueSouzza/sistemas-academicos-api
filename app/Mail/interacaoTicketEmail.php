@@ -13,8 +13,9 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\CanalDireto\Ticket;
 use App\Models\CanalDireto\Categoria;
 use App\Models\CanalDireto\Setor;
+use App\Models\CanalDireto\InteracaoTicket;
 
-class InteracaoTicket extends Mailable
+class InteracaoTicketEmail extends Mailable
 {
 
     
@@ -27,19 +28,25 @@ class InteracaoTicket extends Mailable
     protected $categoria;
 
     protected $setor;
+
+    protected $interacao;
     
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, Categoria $categoria, Setor $setor)
+    public function __construct(Ticket $ticket, Categoria $categoria, Setor $setor, InteracaoTicket $interacao)
     {
+
         $this->ticket = $ticket;
 
         $this->categoria = $categoria;
 
         $this->setor = $setor;
+
+        $this->interacao = $interacao;
+
     }
 
     /**
@@ -49,9 +56,10 @@ class InteracaoTicket extends Mailable
      */
     public function build()
     {
+       
         return $this->markdown('canalDireto.interacaoTicket')
         ->with([
-            'ticket' => $this->ticket,'categoria' => $this->categoria, 'setor' => $this->setor 
+            'ticket' => $this->ticket,'categoria' => $this->categoria, 'setor' => $this->setor, 'interacao' => $this->interacao 
         ]);
     }
 }

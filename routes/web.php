@@ -24,23 +24,26 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/mailable', function () {
     
+    $ticket     = App\Models\CanalDireto\Ticket::findOrFail("24");
 
+    $categoria  = App\Models\CanalDireto\Categoria::findOrFail("1");
 
-    $ticket = App\Models\CanalDireto\Ticket::findOrFail("1");
+    $setor      = App\Models\CanalDireto\Setor::findOrFail("1");
 
-    $categoria = App\Models\CanalDireto\Categoria::findOrFail($ticket->ID_CATEGORIA);
-
-    $setor = App\Models\CanalDireto\Setor::findOrFail($ticket->ID_SETOR);
+    $interacao  = App\Models\CanalDireto\InteracaoTicket::findOrFail('1');
     //InteracaoTicket($ticket)
 
-    //var_dump($ticket);
+    //var_dump($setor);
     //Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket));
     
     //$user = App\User::find(1);
-    return new App\Mail\InteracaoTicket($ticket, $categoria, $setor);
+    return new App\Mail\InteracaoTicketEmail($ticket, $categoria, $setor, $interacao);
+
 });
 
-<<<<<<< HEAD
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/mailable2', function () {
     
@@ -59,10 +62,3 @@ Route::get('/mailable2', function () {
     //$user = App\User::find(1);
     return new App\Mail\TicketEmail($ticket, $categoria, $setor);
 });
-
-
-=======
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
->>>>>>> 89b8a55c12237dfcdf227d01a56b8282a6614c20

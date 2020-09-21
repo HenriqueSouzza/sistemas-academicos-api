@@ -14,6 +14,7 @@ use App\Models\CanalDireto\Categoria;
 use App\Models\CanalDireto\Setor;
 
 use Illuminate\Support\Facades\Mail; //dependencia de envio de email
+use App\Mail\InteracaoTicketEmail; //dependencia de envio de email
 
 
 class InteracaoTicketController extends Controller
@@ -120,16 +121,20 @@ class InteracaoTicketController extends Controller
 
         }
 
+
         try {
 
-            $ticket = Ticket::findOrFail($dados->response->content->id);
+            $ticket = Ticket::findOrFail($request->id_ticket);
 
             $categoria = Categoria::findOrFail($ticket->ID_CATEGORIA);
         
             $setor = Setor::findOrFail($ticket->ID_SETOR);
+    
+            $setor = Setor::findOrFail($ticket->ID_SETOR);
+    
+            $interacao = InteracaoTicket::findOrFail($dados->response->content->id);
 
-            //var_dump($dados->response->content->id);
-            Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicket($ticket, $categoria, $setor));
+            Mail::to('henrique.lindao10@gmail.com')->send(new InteracaoTicketEmail($ticket, $categoria, $setor, $interacao));
             var_dump('sucesso');
         } catch (\Throwable $th) {
             var_dump('error');
