@@ -34,7 +34,6 @@ class Ticket extends Model
      *  
      */
     protected $fillable = [
-        'ID',
         'USUARIO',
         'ID_PAPEL_USUARIO',
         'ID_SETOR',
