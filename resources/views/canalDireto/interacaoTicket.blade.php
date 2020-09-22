@@ -24,7 +24,7 @@ Temos novidades sobre seu ticket nº <b>{{ $ticket->ID }}</b>
 
 <p><b>Mensagem:</b> {{ $interacao->MENSAGEM }}</p>
 <p><b>Usuário:</b> {{ $interacao->USUARIO_INTERACAO }}</p>
-<p><b>Data de Solicitacao:</b> {{ date( 'd/m/Y H:i' , strtotime($interacao->CREATED_AT))}}</p>
+<p><b>Data:</b> {{ date( 'd/m/Y H:i' , strtotime($interacao->CREATED_AT))}}</p>
 
 
 @endcomponent
