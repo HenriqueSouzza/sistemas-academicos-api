@@ -5,13 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Yajra\Acl\Traits\HasRole;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
     use Notifiable;
-    use HasRole;
     use HasApiTokens;
 
      /**
@@ -80,7 +78,7 @@ class User extends Authenticatable
 
     ];
 
-      /**
+    /**
      *<b>collection</b> Atributo responsável em informar o namespace e o arquivo do resource
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 

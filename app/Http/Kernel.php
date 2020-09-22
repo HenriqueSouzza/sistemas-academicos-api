@@ -65,14 +65,5 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.user.acl' => \App\Http\Middleware\CheckUserACL::class,
-        
-
-        /**
-         * Adiciona pelo Henrique
-         * Dependência de acl   
-         */
-        'canAtLeast' => \Yajra\Acl\Middleware\CanAtLeastMiddleware::class,
-        'permission' => \Yajra\Acl\Middleware\PermissionMiddleware::class,
-        'role' => \Yajra\Acl\Middleware\RoleMiddleware::class,
     ];
 }

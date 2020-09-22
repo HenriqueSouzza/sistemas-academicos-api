@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function() {
-
+    
     Route::resources([
         '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
         '/canal-direto/interacao-ticket'    => 'Api\CanalDireto\InteracaoTicketController',
@@ -30,8 +30,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
         '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
         '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
-    ]);
+        ]);
+        
+});
 
+Route::middleware('check.user.acl')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
 Route::post('login', 'Api\UserController@login');
