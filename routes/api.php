@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => ['auth:api', 'check.user.acl']], function() {
     
     Route::resources([
         '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
@@ -30,12 +30,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
         '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
         '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
-        ]);
+    ]);
         
-});
-
-Route::middleware('check.user.acl')->get('/user', function (Request $request) {
-    return $request->user();
 });
 
 Route::post('login', 'Api\UserController@login');

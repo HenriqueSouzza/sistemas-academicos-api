@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-// use Gate;
+use Gate;
 
 class CheckUserACL
 {
@@ -17,12 +17,9 @@ class CheckUserACL
     public function handle($request, Closure $next)
     {
 
-        var_dump($request->route());die();
-
         //obtem a controller e a ação 
         $ability = explode('\\', $request->route()->getActionName())[4];
-
-    
+        
         if(! Gate::forUser($request->user())->allows($ability))
         {
             return response()->json(['response' => 'Unauthorized'])->setStatusCode(403);
