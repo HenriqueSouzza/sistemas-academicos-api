@@ -16,7 +16,7 @@ class Permissoes extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'cd.PERMISSOES';
+    protected $table = 'PERMISSOES';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -89,5 +89,16 @@ class Permissoes extends Model
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    /**
+     * <b>Papeis</b> Método responsável por realizar o relacionamento muito para muitos entre a tabela de PERMISSOES e a tabela de PAPEIS
+     * Sendo o primeiro parametro a model e o segundo a tabela
+     * @return type
+     */
+    
+    public function papeis()
+    {
+        return $this->belongsToMany(Papeis::class, 'PERMISSOES_PAPEIS', 'FK_PERMISSOES', 'FK_PAPEIS');
     }
 }

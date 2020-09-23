@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\CanalDireto;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Papeis extends Model
+class PapeisUsuario extends Model
 {
     /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
@@ -16,7 +16,7 @@ class Papeis extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'cd.PAPEIS';
+    protected $table = 'PAPEIS_USUARIOS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -34,8 +34,8 @@ class Papeis extends Model
      *  
      */
     protected $fillable = [
-        'PAPEL',
-        'DESCRICAO',
+        'FK_USER',
+        'FK_PAPEIS',
     ];
 
     /**
@@ -43,8 +43,8 @@ class Papeis extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'PAPEL'         => 'bail|required|max:50',
-        'DESCRICAO'     => 'bail|required|max:100',
+        'FK_USER'           => 'bail|required|integer',
+        'FK_PAPEIS'         => 'bail|required|integer',
     ];
 
     /**
@@ -66,20 +66,20 @@ class Papeis extends Model
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      */
-    public $collection = "\App\Http\Resources\Papeis::collection";
+    public $collection = "\App\Http\Resources\PapeisUsuario::collection";
 
     /**
      * <b>resource</b>
      */
-    public $resource = "\App\Http\Resources\Papeis";
+    public $resource = "\App\Http\Resources\PapeisUsuario";
 
     /**
      * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'papel'     => 'PAPEL',
-        'descricao' => 'DESCRICAO',
+        'fk_user'       => 'FK_USER',
+        'fk_papeis'     => 'FK_PAPEIS',
     ];
 
     /**
@@ -89,16 +89,5 @@ class Papeis extends Model
     public function getPrimaryKey()
     {
         return $this->primaryKey;
-    }
-
-    /**
-     * <b>Papeis</b> Método responsável por realizar o relacionamento muito para muitos entre a tabela de PAPEIS e a tabela de PERMISSOES
-     * Sendo o primeiro parametro a model e o segundo a tabela
-     * @return type
-     */
-    
-    public function permissoes()
-    {
-        return $this->belongsToMany(Permissoes::class, 'PERMISSOES_PAPEIS', 'FK_PAPEIS', 'FK_PERMISSOES');
     }
 }

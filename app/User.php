@@ -7,6 +7,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
+
+use App\Models\CanalDireto\Papeis;
+use App\Models\Permissoes;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -49,22 +53,21 @@ class User extends Authenticatable
     ];
 
      
-     /**
-      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
-      */
-      protected $primaryKey = 'id';
+    /**
+     * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
+    */
+    protected $primaryKey = 'id';
 
-      /**
-       * <b>dates</b> Serve para tratar todos os campos de data para serem também um objeto do tipo Carbon(biblioteca de datas)
-       */
-      protected $dates = ['created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
+    /**
+     * <b>dates</b> Serve para tratar todos os campos de data para serem também um objeto do tipo Carbon(biblioteca de datas)
+     */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 
-      /**
+    /**
      * <b>rules</b> Atributo responsável em definir regras de validação dos dados submetidos pelo formulário
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
     */
     public $rules = [
-
         'name'     => 'bail|required',
         'email'    => 'bail|required',
         'password' => 'bail|required'
@@ -84,14 +87,12 @@ class User extends Authenticatable
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      * Mais informações em https://laravel.com/docs/5.8/eloquent-resources
     */
-
-    public $collection = "\App\Http\Resources\UserResource::collection";
+    public $collection = "\App\Http\Resources\User::collection";
 
     /**
      * <b>resource</b>
      */
-
-   public $resource = "\App\Http\Resources\UserResource";
+    public $resource = "\App\Http\Resources\User";
 
    /**
     * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
@@ -116,5 +117,46 @@ class User extends Authenticatable
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    /**
+     * <b>roles</b> Metodo responsável por realizar o relacionamento de muitos para muitos entre as tabelas de users, PAPEIS e USUARIOS_PAPEIS
+     * Sendo o primeiro parametro a model e o segundo a tabela
+     */
+    public function papeis()
+    {
+        return $this->belongsToMany(Papeis::class, 'PAPEIS_USUARIOS', 'FK_USER', 'FK_PAPEIS');
+    }
+
+    /****************************************************************
+    ************************* ACL METHODS *************************** 
+    *****************************************************************
+    *****************************************************************/
+       
+    /**
+     * <b>hasPermission</b> Recupera todas as permissões atribuidas a um papel
+     * exemplo: permissão visualizar papel: administrador  
+     * @param Permission $permission
+     */
+    public function hasPermission(Permissoes $permission)
+    {
+        return $this->hasAnyRoles($permission->papeis); 
+        
+    }
+    
+    /**
+     * <b>hasAnyRoles</b> Verifica se o usuário que esta logado tem a permissão adequada para realizar o acesso 
+     *
+     * @param type $roles
+     */
+    public function hasAnyRoles($papeis)
+    {
+        // So cai nesse if, se um ou mais papeis,for passado
+        if(is_array($papeis) || is_object($papeis))
+        {
+            return !! $papeis->intersect($this->papeis)->count();
+        }
+
+        return $this->papeis->contains('PAPEL', $papeis);
     }
 }
