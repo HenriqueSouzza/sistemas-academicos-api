@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['auth:api', 'check.user.acl']], function() {
+Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
     
     Route::resources([
         '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth:api', 'check.user.acl']], function() {
         '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
         '/permissoes'                       => 'Api\PermissoesController',
     ]);
+
+    Route::get('/permissoes/update/all', 'Api\PermissoesController@updateAllPermissions');
         
 });
 

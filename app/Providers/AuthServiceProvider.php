@@ -54,11 +54,11 @@ class AuthServiceProvider extends ServiceProvider
 
         if(count($count))
         {
-            $permissions = Permissoes::with('cd.PAPEIS')->get();
+            $permissions = Permissoes::with('Papeis')->get();
 
             foreach( $permissions as $permission )
             {
-                Gate::define($permission->name_permission, function(User $user) use ($permission){
+                Gate::define($permission->PERMISSAO, function(User $user) use ($permission){
                     return $user->hasPermission($permission) ;
                 });
             }
@@ -68,14 +68,11 @@ class AuthServiceProvider extends ServiceProvider
             */
             Gate::before(function(User $user, $ability)
             {
-                
                 if( $user->hasAnyRoles('Administrador') )
                 {
                     //if( $user->hasAnyRoles('1') )
                     return true;
                 }
-                
-                
             });
 
         }

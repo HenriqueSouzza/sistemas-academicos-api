@@ -24,18 +24,13 @@ class Permissoes extends Model
     protected $primaryKey = "ID";
 
     /**
-     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
-     *
-     */
-    // protected $dateFormat = 'ymd';
-
-    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
     protected $fillable = [
-        'DESCRICAO',
         'PERMISSAO',
+        'DESCRICAO',
+        'PREFIX',
     ];
 
     /**
@@ -45,6 +40,7 @@ class Permissoes extends Model
     public $rules = [
         'DESCRICAO'         => 'bail|required|max:100',
         'PERMISSAO'         => 'bail|required|max:250',
+        'PREFIX'            => 'bail|max:150',
     ];
 
     /**
@@ -78,8 +74,9 @@ class Permissoes extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'descricao'     => 'DESCRICAO',
         'permissao'     => 'PERMISSAO',
+        'descricao'     => 'DESCRICAO',
+        'prefix'        => 'PREFIX',
     ];
 
     /**
@@ -99,6 +96,6 @@ class Permissoes extends Model
     
     public function papeis()
     {
-        return $this->belongsToMany(Papeis::class, 'PERMISSOES_PAPEIS', 'FK_PERMISSOES', 'FK_PAPEIS');
+        return $this->belongsToMany(CanalDireto\Papeis::class, 'PERMISSOES_PAPEIS', 'FK_PERMISSOES', 'FK_PAPEIS');
     }
 }

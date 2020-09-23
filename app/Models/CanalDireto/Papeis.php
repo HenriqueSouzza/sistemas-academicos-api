@@ -24,12 +24,6 @@ class Papeis extends Model
     protected $primaryKey = "ID";
 
     /**
-     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
-     *
-     */
-    // protected $dateFormat = 'ymd';
-
-    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */

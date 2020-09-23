@@ -120,22 +120,25 @@ class PermissoesController extends Controller
         foreach(\Route::getRoutes()->getRoutes() as $route )
         {
             $action = $route->getAction();
-
+            
             if(array_key_exists('controller', $action))
             {
+                
                 $controller = explode('\\', $action['controller']);
                 $index = max(array_keys($controller));
                 $actionPermission = explode('@', $controller[$index]);
+                $actionPermission = isset($actionPermission[1]) ? $actionPermission[1] : $actionPermission[0];
                 $actionName = ( array_key_exists('as', $action) ? $action['as'] : '' );
-
-                $find = Permission::where('name_permission', $controller[$index])->count();
-
+                
+                $find = $this->model->where('PERMISSAO', $controller[$index])->count();
+                
                 if(!$find)
                 {
-                    $data = Permission::insert([
-                       'name_permission'   => $controller[$index],
-                       'label_permission'  => 'Acesso a ação '.$actionPermission[1],
-                       'action_permission' => $actionName,
+                    $data = $this->model->create([
+                       'PERMISSAO'   => $controller[$index],
+                       'DESCRICAO'  => 'Acesso a ação '. $actionPermission,
+                       'PREFIX'  => $action['prefix'],
+                       'ACTION_PERMISSOES' => $actionName,
                     ]);
                 }
             }

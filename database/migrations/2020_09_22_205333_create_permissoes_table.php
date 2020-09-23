@@ -17,6 +17,7 @@ class CreatePermissoesTable extends Migration
             $table->increments('ID');
             $table->string('DESCRICAO', 100);
             $table->string('PERMISSAO', 250);
+            $table->string('PREFIX', 150)->nullable();
             $table->string('ACTION_PERMISSOES', 200)->default('N/I');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
