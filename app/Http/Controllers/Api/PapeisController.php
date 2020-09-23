@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\CanalDireto;
+namespace App\Http\Controllers\Api;
 
-use App\Models\CanalDireto\Papeis;
+use App\Models\Papeis;
+use App\Models\PermissoesPapeis;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
@@ -68,9 +69,49 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request)
-    {
-        return $this->storeTrait($request);
+    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis)
+    {   
+        //Valida os campos de data
+        $validatePapeis = $this->validateInputs($request);
+
+        if(isset($validatePapeis->getData()->response->content->error))
+        {
+            return $validatePapeis;
+        }
+
+        $values = $this->columnsInsert($request);
+
+        $resultPapeis = $this->model->create($values);
+        
+        $request->merge(['id_papeis' => $resultPapeis->ID]);
+        
+        //Caso for passado a as permissoes desse papel
+        $permissao = (array) $request->permissao;
+        
+        if(count($permissao) > 0){
+            //Assume model de permissoes Papeis
+            $this->model = $PermissoesPapeis;
+
+            foreach($permissao as $key => $value ):
+
+                $request->merge(['id_permissao' => $value]);
+
+                $validatePermissoes = $this->validateInputs($request);
+
+                if(!isset($validatePermissoes->getData()->response->content->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        $this->model = $papeis; 
+        
+        return $this->createResponse($this->columnsShow($resultPapeis), 201);
     }
 
     /**

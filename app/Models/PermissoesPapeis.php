@@ -100,7 +100,7 @@ class PermissoesPapeis extends Model
     {   
         switch ($model) {
             case 'Papeis':
-                $query = (Object) CanalDireto\Papeis::whereRaw("ID={$id}");
+                $query = (Object) Papeis::whereRaw("ID={$id}");
                 break;  
             case 'Permissoes':
                 $query = (Object) Permissoes::whereRaw("ID={$id}");
