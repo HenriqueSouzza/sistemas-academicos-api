@@ -16,7 +16,7 @@ class PermissoesPapeis extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'PAPEIS_USUARIOS';
+    protected $table = 'PERMISSOES_PAPEIS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -24,18 +24,12 @@ class PermissoesPapeis extends Model
     protected $primaryKey = "ID";
 
     /**
-     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
-     *
-     */
-    // protected $dateFormat = 'ymd';
-
-    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
     protected $fillable = [
         'FK_PAPEIS',
-        'FK_PERMISSOES',
+        'FK_PERMISSOES'
     ];
 
     /**
@@ -44,7 +38,7 @@ class PermissoesPapeis extends Model
      */
     public $rules = [
         'FK_PAPEIS'             => 'bail|required|integer',
-        'FK_PERMISSOES'         => 'bail|required|integer',
+        'FK_PERMISSOES'         => 'bail|required|integer'
     ];
 
     /**
@@ -78,8 +72,8 @@ class PermissoesPapeis extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'fk_papeis'         => 'FK_PAPEIS',
-        'fk_permissoes'     => 'FK_PERMISSOES',
+        'id_papeis'         => 'FK_PAPEIS',
+        'id_permissao'      => 'FK_PERMISSOES',
     ];
 
     /**
@@ -89,5 +83,39 @@ class PermissoesPapeis extends Model
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////// REGRAS DE NEGOCIO ///////////////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
+     * REGRA : Verifica se existe o papel e a permissao informada, caso não exista retornará uma mensagem de erro
+     * caso contrario retorna true
+     * @param $id 
+     * @param $model 
+    */
+    public function ruleUnique($id, $model)
+    {   
+        switch ($model) {
+            case 'Papeis':
+                $query = (Object) CanalDireto\Papeis::whereRaw("ID={$id}");
+                break;  
+            case 'Permissoes':
+                $query = (Object) Permissoes::whereRaw("ID={$id}");
+                break;   
+        }
+        
+        $count = $query->get()->count();
+
+        if($count < 1)
+        {
+            $error['message'] = $model . " não Cadastrado (a).";
+            $error['error']   = true;
+
+            return $error;
+        }
+
     }
 }

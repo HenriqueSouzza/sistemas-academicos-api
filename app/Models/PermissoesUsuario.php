@@ -24,12 +24,6 @@ class PermissoesUsuario extends Model
     protected $primaryKey = "ID";
 
     /**
-     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
-     *
-     */
-    // protected $dateFormat = 'ymd';
-
-    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
@@ -78,8 +72,8 @@ class PermissoesUsuario extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'fk_user'           => 'FK_USER',
-        'fk_permissoes'     => 'FK_PERMISSOES',
+        'id_usuario'        => 'FK_USER',
+        'id_permissao'      => 'FK_PERMISSOES',
     ];
 
     /**
@@ -89,5 +83,39 @@ class PermissoesUsuario extends Model
     public function getPrimaryKey()
     {
         return $this->primaryKey;
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////// REGRAS DE NEGOCIO ///////////////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
+     * REGRA : Verifica se existe o papel e o usuario informado, caso não exista retornará uma mensagem de erro
+     * caso contrario retorna true
+     * @param $id 
+     * @param $model 
+    */
+    public function ruleUnique($id, $model)
+    {   
+        switch ($model) {
+            case 'Permissoes':
+                $query = (Object) Permissoes::whereRaw("ID={$id}");
+                break;  
+            case 'Usuarios':
+                $query = (Object) \App\User::whereRaw("id={$id}");
+                break;   
+        }
+        
+        $count = $query->get()->count();
+
+        if($count < 1)
+        {
+            $error['message'] = $model . " não Cadastrado (a).";
+            $error['error']   = true;
+
+            return $error;
+        }
+
     }
 }

@@ -78,8 +78,8 @@ class PapeisUsuario extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'fk_user'       => 'FK_USER',
-        'fk_papeis'     => 'FK_PAPEIS',
+        'id_usuario'        => 'FK_USER',
+        'id_papeis'         => 'FK_PAPEIS',
     ];
 
     /**
@@ -90,4 +90,39 @@ class PapeisUsuario extends Model
     {
         return $this->primaryKey;
     }
+
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////// REGRAS DE NEGOCIO ///////////////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
+     * REGRA : Verifica se existe o papel e o usuario informado, caso não exista retornará uma mensagem de erro
+     * caso contrario retorna true
+     * @param $id 
+     * @param $model 
+    */
+    public function ruleUnique($id, $model)
+    {   
+        switch ($model) {
+            case 'Papeis':
+                $query = (Object) CanalDireto\Papeis::whereRaw("ID={$id}");
+                break;  
+            case 'Usuario':
+                $query = (Object) \App\User::whereRaw("id={$id}");
+                break;   
+        }
+        
+        $count = $query->get()->count();
+
+        if($count < 1)
+        {
+            $error['message'] = $model . " não Cadastrado (a).";
+            $error['error']   = true;
+
+            return $error;
+        }
+
+    }
+
 }
