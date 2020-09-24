@@ -16,8 +16,7 @@ class CreateSetorsTable extends Migration
         Schema::create('cd.SETOR', function (Blueprint $table) {
             $table->increments('ID');
             $table->string('DESCRICAO');
-            $table->string('ATIVO');
-            $table->string('USUARIO');
+            $table->integer('ATIVO');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');  

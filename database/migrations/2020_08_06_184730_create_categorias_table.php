@@ -17,12 +17,10 @@ class CreateCategoriasTable extends Migration
             $table->increments('ID');
             $table->integer('ID_SETOR');
             $table->string('DESCRICAO');
-            $table->string('ATIVO');
-            $table->string('PERMITE_ABERTURA');
-            $table->string('PERMITE_INTERACAO');
-            //PERMITE A ABERTURA DE VARIOS TICKETS DA MESMA CATEGORIA
-            $table->string('PERMITE_N_TICKETS');
-            $table->string('USUARIO');
+            $table->integer('ATIVO');
+            $table->integer('PERMITE_ABERTURA_TICKET'); //coluna para validar se essa categoria permite abertura de ticket
+            $table->integer('PERMITE_INTERACAO'); //Coluna para validar se essa categoria permite interacao de ticket
+            $table->integer('PERMITE_N_TICKETS_ABERTOS'); //Coluna para validar se essa categoria permite abrir vários tickets mesmo estando um em aberto pelo o usuário
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');  

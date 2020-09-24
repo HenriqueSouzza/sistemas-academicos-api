@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Setor extends Model
 {
-    //
-
+    
    /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
      * Usado no campo deleted_at da tabela 
@@ -29,19 +28,18 @@ class Setor extends Model
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
-    protected $fillable = [ 'DESCRICAO',
-                            'ATIVO',
-                            'USUARIO'
-                        ];    
+    protected $fillable = [ 
+        'DESCRICAO',
+        'ATIVO',
+    ];    
 
     /**
      * <b>rules</b> Atributo responsável em definir regras de validação dos dados submetidos pelo formulário
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'DESCRICAO' => 'bail|required|',
-        'ATIVO'     => 'bail|required|',
-        'USUARIO'   => 'bail|required|'
+        'DESCRICAO' => 'bail|required|max:150',
+        'ATIVO'     => 'bail|required|integer|max:1',
     ];   
     
     /**
@@ -78,10 +76,8 @@ class Setor extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        "setor" => 'ID',
-        "descricao" => 'DESCRICAO',
-        "ativo" => 'ATIVO',
-        "usuario" => 'USUARIO'
+        "descricao"     => 'DESCRICAO',
+        "ativo"         => 'ATIVO',
     ];    
 
     /**
