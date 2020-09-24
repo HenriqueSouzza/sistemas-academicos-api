@@ -16,10 +16,10 @@ class Categoria extends JsonResource
     {
         return [
             'id'                        => $this->ID,
-            'setor'                     => $this->ID_SETOR,
+            'setor'                     => $this->setor,
             'descricao'                 => $this->DESCRICAO,
             'ativo'                     => $this->ATIVO,
-            'permite_abertura_ticket'   => $this->PERMITE_ABERTURA,
+            'permite_abertura_ticket'   => $this->PERMITE_ABERTURA_TICKET,
             'permite_interacao'         => $this->PERMITE_INTERACAO,
             'permite_n_tickets_abertos' => $this->PERMITE_N_TICKETS_ABERTOS,
             'created_at'                => $this->CREATED_AT,

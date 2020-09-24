@@ -71,19 +71,17 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
-        $responseValidate =  $validate->original['response']['content'];
 
-        if(isset($responseValidate->error))
+        if(isset($validate->getData()->response->content->error))
         {
             return $validate;
         }
 
         //Verifica se já existe o papel que foi informado
         $ruleUnique = (Object) $this->model->ruleUnique($request->setor);
-    
+        
         if(isset($ruleUnique->error))
         {
             return $this->createResponse($ruleUnique, 422);

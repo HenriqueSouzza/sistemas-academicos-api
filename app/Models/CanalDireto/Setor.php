@@ -88,4 +88,22 @@ class Setor extends Model
     {
         return $this->primaryKey;
     }    
+
+    /**
+     * <b>setor</b> Método responsável em definir o relacionamento entre as de Setor e Categoria e suas
+     * respectivas tabelas.
+     */
+    public function categoria()
+    {
+        return $this->hasMany(Categoria::class, 'ID_SETOR', 'ID')->select([
+            'CATEGORIA.ID                           as id', 
+            'CATEGORIA.DESCRICAO                    as descricao',
+            'CATEGORIA.ATIVO                        as ativo',
+            'CATEGORIA.PERMITE_ABERTURA_TICKET      as permite_abertura_ticket',  
+            'CATEGORIA.PERMITE_INTERACAO            as permite_interacao',
+            'CATEGORIA.PERMITE_N_TICKETS_ABERTOS    as permite_n_tickets_abertos',
+            'CATEGORIA.CREATED_AT                   as created_at',
+            'CATEGORIA.UPDATED_AT                   as updated_at',
+        ]);
+    }
 }

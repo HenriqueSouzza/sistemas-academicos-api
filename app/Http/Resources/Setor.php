@@ -18,6 +18,7 @@ class Setor extends JsonResource
             'id'            => $this->ID,
             'descricao'     => $this->DESCRICAO,
             'ativo'         => $this->ATIVO,
+            'categoria'     => $this->categoria ? $this->categoria : [],
             'created_at'    => $this->CREATED_AT,
             'updated_at'    => $this->UPDATED_AT,
         ];

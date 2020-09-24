@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\CanalDireto;
 
 use App\Models\CanalDireto\Setor;
+use App\Models\CanalDireto\Categoria;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

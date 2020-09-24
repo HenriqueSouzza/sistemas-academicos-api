@@ -31,7 +31,7 @@ class Categoria extends Model
         'ID_SETOR',
         'DESCRICAO',
         'ATIVO',
-        'PERMITE_ABERTURA',
+        'PERMITE_ABERTURA_TICKET',
         'PERMITE_INTERACAO',
         'PERMITE_N_TICKETS_ABERTOS',      
     ];   
@@ -44,7 +44,7 @@ class Categoria extends Model
         'ID_SETOR'                  => 'bail|required|integer',
         'DESCRICAO'                 => 'bail|required|max:100',
         'ATIVO'                     => 'bail|required|integer|max:1',
-        'PERMITE_ABERTURA'          => 'bail|required|integer|max:1',
+        'PERMITE_ABERTURA_TICKET'   => 'bail|required|integer|max:1',
         'PERMITE_INTERACAO'         => 'bail|required|integer|max:1',
         'PERMITE_N_TICKETS_ABERTOS' => 'bail|required|integer|max:1'        
     ];   
@@ -84,7 +84,7 @@ class Categoria extends Model
         'setor'                     => 'ID_SETOR',
         'descricao'                 => 'DESCRICAO',
         'ativo'                     => 'ATIVO',
-        'permite_abertura'          => 'PERMITE_ABERTURA',
+        'permite_abertura_ticket'   => 'PERMITE_ABERTURA_TICKET',
         'permite_interacao'         => 'PERMITE_INTERACAO',
         'permite_n_tickets_abertos' => 'PERMITE_N_TICKETS_ABERTOS',
     ];    
@@ -104,7 +104,13 @@ class Categoria extends Model
      */
     public function setor()
     {
-        return $this->belongsTo(Setor::class, 'ID_SETOR', 'ID');
+        return $this->hasMany(Setor::class, 'ID', 'ID_SETOR')->select([
+            'SETOR.ID                           as id', 
+            'SETOR.DESCRICAO                    as descricao',
+            'SETOR.ATIVO                        as ativo',
+            'SETOR.CREATED_AT                   as created_at',
+            'SETOR.UPDATED_AT                   as updated_at'
+        ]);
     }   
     
     /**
