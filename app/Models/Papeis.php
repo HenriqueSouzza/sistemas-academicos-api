@@ -52,7 +52,7 @@ class Papeis extends Model
      * <b>hidden</b> Atributo responsável em esconder colunas que não deverão ser retornadas em uma requisição
      */
     protected $hidden  = [
-
+        'pivot'
     ];
 
     /**
@@ -93,6 +93,13 @@ class Papeis extends Model
     
     public function permissoes()
     {
-        return $this->belongsToMany(Permissoes::class, 'PERMISSOES_PAPEIS', 'FK_PAPEIS', 'FK_PERMISSOES');
+        return $this->belongsToMany(Permissoes::class, 'PERMISSOES_PAPEIS', 'FK_PAPEIS', 'FK_PERMISSOES')
+                    ->select([
+                                'PERMISSOES.ID as id', 
+                                'PERMISSOES.PERMISSAO as permissao',
+                                'PERMISSOES.DESCRICAO as descricao',
+                                'PERMISSOES.PREFIX as prefix',  
+                                'PERMISSOES.ACTION_PERMISSOES as action_permissoes'
+                            ]);
     }
 }

@@ -54,7 +54,7 @@ class Permissoes extends Model
      * <b>hidden</b> Atributo responsável em esconder colunas que não deverão ser retornadas em uma requisição
      */
     protected $hidden  = [
-
+        'pivot'
     ];
 
     /**
@@ -93,7 +93,6 @@ class Permissoes extends Model
      * Sendo o primeiro parametro a model e o segundo a tabela
      * @return type
      */
-    
     public function papeis()
     {
         return $this->belongsToMany(Papeis::class, 'PERMISSOES_PAPEIS', 'FK_PERMISSOES', 'FK_PAPEIS');

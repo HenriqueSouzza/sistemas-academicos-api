@@ -129,9 +129,73 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, PermissoesPapeis $permissoesPapeis, Papeis $papeis)
     {
-        return $this->updateTrait($request, $id);
+        $result = $this->model->findOrFail($id);
+
+        //Método vindo da trait de api 
+        $values = $this->columnsInsert($request);
+
+        $arrayRole = array();
+        
+        foreach($values as $key => $val):
+
+            if(in_array($key, array_keys($this->model->rules))):
+                $arrayRole[$key] = $this->model->rules[$key];
+            endif;
+            
+        endforeach;
+
+        if(count($arrayRole) > 0):
+            
+            $validate = validator($values, $arrayRole, $this->model->messages);
+
+        else:
+
+            $validate = validator($values, $this->model->rules, $this->model->messages);
+
+        endif;
+
+        if ($validate->fails()) {
+            $errors['messages'] = $this->columnsShow($validate->errors());
+            $errors['error']    = true;
+
+            return $this->createResponse($errors, 422);
+        }
+
+        $result->update($values);
+
+        //Caso for passado a as permissoes desse papel
+        $permissao = (array) $request->permissao;
+
+        if(count($permissao) > 0){
+            
+            //Assume model de permissoes Papeis
+            $this->model = $permissoesPapeis;
+            
+            $this->model->where('FK_PAPEIS', $id)->delete();
+    
+            foreach($permissao as $key => $value ):
+                
+                $request->merge(['id_permissao' => $value]);
+                $request->merge(['id_papeis' => $id]);
+                
+                $validatePermissoes = $this->validateInputs($request);
+                
+                if(!isset($validatePermissoes->getData()->response->content->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        $this->model = $papeis; 
+        
+        return $this->createResponse($this->columnsShow($result), 200);
     }
 
     /**
