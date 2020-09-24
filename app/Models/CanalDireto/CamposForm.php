@@ -32,6 +32,7 @@ class CamposForm extends Model
         'LABEL',
         'NAME',
         'TYPE',
+        'ICON',
         'CAMPO_ID',
         'VALUE',
         'OBRIGATORIO',
