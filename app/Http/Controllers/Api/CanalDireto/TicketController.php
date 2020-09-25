@@ -127,19 +127,21 @@ class TicketController extends Controller
         if(isset($ruleStatus->error)):
             return $this->createResponse($ruleStatus, 422);
         endif;
+
+        $values = $this->columnsInsert($request);
+
+        $insert = $this->model->create($values);
         
-        $insert = $this->storeTrait($request);
-        
-        $dados = json_decode($insert->getContent());
-        
+        $result = $this->columnsShow($insert);
+
         if($request->arquivo){
-            $resultUpload = $this->saveArchive($request, $dados);
-            $insert->setContent(json_encode($resultUpload));
+            $resultUpload = $this->saveArchive($request->arquivo, $insert->ID);
+            $result['errorUpload'] = $resultUpload;
         }
 
         try {
 
-            $ticket = Ticket::findOrFail($dados->response->content->id);
+            $ticket = Ticket::findOrFail($insert->ID);
 
             $categoria = Categoria::findOrFail($ticket->ID_CATEGORIA);
         
@@ -147,12 +149,11 @@ class TicketController extends Controller
 
             Mail::to('iesb@gmail.com')->send(new TicketEmail($ticket, $categoria, $setor));
             
-            var_dump('sucesso');
         } catch (\Throwable $th) {
-            var_dump('error');
+            echo ('erro ao enviar e-mail para solicitante');
         }
 
-        return $insert;
+        return $this->createResponse($result, 201);
     }
 
     /**
@@ -220,9 +221,7 @@ class TicketController extends Controller
     /**
      * Tratar os arquivos que serão salvos
      */
-    private function saveArchive($request, $data){
-
-        $files = $request->arquivo;
+    private function saveArchive($files, $idTicket){
 
         $error = [];
 
@@ -239,16 +238,14 @@ class TicketController extends Controller
                 $error['error'][$key] = true;
                 $error['message'][$key] = $this->AnexoTicketController->getErrorSaveFile();
     
-                $data->response->errorUpload = (object) $error;
-    
             }
 
-            if(!isset($data->response->errorUpload)):
+            if($addFile):
 
                 $dataInsert = [
-                    'ID_TICKET' => $data->response->content->id,
+                    'ID_TICKET' => $idTicket,
                     'ID_INTERACAO_TICKET' => '',
-                    'ARQUIVO' => asset('storage/'.$addFile)
+                    'ARQUIVO' => asset('storage/' . $addFile)
                 ];
         
                 $result = $this->AnexoTicketController->store($dataInsert);
@@ -257,7 +254,7 @@ class TicketController extends Controller
             
         endforeach;
 
-        return $data;
+        return $error;
         
     }
 
