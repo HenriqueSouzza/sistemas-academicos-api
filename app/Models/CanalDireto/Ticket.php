@@ -195,7 +195,7 @@ class Ticket extends Model
                 $query = (Object) StatusTicket::whereRaw("ID={$id}");
             break;                                            
             default:
-                $query = (Object) Papeis::whereRaw("ID={$id}");
+                $query = (Object) \App\Models\Papeis::whereRaw("ID={$id}");
             break;
         }
         

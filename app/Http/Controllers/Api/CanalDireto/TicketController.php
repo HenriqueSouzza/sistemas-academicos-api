@@ -89,8 +89,6 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
- 
-
 
         //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
         $validate = $this->validateInputs($request);
@@ -139,7 +137,6 @@ class TicketController extends Controller
             $insert->setContent(json_encode($resultUpload));
         }
 
-
         try {
 
             $ticket = Ticket::findOrFail($dados->response->content->id);
@@ -148,8 +145,8 @@ class TicketController extends Controller
         
             $setor = Setor::findOrFail($ticket->ID_SETOR);
 
-            //var_dump($dados->response->content->id);
             Mail::to('iesb@gmail.com')->send(new TicketEmail($ticket, $categoria, $setor));
+            
             var_dump('sucesso');
         } catch (\Throwable $th) {
             var_dump('error');

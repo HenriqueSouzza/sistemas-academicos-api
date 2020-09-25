@@ -144,7 +144,7 @@ class InteracaoTicket extends Model
                 $query = (Object) Ticket::whereRaw("ID={$id}");
                 break;  
             case 'Papel':
-                $query = (Object) Papeis::whereRaw("ID={$id}");
+                $query = (Object) \App\Models\Papeis::whereRaw("ID={$id}");
                 break;   
         }
         
