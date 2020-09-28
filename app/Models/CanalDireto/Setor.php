@@ -76,6 +76,7 @@ class Setor extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
+        "id"            => 'ID',
         "descricao"     => 'DESCRICAO',
         "ativo"         => 'ATIVO',
     ];    
