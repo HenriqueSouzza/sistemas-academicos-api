@@ -31,9 +31,10 @@ Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
         '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
         '/papeis'                           => 'Api\PapeisController',
         '/permissoes'                       => 'Api\PermissoesController',
-        '/papeis-usuario'                   => 'Api\PapeisUsuarioController',
-        '/permissoes-papeis'                => 'Api\PermissoesPapeisController',
-        '/permissoes-usuario'               => 'Api\PermissoesUsuarioController',
+        // '/papeis-usuario'                   => 'Api\PapeisUsuarioController',
+        // '/permissoes-papeis'                => 'Api\PermissoesPapeisController',
+        // '/permissoes-usuario'               => 'Api\PermissoesUsuarioController',
+        '/sistemas'                         => 'Api\SistemasController',
     ]);
 
     Route::get('/permissoes/update/all', 'Api\PermissoesController@updateAllPermissions');

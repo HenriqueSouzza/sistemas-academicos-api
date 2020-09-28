@@ -16,7 +16,7 @@ class Papeis extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'cd.PAPEIS';
+    protected $table = 'PAPEIS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -30,6 +30,7 @@ class Papeis extends Model
     protected $fillable = [
         'PAPEL',
         'DESCRICAO',
+        'SISTEMA',
     ];
 
     /**
@@ -39,6 +40,7 @@ class Papeis extends Model
     public $rules = [
         'PAPEL'         => 'bail|required|max:50',
         'DESCRICAO'     => 'bail|required|max:100',
+        'SISTEMA'       => 'bail|required|integer',
     ];
 
     /**
@@ -74,6 +76,7 @@ class Papeis extends Model
     public $map = [
         'papel'     => 'PAPEL',
         'descricao' => 'DESCRICAO',
+        'sistema'   => 'SISTEMA',
     ];
 
     /**

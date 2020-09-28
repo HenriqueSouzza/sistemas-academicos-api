@@ -39,7 +39,7 @@ class Setor extends Model
      */
     public $rules = [
         'DESCRICAO' => 'bail|required|max:150',
-        'ATIVO'     => 'bail|required|integer|max:1',
+        'ATIVO'     => 'bail|required|boolean',
     ];   
     
     /**

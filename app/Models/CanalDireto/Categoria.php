@@ -43,10 +43,10 @@ class Categoria extends Model
     public $rules = [
         'ID_SETOR'                  => 'bail|required|integer',
         'DESCRICAO'                 => 'bail|required|max:100',
-        'ATIVO'                     => 'bail|required|integer|max:1',
-        'PERMITE_ABERTURA_TICKET'   => 'bail|required|integer|max:1',
-        'PERMITE_INTERACAO'         => 'bail|required|integer|max:1',
-        'PERMITE_N_TICKETS_ABERTOS' => 'bail|required|integer|max:1'        
+        'ATIVO'                     => 'bail|required|boolean',
+        'PERMITE_ABERTURA_TICKET'   => 'bail|required|boolean',
+        'PERMITE_INTERACAO'         => 'bail|required|boolean',
+        'PERMITE_N_TICKETS_ABERTOS' => 'bail|required|boolean'        
     ];   
     
 

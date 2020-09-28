@@ -43,11 +43,11 @@ class InteracaoTicket extends Model
      */
     public $rules = [
         'ID_TICKET'         => 'bail|required|integer',
-        'ID_PAPEL_USUARIO'  => 'bail|required|max:1|integer',
+        'ID_PAPEL_USUARIO'  => 'bail|required|integer',
         'USUARIO_INTERACAO' => 'bail|required|max:200',
         'MENSAGEM'          => 'bail|required|max:350',
-        'PUBLICO'           => 'bail|max:1|integer',
-        'PRIVADO'           => 'bail|max:1|integer',
+        'PUBLICO'           => 'bail|boolean',
+        'PRIVADO'           => 'bail|boolean',
     ]; 
 
     /**
