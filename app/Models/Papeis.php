@@ -105,4 +105,36 @@ class Papeis extends Model
                                 'PERMISSOES.ACTION_PERMISSOES as action_permissoes'
                             ]);
     }
+
+
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////// REGRAS DE NEGOCIO ///////////////////////////
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * <b>ruleUnique</b> Método responsável em realizar a seguinte verificação:
+     * REGRA : Verifica se existe o papel e o usuario informado, caso não exista retornará uma mensagem de erro
+     * caso contrario retorna true
+     * @param $id 
+     * @param $model 
+    */
+    public function ruleUnique($id, $model)
+    {   
+        switch ($model) {
+            case 'Sistema':
+                $query = (Object) Sistemas::whereRaw("ID={$id}");
+            break;  
+        }
+        
+        $count = $query->get()->count();
+
+        if($count < 1)
+        {
+            $error['message'] = $model . " não Cadastrado (a).";
+            $error['error']   = true;
+
+            return $error;
+        }
+
+    }
 }

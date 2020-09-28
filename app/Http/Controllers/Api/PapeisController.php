@@ -79,6 +79,14 @@ class PapeisController extends Controller
             return $validatePapeis;
         }
 
+        //Verifica se já existe o sistema que foi informado
+        $ruleSistema = (Object) $this->model->ruleUnique($request->sistema, "Sistema");         
+
+        if(isset($ruleSistema->error))
+        {
+            return $this->createResponse($ruleSistema, 422);
+        }
+
         $values = $this->columnsInsert($request);
 
         $resultPapeis = $this->model->create($values);
