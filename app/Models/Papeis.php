@@ -96,14 +96,26 @@ class Papeis extends Model
     
     public function permissoes()
     {
-        return $this->belongsToMany(Permissoes::class, 'PERMISSOES_PAPEIS', 'FK_PAPEIS', 'FK_PERMISSOES')
-                    ->select([
-                                'PERMISSOES.ID as id', 
-                                'PERMISSOES.PERMISSAO as permissao',
-                                'PERMISSOES.DESCRICAO as descricao',
-                                'PERMISSOES.PREFIX as prefix',  
-                                'PERMISSOES.ACTION_PERMISSOES as action_permissoes'
-                            ]);
+        return $this->belongsToMany(Permissoes::class, 'PERMISSOES_PAPEIS', 'FK_PAPEIS', 'FK_PERMISSOES')->select([
+            'PERMISSOES.ID as id', 
+            'PERMISSOES.PERMISSAO as permissao',
+            'PERMISSOES.DESCRICAO as descricao',
+            'PERMISSOES.PREFIX as prefix',  
+            'PERMISSOES.ACTION_PERMISSOES as action_permissoes'
+        ]);
+    }
+
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Sistemas e suas
+     * respectivas tabelas.
+     */
+    public function sistemas()
+    {
+        return $this->belongsTo(Sistemas::class, 'SISTEMA', 'ID')->select([
+            'SISTEMAS.ID as id', 
+            'SISTEMAS.NOME_SISTEMA as nome_sistema',
+            'SISTEMAS.ATIVO as ativo',
+        ]);
     }
 
 

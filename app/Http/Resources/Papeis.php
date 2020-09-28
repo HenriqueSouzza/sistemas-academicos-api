@@ -19,6 +19,7 @@ class Papeis extends JsonResource
             'papel'             => $this->PAPEL,
             'descricao'         => $this->DESCRICAO,
             'permissoes'        => $this->permissoes,
+            'sistemas'          => $this->sistemas,
             'created_at'        => $this->CREATED_AT
         ];
     }
