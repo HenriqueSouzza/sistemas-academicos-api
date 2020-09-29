@@ -11,7 +11,7 @@ class PapeisUsuario extends Model
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
      * Usado no campo deleted_at da tabela 
      */
-    use SoftDeletes;
+    // use SoftDeletes;
 
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
@@ -106,7 +106,7 @@ class PapeisUsuario extends Model
     {   
         switch ($model) {
             case 'Papeis':
-                $query = (Object) CanalDireto\Papeis::whereRaw("ID={$id}");
+                $query = (Object) Papeis::whereRaw("ID={$id}");
                 break;  
             case 'Usuario':
                 $query = (Object) \App\User::whereRaw("id={$id}");

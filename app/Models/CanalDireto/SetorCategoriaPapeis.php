@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PermissoesUsuario extends Model
+class SetorCategoriaPapeis extends Model
 {
     /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
@@ -16,7 +16,7 @@ class PermissoesUsuario extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'PERMISSOES_USUARIOS';
+    protected $table = 'cd.SETOR_CATEGORIA_PAPEIS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -24,12 +24,19 @@ class PermissoesUsuario extends Model
     protected $primaryKey = "ID";
 
     /**
+     * <b>dateFormat</b> dita o formato das datas que serão inseridas no campo data.
+     *
+     */
+    // protected $dateFormat = 'ymd';
+
+    /**
      * <b>fillable</b> Informa quais colunas é permitido a inserção de dados (MassAssignment)
      *  
      */
     protected $fillable = [
-        'FK_USER',
-        'FK_PERMISSOES',
+        'FK_CATEGORIA',
+        'FK_PAPEIS',
+        'FK_SETOR',
     ];
 
     /**
@@ -37,8 +44,9 @@ class PermissoesUsuario extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'FK_USER'               => 'bail|required|integer',
-        'FK_PERMISSOES'         => 'bail|required|integer',
+        'FK_PAPEIS'         => 'bail|required|integer',
+        'FK_SETOR'          => 'bail|required|integer',
+        'FK_CATEGORIA'      => 'bail|required|integer',
     ];
 
     /**
@@ -60,20 +68,21 @@ class PermissoesUsuario extends Model
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      */
-    public $collection = "\App\Http\Resources\PermissoesUsuario::collection";
+    public $collection = "\App\Http\Resources\SetorCategoriaPapeis::collection";
 
     /**
      * <b>resource</b>
      */
-    public $resource = "\App\Http\Resources\PermissoesUsuario";
+    public $resource = "\App\Http\Resources\SetorCategoriaPapeis";
 
     /**
      * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'id_usuario'        => 'FK_USER',
-        'id_permissao'      => 'FK_PERMISSOES',
+        'id_papeis'         => 'FK_PAPEIS',
+        'id_categoria'      => 'FK_CATEGORIA',
+        'id_setor'          => 'FK_SETOR',
     ];
 
     /**
@@ -99,11 +108,14 @@ class PermissoesUsuario extends Model
     public function ruleUnique($id, $model)
     {   
         switch ($model) {
-            case 'Permissoes':
-                $query = (Object) Permissoes::whereRaw("ID={$id}");
+            case 'Papeis':
+                $query = (Object) \app\Models\Papeis::whereRaw("ID={$id}");
                 break;  
-            case 'Usuarios':
-                $query = (Object) \App\User::whereRaw("id={$id}");
+            case 'Categoria':
+                $query = (Object) Categoria::whereRaw("id={$id}");
+                break;   
+            case 'Setor':
+                $query = (Object) Setor::whereRaw("id={$id}");
                 break;   
         }
         

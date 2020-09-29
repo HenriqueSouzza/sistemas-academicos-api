@@ -21,20 +21,22 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
     
     Route::resources([
-        '/canal-direto/ticket'              => 'Api\CanalDireto\TicketController',
-        '/canal-direto/interacao-ticket'    => 'Api\CanalDireto\InteracaoTicketController',
-        '/canal-direto/setor'               => 'Api\CanalDireto\SetorController',
-        '/canal-direto/categoria'           => 'Api\CanalDireto\CategoriaController',
-        '/canal-direto/formularios'         => 'Api\CanalDireto\FormulariosController',
-        '/canal-direto/campos'              => 'Api\CanalDireto\CamposFormsController',
-        '/canal-direto/campos-formularios'  => 'Api\CanalDireto\CamposFormulariosController',
-        '/canal-direto/status-ticket'       => 'Api\CanalDireto\StatusTicketController',
-        '/papeis'                           => 'Api\PapeisController',
-        '/permissoes'                       => 'Api\PermissoesController',
-        // '/papeis-usuario'                   => 'Api\PapeisUsuarioController',
-        // '/permissoes-papeis'                => 'Api\PermissoesPapeisController',
-        // '/permissoes-usuario'               => 'Api\PermissoesUsuarioController',
-        '/sistemas'                         => 'Api\SistemasController',
+        '/canal-direto/ticket'                  => 'Api\CanalDireto\TicketController',
+        '/canal-direto/interacao-ticket'        => 'Api\CanalDireto\InteracaoTicketController',
+        '/canal-direto/setor'                   => 'Api\CanalDireto\SetorController',
+        '/canal-direto/categoria'               => 'Api\CanalDireto\CategoriaController',
+        '/canal-direto/formularios'             => 'Api\CanalDireto\FormulariosController',
+        '/canal-direto/campos'                  => 'Api\CanalDireto\CamposFormsController',
+        '/canal-direto/campos-formularios'      => 'Api\CanalDireto\CamposFormulariosController',
+        '/canal-direto/status-ticket'           => 'Api\CanalDireto\StatusTicketController',
+        '/canal-direto/setor-categoria-papeis'  => 'Api\CanalDireto\SetorCategoriaPapeisController',
+        // '/canal-direto/formulario-papeis'    => 'Api\CanalDireto\FormularioPapeisController',
+        '/papeis'                               => 'Api\PapeisController',
+        '/permissoes'                           => 'Api\PermissoesController',
+        // '/papeis-usuario'                    => 'Api\PapeisUsuarioController',
+        // '/permissoes-papeis'                 => 'Api\PermissoesPapeisController',
+        // '/permissoes-usuario'                => 'Api\PermissoesUsuarioController',
+        '/sistemas'                             => 'Api\SistemasController',
     ]);
 
     Route::get('/permissoes/update/all', 'Api\PermissoesController@updateAllPermissions');

@@ -93,7 +93,9 @@ class PapeisController extends Controller
         
         $request->merge(['id_papeis' => $resultPapeis->ID]);
         
-        //Caso for passado a as permissoes desse papel
+        /**************************************************************
+         **************** CASO FOR PASSADO PERMISSAO ******************
+         **************************************************************/
         $permissao = (array) $request->permissao;
         
         if(count($permissao) > 0){
@@ -117,6 +119,26 @@ class PapeisController extends Controller
 
         }
 
+        /**************************************************************
+         ******************* CASO FOR PASSADO SETOR *******************
+         **************************************************************/
+
+
+        /**************************************************************
+         ************** CASO FOR PASSADO CATEGORIA  *******************
+         **************************************************************/
+
+
+
+
+        /**************************************************************
+        *************** CASO FOR PASSADO FORMULARIO *******************
+        ***************************************************************/
+
+
+
+
+        /**************************** RETURN ***************************/
         $this->model = $papeis; 
         
         return $this->createResponse($this->columnsShow($resultPapeis), 201);
