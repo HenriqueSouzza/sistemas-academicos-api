@@ -122,6 +122,19 @@ class Papeis extends Model
     }
 
     /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Formularios e suas
+     * respectivas tabelas.
+     */
+    public function formulario()
+    {
+        return $this->belongsTo(CanalDireto\Formularios::class, 'FK_FORMULARIO', 'ID')->select([
+            'FORMULARIOS.ID as id', 
+            'FORMULARIOS.NOME as nome',
+            'FORMULARIOS.DESCRICAO as descricao',
+        ]);
+    }
+
+    /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Setor e suas
      * respectivas tabelas.
      */
