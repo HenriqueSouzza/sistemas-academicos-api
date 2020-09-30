@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Papeis;
 use App\Models\PermissoesPapeis;
+use App\Models\CanalDireto\SetorCategoriaPapeis;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
@@ -69,7 +70,7 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis)
+    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis, SetorCategoriaPapeis $setorCategoriaPapeis)
     {   
         //Valida os campos de data
         $validatePapeis = $this->validateInputs($request);
@@ -82,9 +83,17 @@ class PapeisController extends Controller
         //Verifica se já existe o sistema que foi informado
         $ruleSistema = (Object) $this->model->ruleUnique($request->sistema, "Sistema");         
 
+        //Verifica se já existe o sistema que foi informado
+        // $ruleFormulario = (Object) $this->model->ruleUnique($request->sistema, "Formulario");         
+
         if(isset($ruleSistema->error))
         {
             return $this->createResponse($ruleSistema, 422);
+        }
+
+        if(isset($ruleFormulario->error))
+        {
+            return $this->createResponse($ruleFormulario, 422);
         }
 
         $values = $this->columnsInsert($request);
@@ -120,23 +129,37 @@ class PapeisController extends Controller
         }
 
         /**************************************************************
-         ******************* CASO FOR PASSADO SETOR *******************
+         ********** CASO FOR PASSADO SETOR e CATEGORIA ****************
          **************************************************************/
+        $categoria = (array) $request->categoria;
+        $setor = (array) $request->setor;
+        
+        if(count($categoria) > 0 && count($setor) > 0){
+            
+            //Assume model de permissoes Papeis
+            $this->model = $setorCategoriaPapeis;
+            
+            foreach($setor as $key => $value):
+                
+                foreach($categoria as $i => $val):
+                    
+                    $request->merge(['id_setor' => $value]);
+                    $request->merge(['id_categoria' => $val]);
+                    
+                    $validate = $this->validateInputs($request);
 
+                    if(!isset($validate->getData()->response->content->error))
+                    {
+                        $values = $this->columnsInsert($request);
 
-        /**************************************************************
-         ************** CASO FOR PASSADO CATEGORIA  *******************
-         **************************************************************/
+                        $this->model->create($values);
+                    }
 
+                endforeach;
 
+            endforeach;
 
-
-        /**************************************************************
-        *************** CASO FOR PASSADO FORMULARIO *******************
-        ***************************************************************/
-
-
-
+        }
 
         /**************************** RETURN ***************************/
         $this->model = $papeis; 

@@ -31,6 +31,7 @@ class Papeis extends Model
         'PAPEL',
         'DESCRICAO',
         'SISTEMA',
+        'FK_FORMULARIO'
     ];
 
     /**
@@ -38,9 +39,10 @@ class Papeis extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'PAPEL'         => 'bail|required|max:50',
-        'DESCRICAO'     => 'bail|required|max:100',
-        'SISTEMA'       => 'bail|required|integer',
+        'PAPEL'             => 'bail|required|max:50',
+        'DESCRICAO'         => 'bail|required|max:100',
+        'SISTEMA'           => 'bail|required|integer',
+        'FK_FORMULARIO'     => 'bail|required|integer',
     ];
 
     /**
@@ -74,9 +76,10 @@ class Papeis extends Model
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'papel'     => 'PAPEL',
-        'descricao' => 'DESCRICAO',
-        'sistema'   => 'SISTEMA',
+        'papel'         => 'PAPEL',
+        'descricao'     => 'DESCRICAO',
+        'sistema'       => 'SISTEMA',
+        'formulario'    => 'FK_FORMULARIO',
     ];
 
     /**
@@ -135,6 +138,9 @@ class Papeis extends Model
         switch ($model) {
             case 'Sistema':
                 $query = (Object) Sistemas::whereRaw("ID={$id}");
+            break;  
+            case 'Formulario':
+                $query = (Object) CanalDireto\Formularios::whereRaw("ID={$id}");
             break;  
         }
         
