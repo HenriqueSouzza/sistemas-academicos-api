@@ -18,6 +18,7 @@ class CreatePapeisTable extends Migration
             $table->string('PAPEL', 50);
             $table->string('DESCRICAO', 100);
             $table->integer('SISTEMA');
+            $table->integer('FK_FORMULARIO')->nullable();
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');

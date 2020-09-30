@@ -42,7 +42,7 @@ class Papeis extends Model
         'PAPEL'             => 'bail|required|max:50',
         'DESCRICAO'         => 'bail|required|max:100',
         'SISTEMA'           => 'bail|required|integer',
-        'FK_FORMULARIO'     => 'bail|required|integer',
+        'FK_FORMULARIO'     => 'bail|integer',
     ];
 
     /**
