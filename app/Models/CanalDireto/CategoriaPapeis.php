@@ -5,7 +5,7 @@ namespace App\Models\CanalDireto;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SetorCategoriaPapeis extends Model
+class CategoriaPapeis extends Model
 {
     /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
@@ -16,7 +16,7 @@ class SetorCategoriaPapeis extends Model
     /**
      * <b>table</b> Informa qual é a tabela que o modelo irá utilizar
     */
-    protected $table = 'cd.SETOR_CATEGORIA_PAPEIS';
+    protected $table = 'cd.CATEGORIA_PAPEIS';
 
     /**
      * <b>primaryKey</b> Informa qual a é a chave primaria da tabela
@@ -36,7 +36,6 @@ class SetorCategoriaPapeis extends Model
     protected $fillable = [
         'FK_CATEGORIA',
         'FK_PAPEIS',
-        'FK_SETOR',
     ];
 
     /**
@@ -44,9 +43,8 @@ class SetorCategoriaPapeis extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'FK_PAPEIS'         => 'bail|required|integer',
-        'FK_SETOR'          => 'bail|required|integer',
         'FK_CATEGORIA'      => 'bail|required|integer',
+        'FK_PAPEIS'         => 'bail|required|integer',
     ];
 
     /**
@@ -68,12 +66,12 @@ class SetorCategoriaPapeis extends Model
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      */
-    public $collection = "\App\Http\Resources\SetorCategoriaPapeis::collection";
+    public $collection = "\App\Http\Resources\CategoriaPapeis::collection";
 
     /**
      * <b>resource</b>
      */
-    public $resource = "\App\Http\Resources\SetorCategoriaPapeis";
+    public $resource = "\App\Http\Resources\CategoriaPapeis";
 
     /**
      * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
@@ -82,7 +80,6 @@ class SetorCategoriaPapeis extends Model
     public $map = [
         'id_papeis'         => 'FK_PAPEIS',
         'id_categoria'      => 'FK_CATEGORIA',
-        'id_setor'          => 'FK_SETOR',
     ];
 
     /**
@@ -113,9 +110,6 @@ class SetorCategoriaPapeis extends Model
                 break;  
             case 'Categoria':
                 $query = (Object) Categoria::whereRaw("id={$id}");
-                break;   
-            case 'Setor':
-                $query = (Object) Setor::whereRaw("id={$id}");
                 break;   
         }
         

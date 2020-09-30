@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\CanalDireto;
 
-use App\Models\CanalDireto\SetorCategoriaPapeis;
+use App\Models\CanalDireto\CategoriaPapeis;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
 
-class SetorCategoriaPapeisController extends Controller
+class CategoriaPapeisController extends Controller
 {
     /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
@@ -44,7 +44,7 @@ class SetorCategoriaPapeisController extends Controller
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(SetorCategoriaPapeis $model)
+    public function __construct(CategoriaPapeis $model)
     {
         $this->model = $model;
     }
@@ -83,19 +83,12 @@ class SetorCategoriaPapeisController extends Controller
         //Verifica se já existe o Categoria que foi informado
         $ruleCategoria = (Object) $this->model->ruleUnique($request->id_categoria, "Categoria");  
 
-        //Verifica se já existe o Setor que foi informado
-        $ruleSetor = (Object) $this->model->ruleUnique($request->id_setor, "Setor");  
-
         if(isset($rulePapeis->error)):
             return $this->createResponse($rulePapeis, 422);
         endif;
 
         if(isset($ruleCategoria->error)):
             return $this->createResponse($ruleCategoria, 422);
-        endif;
-
-        if (isset($ruleSetor->error)):
-            return $this->createResponse($ruleSetor, 422);
         endif;
 
         return $this->storeTrait($request);

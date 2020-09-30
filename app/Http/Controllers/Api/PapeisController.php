@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Papeis;
 use App\Models\PermissoesPapeis;
-use App\Models\CanalDireto\SetorCategoriaPapeis;
+use App\Models\CanalDireto\CategoriaPapeis;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
@@ -70,7 +70,7 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis, SetorCategoriaPapeis $setorCategoriaPapeis)
+    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis, CategoriaPapeis $categoriaPapeis)
     {   
         //Valida os campos de data
         $validatePapeis = $this->validateInputs($request);
@@ -117,7 +117,10 @@ class PapeisController extends Controller
 
                 $validatePermissoes = $this->validateInputs($request);
 
-                if(!isset($validatePermissoes->getData()->response->content->error))
+                //Verifica se já existe o sistema que foi informado
+                $rulePermissoes = (Object) $this->model->ruleUnique($request->id_permissao, "Permissoes");
+
+                if(!isset($validatePermissoes->getData()->response->content->error) && !isset($rulePermissoes->error))
                 {
                     $values = $this->columnsInsert($request);
 
@@ -129,33 +132,30 @@ class PapeisController extends Controller
         }
 
         /**************************************************************
-         ********** CASO FOR PASSADO SETOR e CATEGORIA ****************
+         ********** CASO FOR PASSADO CATEGORIA ****************
          **************************************************************/
         $categoria = (array) $request->categoria;
-        $setor = (array) $request->setor;
         
-        if(count($categoria) > 0 && count($setor) > 0){
-            
+        if(count($categoria) > 0){
+
             //Assume model de permissoes Papeis
-            $this->model = $setorCategoriaPapeis;
+            $this->model = $categoriaPapeis;
             
-            foreach($setor as $key => $value):
+            foreach($categoria as $key => $value):
+
+                $request->merge(['id_categoria' => $value]);
                 
-                foreach($categoria as $i => $val):
-                    
-                    $request->merge(['id_setor' => $value]);
-                    $request->merge(['id_categoria' => $val]);
-                    
-                    $validate = $this->validateInputs($request);
+                $validate = $this->validateInputs($request);
 
-                    if(!isset($validate->getData()->response->content->error))
-                    {
-                        $values = $this->columnsInsert($request);
+                //Verifica se já existe o sistema que foi informado
+                $ruleCategoria = (Object) $this->model->ruleUnique($request->id_categoria, "Categoria");         
 
-                        $this->model->create($values);
-                    }
+                if(!isset($validate->getData()->response->content->error) && !isset($ruleCategoria->error))
+                {
+                    $values = $this->columnsInsert($request);
 
-                endforeach;
+                    $this->model->create($values);
+                }
 
             endforeach;
 

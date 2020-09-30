@@ -121,6 +121,27 @@ class Papeis extends Model
         ]);
     }
 
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Setor e suas
+     * respectivas tabelas.
+     */
+    public function categoria()
+    {
+        return $this->belongsToMany(CanalDireto\Categoria::class, 'cd.CATEGORIA_PAPEIS', 'FK_PAPEIS', 'FK_CATEGORIA')
+        ->join('cd.SETOR', 'SETOR.ID', '=', 'CATEGORIA.ID_SETOR')
+        ->select([
+            'CATEGORIA.ID as id', 
+            'SETOR.ID as id_setor',
+            'SETOR.DESCRICAO as setor',
+            'SETOR.ATIVO as ativo',
+            'CATEGORIA.DESCRICAO as descricao',
+            'CATEGORIA.PERMITE_ABERTURA_TICKET as permite_abertura_ticket',
+            'CATEGORIA.PERMITE_INTERACAO as permite_interacao',
+            'CATEGORIA.PERMITE_N_TICKETS_ABERTOS as permite_n_tickets_abertos',
+            'CATEGORIA.ATIVO as ativo'
+        ]);
+    }
+
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////// REGRAS DE NEGOCIO ///////////////////////////

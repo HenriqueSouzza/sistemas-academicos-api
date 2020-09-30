@@ -61,7 +61,7 @@ class Categoria extends Model
      * <b>hidden</b> Atributo responsável em esconder colunas que não deverão ser retornadas em uma requisição
      */
     protected $hidden  = [
-
+        'pivot'
     ];
 
     /**

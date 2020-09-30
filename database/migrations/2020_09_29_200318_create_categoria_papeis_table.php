@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSetorCategoriaPapeisTable extends Migration
+class CreateCategoriaPapeisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateSetorCategoriaPapeisTable extends Migration
      */
     public function up()
     {
-        Schema::create('cd.SETOR_CATEGORIA_PAPEIS', function (Blueprint $table) {
+        Schema::create('cd.CATEGORIA_PAPEIS', function (Blueprint $table) {
             $table->increments('ID');
             $table->integer('FK_PAPEIS');
-            $table->integer('FK_SETOR');
             $table->integer('FK_CATEGORIA');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
@@ -31,6 +30,6 @@ class CreateSetorCategoriaPapeisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cd.SETOR_CATEGORIA_PAPEIS');
+        Schema::dropIfExists('cd.CATEGORIA_PAPEIS');
     }
 }
