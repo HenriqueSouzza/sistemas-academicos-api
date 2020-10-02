@@ -182,7 +182,7 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function update(Request $request, $id, PermissoesPapeis $permissoesPapeis, Papeis $papeis)
+    public function update(Request $request, $id, PermissoesPapeis $permissoesPapeis, Papeis $papeis, CategoriaPapeis $categoriaPapeis)
     {
         $result = $this->model->findOrFail($id);
 
@@ -218,7 +218,10 @@ class PapeisController extends Controller
 
         $result->update($values);
 
-        //Caso for passado a as permissoes desse papel
+        /**************************************************************
+         ********** CASO FOR PASSADO PERMISSAO ****************
+         **************************************************************/
+
         $permissao = (array) $request->permissao;
 
         if(count($permissao) > 0){
@@ -234,8 +237,11 @@ class PapeisController extends Controller
                 $request->merge(['id_papeis' => $id]);
                 
                 $validatePermissoes = $this->validateInputs($request);
+
+                //Verifica se já existe o sistema que foi informado
+                $rulePermission = (Object) $this->model->ruleUnique($request->id_permissao, "Permissoes"); 
                 
-                if(!isset($validatePermissoes->getData()->response->content->error))
+                if(!isset($validatePermissoes->getData()->response->content->error) && !isset($rulePermission->error))
                 {
                     $values = $this->columnsInsert($request);
 
@@ -246,6 +252,40 @@ class PapeisController extends Controller
 
         }
 
+        /**************************************************************
+         ********** CASO FOR PASSADO CATEGORIA ****************
+         **************************************************************/
+        $categoria = (array) $request->categoria;
+        
+        if(count($categoria) > 0){
+
+            //Assume model de permissoes Papeis
+            $this->model = $categoriaPapeis;
+
+            $this->model->where('FK_PAPEIS', $id)->delete();
+            
+            foreach($categoria as $key => $value):
+
+                $request->merge(['id_categoria' => $value]);
+                $request->merge(['id_papeis' => $id]);
+                
+                $validate = $this->validateInputs($request);
+
+                //Verifica se já existe o sistema que foi informado
+                $ruleCategoria = (Object) $this->model->ruleUnique($request->id_categoria, "Categoria");         
+
+                if(!isset($validate->getData()->response->content->error) && !isset($ruleCategoria->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        /**************************** RETURN ***************************/
         $this->model = $papeis; 
         
         return $this->createResponse($this->columnsShow($result), 200);

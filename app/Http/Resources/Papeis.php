@@ -17,11 +17,9 @@ class Papeis extends JsonResource
         $array = [];
 
         foreach($this->categoria as $key => $value):
-            $array['setor'] = [
-                'id_setor'  => $value['id_setor'],
-                'setor'     => $value['setor'],
-            ];
-            $array['categoria'][$key] = [
+            $array[$value['id_setor']]['id_setor'] = $value['id_setor'];
+            $array[$value['id_setor']]['setor'] = $value['setor'];
+            $array[$value['id_setor']]['categoria'][] = [
                 'id'                        => $value['id'],
                 'descricao'                 => $value['descricao'],
                 'permite_abertura_ticket'   => $value['permite_abertura_ticket'],
