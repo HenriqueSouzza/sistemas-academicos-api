@@ -22,6 +22,7 @@ class User extends JsonResource
             'provider_id'    => $this->provider_id,
             'email_verified' => $this->email_verified_at,
             'papeis'         => $this->papeis,
+            'permissoes'     => $this->permissoes,
             'created_at'     => $this->created_at,
         ];
     }

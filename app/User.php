@@ -134,6 +134,21 @@ class User extends Authenticatable
         ]);
     }
 
+    /**
+     * <b>roles</b> Metodo responsável por realizar o relacionamento de muitos para muitos entre as tabelas de users, PAPEIS e PERMISSOES
+     * Sendo o primeiro parametro a model e o segundo a tabela
+     */
+    public function permissoes()
+    {
+        return $this->belongsToMany(Models\Permissoes::class, 'PERMISSOES_USUARIOS', 'FK_USER', 'FK_PERMISSOES')
+        ->select([
+            'PERMISSOES.ID as id', 
+            'PERMISSOES.DESCRICAO as descricao', 
+            'PERMISSOES.PERMISSAO as permissao', 
+            'PERMISSOES.PREFIX as prefix', 
+        ]);
+    }
+
     /****************************************************************
     ************************* ACL METHODS *************************** 
     *****************************************************************
