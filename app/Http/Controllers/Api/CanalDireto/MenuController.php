@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api\CanalDireto;
 
-use App\Models\CanalDireto\Setor;
-
-use App\Http\Controllers\Controller;
+use App\Models\CanalDireto\Menu;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ApiControllerTrait;
 
 
-class SetorController extends Controller
+class MenuController extends Controller
 {
      /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
@@ -48,7 +47,7 @@ class SetorController extends Controller
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Setor $model)
+    public function __construct(Menu $model)
     {
         $this->model = $model;
     }
@@ -103,6 +102,4 @@ class SetorController extends Controller
     {
         return $this->destroyTrait($id);
     }
-    
-
 }

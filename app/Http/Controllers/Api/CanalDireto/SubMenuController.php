@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api\CanalDireto;
 
-use App\Models\CanalDireto\Setor;
-
-use App\Http\Controllers\Controller;
+use App\Models\CanalDireto\SubMenu;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ApiControllerTrait;
 
-
-class SetorController extends Controller
+class SubMenuController extends Controller
 {
-     /**
+    /**
      * <b>use ApiControllerTrait</b> Usa a trait e sobreescreve os seus nomes e sua visibilidade, para a classe
      * que esta utilizando a mesma. Sendo assim temos um método index neste classe e um na ApiControllerTrait. 
      * Para não causar conflito é alterado o seu nome exemplo: index as protected indexTrait;
@@ -28,13 +26,14 @@ class SetorController extends Controller
         destroy as protected destroyTrait;
     }
 
-     /**
+    /**
      * <b>model</b> Atributo responsável em guardar informações a respeito de qual model a controller ira utilizar. 
      * Por causa do D.I (injeção de dependencia feita) o mesmo armazena um objeto da classe que ira ser utilizada.
      * OBS: Este atributo é utilizado na ApiControllerTrait, para diferenciar qual classe esta utilizando os seus recursos
      */
 
     protected $model;
+    
 
     /**
      * <b>relationships</b> Atributo responsável em guardar informações sobre relacionamentos especificados na models
@@ -43,15 +42,15 @@ class SetorController extends Controller
      * Possa utilizar o mesmo em seu método with() presente na consulta do metodo index
      */
     protected $relationships = [];
-
+    
     /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-    public function __construct(Setor $model)
+    public function __construct(SubMenu $model)
     {
         $this->model = $model;
-    }
+    }    
 
     /**
      * Display a listing of the resource.
@@ -61,8 +60,8 @@ class SetorController extends Controller
     public function index(Request $request)
     {
         return $this->indexTrait($request);
-    } 
-    
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -70,9 +69,25 @@ class SetorController extends Controller
      */
     public function store(Request $request)
     {
+        //Valida os inputs passado, o método validateInputs vem da trait (ApiControllerTrait)
+        $validate = $this->validateInputs($request);
+
+        if(isset($validate->getData()->response->content->error))
+        {
+            return $validate;
+        }
+
+        //Verifica se já existe o papel que foi informado
+        $ruleUnique = (Object) $this->model->ruleUnique($request->menu, 'Menu');
+        
+        if(isset($ruleUnique->error))
+        {
+            return $this->createResponse($ruleUnique, 422);
+        }
+
         return $this->storeTrait($request);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -81,8 +96,8 @@ class SetorController extends Controller
     public function show($id)
     {
         return $this->showTrait($id);
-    }   
-    
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -91,8 +106,8 @@ class SetorController extends Controller
     public function update(Request $request, $id)
     {
         return $this->updateTrait($request, $id);
-    } 
-    
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -103,6 +118,4 @@ class SetorController extends Controller
     {
         return $this->destroyTrait($id);
     }
-    
-
 }
