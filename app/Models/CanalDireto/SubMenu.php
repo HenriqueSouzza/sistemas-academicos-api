@@ -98,6 +98,22 @@ class SubMenu extends Model
         return $this->primaryKey;
     }   
 
+
+    /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as Menu e SubMenu e suas
+     * respectivas tabelas.
+     */
+    public function menu()
+    {
+        return $this->hasMany(Menu::class, 'ID', 'ID_MENU')
+        ->select([
+            'MENUS.ID as id', 
+            'MENUS.NOME as nome',
+            'MENUS.LINK as link',
+            'MENUS.ICON as icon',
+        ]);
+    }
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////// REGRAS DE NEGOCIO ////////////////////////////
     ///////////////////////////////////////////////////////////////////
