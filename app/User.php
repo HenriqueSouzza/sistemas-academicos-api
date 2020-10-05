@@ -101,6 +101,7 @@ class User extends Authenticatable
     public $map = [
        'id'             => 'id',
        'name'           => 'name',
+       'email'          => 'email',
        'password'       => 'password',
        'provider'       => 'provider',
        'provider_id'    => 'provider_id',
@@ -125,7 +126,12 @@ class User extends Authenticatable
      */
     public function papeis()
     {
-        return $this->belongsToMany(Papeis::class, 'PAPEIS_USUARIOS', 'FK_USER', 'FK_PAPEIS');
+        return $this->belongsToMany(Models\Papeis::class, 'PAPEIS_USUARIOS', 'FK_USER', 'FK_PAPEIS')
+        ->select([
+            'PAPEIS.ID as id', 
+            'PAPEIS.PAPEL as papel',
+            'PAPEIS.DESCRICAO as descricao',
+        ]);
     }
 
     /****************************************************************

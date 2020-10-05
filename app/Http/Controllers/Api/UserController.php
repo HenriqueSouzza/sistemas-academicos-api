@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\User;
 
 use App\Models\Lyceum;
+use App\Models\PermissoesUsuario;
+use App\Models\PapeisUsuario;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
@@ -104,9 +106,115 @@ class UserController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, PermissoesUsuario $permissoesUsuario, PapeisUsuario $papeisUsuario, User $user)
     {
-        return $this->updateTrait($request, $id);
+        $result = $this->model->findOrFail($id);
+
+        //Método vindo da trait de api 
+        $values = $this->columnsInsert($request);
+
+        $arrayRole = array();
+        
+        foreach($values as $key => $val):
+
+            if(in_array($key, array_keys($this->model->rules))):
+                $arrayRole[$key] = $this->model->rules[$key];
+            endif;
+            
+        endforeach;
+
+        if(count($arrayRole) > 0):
+            
+            $validate = validator($values, $arrayRole, $this->model->messages);
+
+        else:
+
+            $validate = validator($values, $this->model->rules, $this->model->messages);
+
+        endif;
+
+        if ($validate->fails()) {
+            $errors['messages'] = $this->columnsShow($validate->errors());
+            $errors['error']    = true;
+
+            return $this->createResponse($errors, 422);
+        }
+
+        $result->update($values);
+
+        /**************************************************************
+         ********** CASO FOR PASSADO PERMISSAO ****************
+         **************************************************************/
+
+        $permissao = (array) $request->permissao;
+
+        if(count($permissao) > 0){
+            
+            //Assume model de permissoes Papeis
+            $this->model = $permissoesUsuario;
+            
+            $this->model->where('FK_USER', $result->id)->delete();
+            
+            foreach($permissao as $key => $value ):
+                
+                $request->merge(['id_permissao' => $value]);
+                $request->merge(['id_usuario' => $result->id]);
+                
+                $validatePermissoes = $this->validateInputs($request);
+
+                //Verifica se já existe a permissao que foi informado
+                $rulePermission = (Object) $this->model->ruleUnique($request->id_permissao, "Permissoes"); 
+                $ruleUsuario = (Object) $this->model->ruleUnique($request->id_usuario, "Usuarios"); 
+
+                if(!isset($validatePermissoes->getData()->response->content->error) && !isset($rulePermission->error) && !isset($ruleUsuario->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        /**************************************************************
+         ********** CASO FOR PASSADO PAPEIS ****************
+         **************************************************************/
+
+        $papel = (array) $request->papel;
+
+        if(count($papel) > 0){
+            
+            //Assume model de PapeisUsuario
+            $this->model = $papeisUsuario;
+            
+            $this->model->where('FK_USER', $result->id)->delete();
+
+            foreach($papel as $key => $value ):
+                
+                $request->merge(['id_papeis' => $value]);
+                $request->merge(['id_usuario' => $result->id]);
+                
+                $validatePapeis = $this->validateInputs($request);
+                
+                //Verifica se já existe o papel que foi informado
+                $rulePapel = (Object) $this->model->ruleUnique($request->id_papeis, "Papeis"); 
+                $ruleUsuario = (Object) $this->model->ruleUnique($request->id_usuario, "Usuarios"); 
+
+                if(!isset($validatePapeis->getData()->response->content->error) && !isset($rulePapel->error) && !isset($ruleUsuario->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        $this->model = $user;
+
+        return $this->createResponse($this->columnsShow($result), 200);
     }
 
     /**

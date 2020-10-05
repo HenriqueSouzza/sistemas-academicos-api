@@ -104,17 +104,20 @@ class PapeisUsuario extends Model
     */
     public function ruleUnique($id, $model)
     {   
+        $count = [];
         switch ($model) {
             case 'Papeis':
                 $query = (Object) Papeis::whereRaw("ID={$id}");
+
+                $count = $query->get()->count();
                 break;  
             case 'Usuario':
                 $query = (Object) \App\User::whereRaw("id={$id}");
+
+                $count = $query->get()->count();
                 break;   
         }
         
-        $count = $query->get()->count();
-
         if($count < 1)
         {
             $error['message'] = $model . " não Cadastrado (a).";

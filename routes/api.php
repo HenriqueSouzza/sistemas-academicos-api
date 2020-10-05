@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
         '/canal-direto/campos-formularios'      => 'Api\CanalDireto\CamposFormulariosController',
         '/canal-direto/status-ticket'           => 'Api\CanalDireto\StatusTicketController',
         '/canal-direto/categoria-papeis'        => 'Api\CanalDireto\CategoriaPapeisController',
+        '/usuarios'                             => 'Api\UserController',
         // '/canal-direto/formulario-papeis'    => 'Api\CanalDireto\FormularioPapeisController',
         '/papeis'                               => 'Api\PapeisController',
         '/permissoes'                           => 'Api\PermissoesController',

@@ -21,10 +21,8 @@ class User extends JsonResource
             'provider'       => $this->provider,
             'provider_id'    => $this->provider_id,
             'email_verified' => $this->email_verified_at,
+            'papeis'         => $this->papeis,
             'created_at'     => $this->created_at,
-            'updated_at'     => $this->updated_at,
-            'deleted_at'     => $this->deleted_at,
-            // 'user'           => new UserResource($this->user)
         ];
     }
 }
