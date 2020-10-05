@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Papeis;
 use App\Models\PermissoesPapeis;
 use App\Models\CanalDireto\CategoriaPapeis;
+use App\Models\CanalDireto\PapeisMenu;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\ApiControllerTrait;
@@ -70,7 +71,7 @@ class PapeisController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis, CategoriaPapeis $categoriaPapeis)
+    public function store(Request $request, PermissoesPapeis $PermissoesPapeis, Papeis $papeis, CategoriaPapeis $categoriaPapeis,  PapeisMenu $papeisMenu)
     {   
         //Valida os campos de data
         $validatePapeis = $this->validateInputs($request);
@@ -84,7 +85,7 @@ class PapeisController extends Controller
         $ruleSistema = (Object) $this->model->ruleUnique($request->sistema, "Sistema");         
 
         //Verifica se já existe o formulario que foi informado
-        // $ruleFormulario = (Object) $this->model->ruleUnique($request->sistema, "Formulario");         
+        $ruleFormulario = (Object) $this->model->ruleUnique($request->formulario, "Formulario");         
 
         if(isset($ruleSistema->error))
         {
@@ -151,6 +152,37 @@ class PapeisController extends Controller
                 $ruleCategoria = (Object) $this->model->ruleUnique($request->id_categoria, "Categoria");         
 
                 if(!isset($validate->getData()->response->content->error) && !isset($ruleCategoria->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        /**************************************************************
+         ****************** CASO FOR PASSADO MENU ********************
+         **************************************************************/
+        $submenu = (array) $request->submenu;
+        
+        if(count($submenu) > 0){
+
+            //Assume model de permissoes Papeis
+            $this->model = $papeisMenu;
+            
+            foreach($submenu as $key => $value):
+
+                $request->merge(['id_submenu' => $value]);
+                
+                $validate = $this->validateInputs($request);
+
+                //Verifica se já existe o Papel que foi informado
+                $rulePapel = (Object) $this->model->ruleUnique($request->id_papeis, "Papeis");         
+                $ruleSubMenu = (Object) $this->model->ruleUnique($request->id_submenu, "SubMenu");         
+                
+                if(!isset($validate->getData()->response->content->error) && !isset($rulePapel->error) && !isset($ruleSubMenu->error))
                 {
                     $values = $this->columnsInsert($request);
 

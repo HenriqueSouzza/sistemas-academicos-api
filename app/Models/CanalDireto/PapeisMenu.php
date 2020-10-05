@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PapeisUsuario extends Model
+class PapeisMenu extends Model
 {
-    /**
+   /**
      * <b>SoftDeletes</b> Recurso utilizado para fazer deleção de registro lógico "sem excluir"
      * Usado no campo deleted_at da tabela 
      */
@@ -34,7 +34,7 @@ class PapeisUsuario extends Model
      *  
      */
     protected $fillable = [
-        'FK_USER',
+        'FK_SUBMENU',
         'FK_PAPEIS',
     ];
 
@@ -43,7 +43,7 @@ class PapeisUsuario extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'FK_USER'           => 'bail|required|integer',
+        'FK_SUBMENU'        => 'bail|required|integer',
         'FK_PAPEIS'         => 'bail|required|integer',
     ];
 
@@ -66,19 +66,19 @@ class PapeisUsuario extends Model
      * O mesmo é utilizado em forma de facade.
      * OBS: Responsável em retornar uma coleção com os alias(apelido) atribuidos para cada coluna. 
      */
-    public $collection = "\App\Http\Resources\PapeisUsuario::collection";
+    public $collection = "\App\Http\Resources\PapeisMenu::collection";
 
     /**
      * <b>resource</b>
      */
-    public $resource = "\App\Http\Resources\PapeisUsuario";
+    public $resource = "\App\Http\Resources\PapeisMenu";
 
     /**
      * <b>map</b> Atributo responsável em atribuir um alias(Apelido), para a colunas do banco de dados
      * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
      */
     public $map = [
-        'id_usuario'        => 'FK_USER',
+        'id_submenu'        => 'FK_SUBMENU',
         'id_papeis'         => 'FK_PAPEIS',
     ];
 
@@ -107,13 +107,11 @@ class PapeisUsuario extends Model
         $count = [];
         switch ($model) {
             case 'Papeis':
-                $query = (Object) Papeis::whereRaw("ID={$id}");
-
+                $query = (Object) \app\Models\Papeis::whereRaw("ID={$id}");
                 $count = $query->get()->count();
                 break;  
-            case 'Usuario':
-                $query = (Object) \App\User::whereRaw("id={$id}");
-
+            case 'SubMenu':
+                $query = (Object) SubMenu::whereRaw("id={$id}");
                 $count = $query->get()->count();
                 break;   
         }
@@ -127,5 +125,4 @@ class PapeisUsuario extends Model
         }
 
     }
-
 }

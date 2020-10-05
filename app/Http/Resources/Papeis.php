@@ -14,17 +14,33 @@ class Papeis extends JsonResource
      */
     public function toArray($request)
     {
-        $array = [];
-
+        $arraySetorCategoria = [];
+        
         foreach($this->categoria as $key => $value):
-            $array[$value['id_setor']]['id_setor'] = $value['id_setor'];
-            $array[$value['id_setor']]['setor'] = $value['setor'];
-            $array[$value['id_setor']]['categoria'][] = [
+            $arraySetorCategoria[$value['id_setor']]['id_setor'] = $value['id_setor'];
+            $arraySetorCategoria[$value['id_setor']]['setor'] = $value['setor'];
+            $arraySetorCategoria[$value['id_setor']]['categoria'][] = [
                 'id'                        => $value['id'],
                 'descricao'                 => $value['descricao'],
                 'permite_abertura_ticket'   => $value['permite_abertura_ticket'],
                 'permite_interacao'         => $value['permite_interacao'],
                 'permite_n_tickets_abertos' => $value['permite_n_tickets_abertos']
+            ];
+        endforeach;
+
+        $arrayMenus = [];
+
+        foreach($this->menus as $key => $value):
+            $arrayMenus[$value['id']]['id'] = $value['id'];
+            $arrayMenus[$value['id']]['nome'] = $value['nome'];
+            $arrayMenus[$value['id']]['icon'] = $value['icon'];
+            $arrayMenus[$value['id']]['link'] = $value['link'];
+            $arrayMenus[$value['id']]['submenus'][] = [
+                'id'                => $value['id_submenu'],
+                'nome'              => $value['nome_submenu'],
+                'link_submenu'      => $value['link_submenu'],
+                'icon'              => $value['icon_submenu'],
+                'ativo'             => $value['ativo_submenu']
             ];
         endforeach;
 
@@ -34,8 +50,9 @@ class Papeis extends JsonResource
             'descricao'         => $this->DESCRICAO,
             'permissoes'        => $this->permissoes,
             'sistemas'          => $this->sistemas,
-            'formulario'        => $this->formulario ? $this->formulario : [],
-            'setorCategoria'    => $array,
+            'formulario'        => $this->formulario,
+            'setorCategoria'    => $arraySetorCategoria,
+            'menus'             => $arrayMenus,
             'created_at'        => $this->CREATED_AT
         ];
     }

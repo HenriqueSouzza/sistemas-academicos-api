@@ -135,6 +135,27 @@ class Papeis extends Model
     }
 
     /**
+     * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Menus e suas
+     * respectivas tabelas.
+     */
+    public function menus()
+    {
+        return $this->belongsToMany(CanalDireto\SubMenu::class, 'cd.PAPEIS_MENUS', 'FK_PAPEIS', 'FK_SUBMENU')
+        ->join('cd.MENUS', 'MENUS.ID', '=', 'SUB_MENUS.ID_MENU')
+        ->select([
+            'MENUS.ID as id', 
+            'MENUS.NOME as nome', 
+            'MENUS.LINK as link', 
+            'MENUS.ICON as icon', 
+            'SUB_MENUS.ID as id_submenu', 
+            'SUB_MENUS.NOME as nome_submenu',
+            'SUB_MENUS.LINK as link_submenu',
+            'SUB_MENUS.ICON as icon_submenu',
+            'SUB_MENUS.ATIVO as ativo_submenu',
+        ]);
+    }
+
+    /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as de Papeis e Setor e suas
      * respectivas tabelas.
      */
