@@ -8,6 +8,8 @@ use App\Models\Lyceum;
 use App\Models\PermissoesUsuario;
 use App\Models\PapeisUsuario;
 
+use Adldap\AdldapInterface;
+
 use App\Http\Controllers\Traits\ApiControllerTrait;
 use App\Http\Controllers\Controller;
 
@@ -51,6 +53,11 @@ class UserController extends Controller
     protected $lyceum;
 
     /**
+     * Atributo responsável por realizar os serviços de LDAP
+     */
+    protected $ldap;
+
+    /**
      * <b>relationships</b> Atributo responsável em guardar informações sobre relacionamentos especificados na models
      * Estes relacionamentos são utilizados entre as models e suas respectivas tabelas.
      * OBS: Caso tenha algum relacionamento na model o mesmo deverá ser descrito o nome do mesmo aqui, para que a ApiControllerTrait
@@ -62,10 +69,11 @@ class UserController extends Controller
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-     public function __construct(User $model, Lyceum $lyceum)
+     public function __construct(User $model, Lyceum $lyceum, AdldapInterface $ldap)
      {
         $this->model = $model;
         $this->lyceum = $lyceum;
+        $this->ldap = $ldap;
      }
      /**
      * Display a listing of the resource.
@@ -262,7 +270,10 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {   
+
         if(!Auth::attempt(['email' => $request->login, 'password' => $request->password])){
+
+            $result = [];
 
             switch ($request->tipo) {
 
@@ -275,31 +286,33 @@ class UserController extends Controller
                     break;
 
                 default:
-                    $result = [];
+                    if(Auth::guard('custom')->attempt(['email' => $request->login, 'password' => $request->password])){
+                        $result[0] = (object) [ 'NOME' => $request->login, 'LOGIN' => $request->login, 'SENHA' => $request->password ];
+                    }
                     break;
             }
-
+            
             if(count($result) < 1){
                 $errors['messages'] = 'Usuário ou senha invalidos !';
                 $errors['error']    = true;
                 
                 return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
             }
-
+            
             //verifica se já existe na base, se existir ele atualiza a senha de acordo com o lyceum
             $isExist = $this->model->where('email', $result[0]->LOGIN)->first();
 
-            if($isExist->id){
+            if(isset($isExist->id)){
                 $this->model->where('email', $result[0]->LOGIN)->update(['password' => Hash::make($result[0]->SENHA)]);
             }else{
                 $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
             }
-
+            
             Auth::attempt(['email' => $result[0]->LOGIN, 'password' => $result[0]->SENHA]);
         }
 
         $user = Auth::user(); //ou  $user = $request->user();
-        
+
         //cria o token com base em uma string randomica, o time e o id do usuário
         $token = $user->createToken(Str::random(10) . time() . $user->id);
 

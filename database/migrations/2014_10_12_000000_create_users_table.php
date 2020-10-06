@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('provider')->default('IESB');
             $table->string('provider_id')->nullable();
+            $table->string('objectguid')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
