@@ -234,8 +234,7 @@ class UserController extends Controller
     public function become(Request $request)
     {   
         $allowedUsers = [
-            'caio.oliveira@cnec.br',
-            'henrique.souza@cnec.br'
+            'henrique.souza@iesb.br'
         ];
 
         $user = User::where('email', $request->email)->first();        
@@ -287,7 +286,14 @@ class UserController extends Controller
                 return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
             }
 
-            $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
+            //verifica se já existe na base, se existir ele atualiza a senha de acordo com o lyceum
+            $isExist = $this->model->where('email', $result[0]->LOGIN)->first();
+
+            if($isExist->id){
+                $this->model->where('email', $result[0]->LOGIN)->update(['password' => Hash::make($result[0]->SENHA)]);
+            }else{
+                $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
+            }
 
             Auth::attempt(['email' => $result[0]->LOGIN, 'password' => $result[0]->SENHA]);
         }
