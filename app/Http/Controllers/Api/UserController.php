@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 
 use App\Models\Lyceum;
+use App\Models\Papeis;
 use App\Models\PermissoesUsuario;
 use App\Models\PapeisUsuario;
 
@@ -377,9 +378,32 @@ class UserController extends Controller
      *  @param Request $request
      *  @return JSON user object
      */
-    public function user(Request $request)
+    public function user(Request $request, Papeis $papeis)
     {
-        return $this->createResponse($request->user());
+        $user = $request->user();
+
+        $id = [];
+
+        if(count($user->papeis) > 0):
+        
+            foreach($user->papeis as $key => $value):
+                $id[] = $value->id;
+            endforeach;
+
+        endif;
+
+        $class = $user->papeis[0]->collection;
+
+        $query = $papeis->where('ID', $id)->get();
+
+        $result = $class($query)->collect();
+
+        unset($user->papeis, $user->updated_at, $user->deleted_at);
+
+        $data['user'] = $user;
+        $data['papeis'] = $result;
+
+        return $this->createResponse($data);
     }
 
 

@@ -396,7 +396,7 @@ trait ApiControllerTrait
 
         $response = (Object) $result;
         $statusCode = is_null ($statusCode) ? app('Illuminate\Http\Response')->status() : $statusCode;
-
+        
         if (property_exists($response, 'collects')) {
 
 
@@ -423,10 +423,13 @@ trait ApiControllerTrait
                 'to'             => $response->lastItem(),
                 'total'          => $response->total(),
             ];
+            
         } else {
+
             $data['content']    = $response;
             $data['status']     = $statusCode; //alterar a atribuição de status
             $data['code']       = 01; //alterar a atribuição de code
+
         }
 
         //retorna os dados em formato json
