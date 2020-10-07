@@ -19,6 +19,7 @@ class Menu extends JsonResource
             'nome'          => $this->NOME,
             'link'          => $this->LINK,
             'icon'          => $this->ICON,
+            'ordem'         => $this->ORDEM,
             'submenu'       => $this->submenu,
             'created_at'    => $this->CREATED_AT
         ];

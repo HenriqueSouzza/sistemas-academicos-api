@@ -20,6 +20,7 @@ class SubMenu extends JsonResource
             'nome'          => $this->NOME,
             'link'          => $this->LINK,
             'icon'          => $this->ICON,
+            'ordem'         => $this->ORDEM,
             'ativo'         => $this->ATIVO,
             'created_at'    => $this->CREATED_AT,
         ];

@@ -19,6 +19,7 @@ class CreateSubMenusTable extends Migration
             $table->string('NOME');
             $table->string('LINK');
             $table->string('ICON')->nullable();
+            $table->integer('ORDEM')->nullable();
             $table->integer('ATIVO');
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');

@@ -400,10 +400,9 @@ class UserController extends Controller
 
         unset($user->papeis, $user->updated_at, $user->deleted_at);
 
-        $data['user'] = $user;
-        $data['papeis'] = $result;
+        $user->papeis = $result;
 
-        return $this->createResponse($data);
+        return $this->createResponse($user);
     }
 
 

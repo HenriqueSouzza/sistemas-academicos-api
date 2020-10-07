@@ -18,6 +18,7 @@ class CreateMenusTable extends Migration
             $table->string('NOME');
             $table->string('LINK');
             $table->string('ICON')->nullable();
+            $table->integer('ORDEM')->nullable();
             $table->dateTime('CREATED_AT');
             $table->dateTime('UPDATED_AT');
             $table->softDeletes('DELETED_AT');

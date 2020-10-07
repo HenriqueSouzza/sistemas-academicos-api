@@ -31,6 +31,7 @@ class Menu extends Model
         'NOME',
         'LINK',
         'ICON',
+        'ORDEM',
     ];    
 
     /**
@@ -41,6 +42,7 @@ class Menu extends Model
         'NOME'          => 'bail|required|max:20',
         'LINK'          => 'bail|required|max:150',
         'ICON'          => 'bail|max:20',
+        'ORDEM'         => 'bail|required|integer',
     ];   
     
     /**
@@ -81,6 +83,7 @@ class Menu extends Model
         'nome'          => 'NOME',
         'link'          => 'LINK',
         'icon'          => 'ICON',
+        'ordem'         => 'ORDEM',
     ];    
 
     /**
@@ -104,6 +107,7 @@ class Menu extends Model
             'SUB_MENUS.NOME as nome',
             'SUB_MENUS.LINK as link',
             'SUB_MENUS.ICON as icon',
+            'SUB_MENUS.ORDEM as ordem',
             'SUB_MENUS.ATIVO as ativo',
         ]);
     }
