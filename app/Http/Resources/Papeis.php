@@ -35,12 +35,14 @@ class Papeis extends JsonResource
             $arrayMenus[$value['id']]['nome'] = $value['nome'];
             $arrayMenus[$value['id']]['icon'] = $value['icon'];
             $arrayMenus[$value['id']]['link'] = $value['link'];
+            $arrayMenus[$value['id']]['ordem'] = $value['ordem'];
             $arrayMenus[$value['id']]['submenus'][] = [
                 'id'                => $value['id_submenu'],
                 'nome'              => $value['nome_submenu'],
                 'link_submenu'      => $value['link_submenu'],
                 'icon'              => $value['icon_submenu'],
-                'ativo'             => $value['ativo_submenu']
+                'ativo'             => $value['ativo_submenu'],
+                'ordem'             => $value['ordem_submenu']
             ];
         endforeach;
 

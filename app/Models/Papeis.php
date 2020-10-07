@@ -147,11 +147,13 @@ class Papeis extends Model
             'MENUS.NOME as nome', 
             'MENUS.LINK as link', 
             'MENUS.ICON as icon', 
+            'MENUS.ORDEM as ordem', 
             'SUB_MENUS.ID as id_submenu', 
             'SUB_MENUS.NOME as nome_submenu',
             'SUB_MENUS.LINK as link_submenu',
             'SUB_MENUS.ICON as icon_submenu',
             'SUB_MENUS.ATIVO as ativo_submenu',
+            'SUB_MENUS.ORDEM as ordem_submenu',
         ]);
     }
 

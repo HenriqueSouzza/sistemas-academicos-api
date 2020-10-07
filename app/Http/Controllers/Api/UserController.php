@@ -196,9 +196,9 @@ class UserController extends Controller
             
             //Assume model de PapeisUsuario
             $this->model = $papeisUsuario;
-            
-            $this->model->where('FK_USER', $result->id)->delete();
 
+            $this->model->where('FK_USER', $result->id)->delete();
+            
             foreach($papel as $key => $value ):
                 
                 $request->merge(['id_papeis' => $value]);
@@ -366,7 +366,6 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-      
         $request->user()->token()->revoke();
         
         return $this->createResponse('Logout efetuado com sucesso!');
@@ -382,25 +381,26 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        $id = [];
+        if(isset($user->papeis) && count($user->papeis) > 0):
 
-        if(count($user->papeis) > 0):
-        
+            $id = [];
+            
             foreach($user->papeis as $key => $value):
                 $id[] = $value->id;
             endforeach;
 
+            
+            $class = $user->papeis[0]->collection;
+            
+            $query = $papeis->whereIn('ID', $id)->get();
+            
+            $result = $class($query)->collect();
+    
+            unset($user->papeis, $user->updated_at, $user->deleted_at);
+    
+            $user->papeis = $result;
+
         endif;
-
-        $class = $user->papeis[0]->collection;
-
-        $query = $papeis->where('ID', $id)->get();
-
-        $result = $class($query)->collect();
-
-        unset($user->papeis, $user->updated_at, $user->deleted_at);
-
-        $user->papeis = $result;
 
         return $this->createResponse($user);
     }
