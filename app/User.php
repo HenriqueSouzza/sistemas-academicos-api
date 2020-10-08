@@ -26,6 +26,7 @@ class User extends Authenticatable
      *  
      */
     protected $fillable = [
+        'id', 
         'name', 
         'email', 
         'password',
@@ -99,7 +100,6 @@ class User extends Authenticatable
     * OBS: este atributo é utilizado no Metodo store e update da ApiControllerTrait
     */
     public $map = [
-       'id'             => 'id',
        'name'           => 'name',
        'email'          => 'email',
        'password'       => 'password',
