@@ -247,7 +247,7 @@ class UserController extends Controller
         ];
 
         $user = User::where('email', $request->email)->first();        
-        if(!$user || !in_array($request->user()->email,$allowedUsers)) 
+        if(!$user || !in_array($request->user()->email, $allowedUsers)) 
         {
           return $this->createResponse('Email não encontrado ou usuário nao permitido para se tornar outro!', 500);
         }
@@ -271,46 +271,54 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {   
+        $result = [];
 
-        if(!Auth::attempt(['email' => $request->login, 'password' => $request->password])){
+        //É obrigatório passar o tipo do usuário
+        if(!isset($request->tipo)):
+            $errors['messages'] = 'Informe o tipo do usuário !';
+            $errors['error']    = true;
+            return $this->createResponse($errors, 422);
+        endif;
 
-            $result = [];
+        //Aluno
+        if($request->tipo == '1'):
+            $result = $this->lyceum->loginAluno($request->login, $request->password);
+        endif;
 
-            switch ($request->tipo) {
+        //Docente
+        if($request->tipo == '2'):
+            $result = $this->lyceum->loginDocente($request->login, $request->password);
+        endif;
 
-                case 'aluno':
-                    $result = $this->lyceum->loginAluno($request->login, $request->password);
-                    break;
-    
-                case 'docente':
-                    $result = $this->lyceum->loginDocente($request->login, $request->password);
-                    break;
-
-                default:
-                    if(Auth::guard('custom')->attempt(['email' => $request->login, 'password' => $request->password])){
-                        $result[0] = (object) [ 'NOME' => $request->login, 'LOGIN' => $request->login, 'SENHA' => $request->password ];
-                    }
-                    break;
+        //Funcionário
+        if($request->tipo == '3'):
+            if(Auth::guard('custom')->attempt(['email' => $request->login, 'password' => $request->password])){
+                $result[0] = (object) [ 'NOME' => $request->login, 'LOGIN' => $request->login, 'SENHA' => $request->password ];
             }
-            
-            if(count($result) < 1){
-                $errors['messages'] = 'Usuário ou senha invalidos !';
-                $errors['error']    = true;
-                
-                return $this->createResponse(["error" => 'Usuário ou senha invalidos !'], 401);
-            }
-            
-            //verifica se já existe na base, se existir ele atualiza a senha de acordo com o lyceum
-            $isExist = $this->model->where('email', $result[0]->LOGIN)->first();
+        endif;
 
-            if(isset($isExist->id)){
-                $this->model->where('email', $result[0]->LOGIN)->update(['password' => Hash::make($result[0]->SENHA)]);
-            }else{
-                $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
-            }
-            
-            Auth::attempt(['email' => $result[0]->LOGIN, 'password' => $result[0]->SENHA]);
-        }
+        //Se a variavel $result retornar um array vazio, é porque não foi encontrado nenhum usuário na base do Lyceum 
+        if(count($result) < 1):
+            $errors['messages'] = 'Usuário ou senha invalidos !';
+            $errors['error']    = true;
+            return $this->createResponse($errors, 401);
+        endif;
+
+        //verifica se já existe na base, se existir ele atualiza a senha de acordo com o lyceum
+        $isExist = $this->model->where('email', $result[0]->LOGIN)->first();
+
+        //Se o usuário existir na base, ele atualiza a senha, se não, ele cria o novo usuário na base
+        if($isExist):
+            $this->model->where('email', $result[0]->LOGIN)->update(['password' => Hash::make($result[0]->SENHA)]);
+        else:
+            $this->model->create(['name' => $result[0]->NOME,'email' => $result[0]->LOGIN, 'password' => Hash::make($result[0]->SENHA)]);
+        endif;
+
+        if(!Auth::attempt(['email' => $result[0]->LOGIN, 'password' => $result[0]->SENHA])):
+            $errors['messages'] = 'Erro ao logar ! Tente novamente, caso persista entre em contato com suporte !';
+            $errors['error']    = true;
+            return $this->createResponse($errors, 401);
+        endif;
 
         $user = Auth::user(); //ou  $user = $request->user();
 
