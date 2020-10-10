@@ -390,13 +390,12 @@ class UserController extends Controller
         $user = $request->user();
 
         if(isset($user->papeis) && count($user->papeis) > 0):
-
+            
             $id = [];
             
             foreach($user->papeis as $key => $value):
-                $id[] = $value->id;
+                $id[] = $value->ID;
             endforeach;
-
             
             $class = $user->papeis[0]->collection;
             
