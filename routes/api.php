@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
+Route::group(['middleware' => ['auth:api', 'check.user.acl']], function() {
     
     Route::resources([
         '/canal-direto/ticket'                  => 'Api\CanalDireto\TicketController',
@@ -33,12 +33,8 @@ Route::group(['middleware' => ['auth:api'/*, 'check.user.acl'*/]], function() {
         '/canal-direto/menus'                   => 'Api\CanalDireto\MenuController',
         '/canal-direto/submenus'                => 'Api\CanalDireto\SubMenuController',
         '/usuarios'                             => 'Api\UserController',
-        // '/canal-direto/formulario-papeis'    => 'Api\CanalDireto\FormularioPapeisController',
         '/papeis'                               => 'Api\PapeisController',
         '/permissoes'                           => 'Api\PermissoesController',
-        // '/papeis-usuario'                    => 'Api\PapeisUsuarioController',
-        // '/permissoes-papeis'                 => 'Api\PermissoesPapeisController',
-        // '/permissoes-usuario'                => 'Api\PermissoesUsuarioController',
         '/sistemas'                             => 'Api\SistemasController',
     ]);
 

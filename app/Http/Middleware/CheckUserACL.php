@@ -18,9 +18,9 @@ class CheckUserACL
     {
 
         //obtem a controller e a ação 
-        $ability = explode('\\', $request->route()->getActionName())[4];
+        $ability = explode('\\', $request->route()->getActionName());
         
-        if(! Gate::forUser($request->user())->allows($ability))
+        if(! Gate::forUser($request->user())->allows(end($ability)))
         {
             return response()->json(['response' => 'Unauthorized'])->setStatusCode(403);
         }

@@ -128,7 +128,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Models\Papeis::class, 'PAPEIS_USUARIOS', 'FK_USER', 'FK_PAPEIS')
         ->select([
-            'PAPEIS.ID as id', 
+            'PAPEIS.ID as ID', 
             'PAPEIS.PAPEL as papel',
             'PAPEIS.DESCRICAO as descricao',
         ]);
@@ -162,7 +162,6 @@ class User extends Authenticatable
     public function hasPermission(Permissoes $permission)
     {
         return $this->hasAnyRoles($permission->papeis); 
-        
     }
     
     /**
@@ -178,6 +177,6 @@ class User extends Authenticatable
             return !! $papeis->intersect($this->papeis)->count();
         }
 
-        return $this->papeis->contains('PAPEL', $papeis);
+        return $this->papeis->contains('papel', $papeis);
     }
 }

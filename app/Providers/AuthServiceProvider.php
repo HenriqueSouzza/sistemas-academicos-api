@@ -55,14 +55,14 @@ class AuthServiceProvider extends ServiceProvider
         if(count($count))
         {
             $permissions = Permissoes::with('Papeis')->get();
-
+            
             foreach( $permissions as $permission )
             {
                 Gate::define($permission->PERMISSAO, function(User $user) use ($permission){
-                    return $user->hasPermission($permission) ;
+                    return $user->hasPermission($permission);
                 });
             }
-            
+
             /**
             * <b> Gate::before</b> Caso o usuário tenha papel de administrador irá passar direto sem passar pelo gate acima
             */
@@ -70,7 +70,6 @@ class AuthServiceProvider extends ServiceProvider
             {
                 if( $user->hasAnyRoles('Administrador') )
                 {
-                    //if( $user->hasAnyRoles('1') )
                     return true;
                 }
             });

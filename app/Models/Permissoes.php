@@ -97,4 +97,5 @@ class Permissoes extends Model
     {
         return $this->belongsToMany(Papeis::class, 'PERMISSOES_PAPEIS', 'FK_PERMISSOES', 'FK_PAPEIS');
     }
+
 }
