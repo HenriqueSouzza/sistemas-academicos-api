@@ -389,6 +389,50 @@ class UserController extends Controller
     {
         $user = $request->user();
 
+        $this->lyceum->setUsuario($user->email);
+        $result = $this->lyceum->buscarDadosUsuario();
+
+        $user->papelPrincipal = [];
+
+        if(count($result) > 0){
+
+            if($result[0]->aluno){
+                
+                $class = $user->papeis[0]->collection;
+                
+                $query = $papeis->whereIn('Papel', ['aluno'])->get();
+                
+                $result = $class($query)->collect();
+
+                $user->papelPrincipal = $result;
+
+            }else{
+
+                $class = $user->papeis[0]->collection;
+                
+                $query = $papeis->whereIn('Papel', ['docente'])->get();
+                
+                $result = $class($query)->collect();
+
+                $user->papelPrincipal = $result;
+
+            }
+        }
+        
+        $funcionario = \Adldap\Laravel\Facades\Adldap::search()->users()->find($user->email);
+
+        if($funcionario->exists){
+            
+            $class = $user->papeis[0]->collection;
+                
+            $query = $papeis->whereIn('Papel', ['funcionário'])->get();
+            
+            $result = $class($query)->collect();
+
+            $user->papelPrincipal = $result;
+            
+        }
+
         if(isset($user->papeis) && count($user->papeis) > 0):
             
             $id = [];

@@ -10,6 +10,16 @@ class Lyceum extends Model
 {
     protected $connection = 'lyceum';
 
+    protected $usuario = '';
+
+    public function setUsuario($usuario){
+        $this->usuario = $usuario;
+    }
+
+    public function getUsuario(){
+        return $this->usuario;
+    }
+
     /**
      * 
      */
@@ -39,5 +49,42 @@ class Lyceum extends Model
                 AND     DBO.DECRYPT(P.SENHA_DOL) = :senha";
 
         return DB::connection($this->connection)->select($sql, ['docente' => $docente, 'senha' => $senha]);
+    }
+
+    public function buscarDadosUsuario(){
+
+        $result = [];
+
+        $sql = "SELECT	A.ALUNO         aluno
+                        ,A.NOME_COMPL   nome_compl
+                        ,A.TURNO        turno
+                        ,A.SERIE        serie
+                        ,A.SIT_ALUNO    sit_aluno
+                        ,C.CURSO        curso
+                        ,C.NOME			nome_curso
+                        ,C.MODALIDADE	modalidade	
+                        ,C.TIPO         tipo
+                        ,TC.DESCRICAO	tipo_descricao
+                FROM	LY_ALUNO	A
+                JOIN	LY_CURSO	C		ON C.CURSO = A.CURSO
+                JOIN	LY_TIPO_CURSO TC	ON TC.TIPO = C.TIPO
+                WHERE	ALUNO = :usuario";
+
+        $result = DB::connection($this->connection)->select($sql, ['usuario' => $this->usuario]);
+
+        if(count($result) > 0){
+            return $result;
+        }
+
+        $sql = "SELECT	NUM_FUNC        num_func
+                        ,NOME_COMPL     nome_compl
+                        ,E_MAIL         e_mail
+                FROM	LY_DOCENTE
+                WHERE   NUM_FUNC = :usuario";
+
+        $result = DB::connection($this->connection)->select($sql, ['usuario' => (int) $this->usuario]);
+
+        return $result;
+
     }
 }

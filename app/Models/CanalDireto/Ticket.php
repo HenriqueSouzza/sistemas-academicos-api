@@ -51,7 +51,7 @@ class Ticket extends Model
      * OBS: A validação bail é responsável em parar a validação caso um das que tenha sido especificada falhe
      */
     public $rules = [
-        'USUARIO'               => 'bail|required|max:20',
+        'USUARIO'               => 'bail|required|max:100',
         'ID_PAPEL_USUARIO'      => 'bail|required|integer',
         'ID_SETOR'              => 'bail|required|integer',
         'ID_CATEGORIA'          => 'bail|required|integer',
@@ -169,6 +169,40 @@ class Ticket extends Model
     public function interacaoTicket()
     {
         return $this->hasMany(interacaoTicket::class, 'ID_TICKET', 'ID');
+    }
+
+    /**
+     * 
+     */
+    public function dadosUsuario(){
+
+        $lyceum = new \App\Models\Lyceum;
+
+        $lyceum->setUsuario($this->USUARIO);
+        $result = $lyceum->buscarDadosUsuario();
+
+        if(count($result) > 0){
+            if($result[0]->aluno){
+                $result[0]->papel = 'aluno';
+            }else{
+                $result[0]->papel = 'docente';
+            }
+            return $result;
+        }
+
+        //se for funcionario
+        $array = [];
+
+        if(\Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)){
+            $array[0]['papel'] = 'funcionário';
+            $array[0]['nome'] = \Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)->name[0];
+            $array[0]['ramal'] = \Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)->telephonenumber[0];
+            $array[0]['filial'] = \Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)->physicaldeliveryofficename[0];
+            $array[0]['setor'] = \Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)->department[0];
+            $array[0]['email'] = \Adldap\Laravel\Facades\Adldap::search()->users()->find($this->USUARIO)->mail[0];
+        }
+
+        return $array;
     }
 
     ///////////////////////////////////////////////////////////////////
