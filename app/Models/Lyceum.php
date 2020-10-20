@@ -48,7 +48,7 @@ class Lyceum extends Model
                 WHERE   NUM_FUNC = :docente
                 AND     DBO.DECRYPT(SENHA_DOL) = :senha";
 
-        return DB::connection($this->connection)->select($sql, ['docente' => $docente, 'senha' => $senha]);
+        return DB::connection($this->connection)->select($sql, ['docente' => (int) $docente, 'senha' => $senha]);
     }
 
     public function buscarDadosUsuario(){
