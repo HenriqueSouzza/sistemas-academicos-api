@@ -17,7 +17,7 @@ class CreateInteracaoTicketsTable extends Migration
             $table->increments('ID');
             $table->integer('ID_TICKET');
             $table->integer('ID_PAPEL_USUARIO');
-            $table->string('USUARIO_INTERACAO', 20);
+            $table->string('USUARIO_INTERACAO', 250);
             $table->text('MENSAGEM');
             $table->integer('PUBLICO')->nullable();
             $table->integer('PRIVADO')->nullable();
