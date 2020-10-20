@@ -182,11 +182,15 @@ class Ticket extends Model
         $result = $lyceum->buscarDadosUsuario();
 
         if(count($result) > 0){
-            if($result[0]->aluno){
+
+            if(isset($result[0]->aluno)){
                 $result[0]->papel = 'aluno';
+                
             }else{
                 $result[0]->papel = 'docente';
+
             }
+
             return $result;
         }
 

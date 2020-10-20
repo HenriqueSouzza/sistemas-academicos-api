@@ -269,7 +269,7 @@ class UserController extends Controller
     /**
      * Responsável pelo processo de login da API
      */
-    public function login(Request $request)
+    public function login(Request $request, Papeis $papeis, PapeisUsuario $papeisUsuario, User $userModel)
     {   
         $result = [];
 
@@ -280,14 +280,18 @@ class UserController extends Controller
             return $this->createResponse($errors, 422);
         endif;
 
+        $papel = '';
+
         //Aluno
         if($request->tipo == '1'):
             $result = $this->lyceum->loginAluno($request->login, $request->password);
+            $papel = 'aluno';
         endif;
-
+        
         //Docente
         if($request->tipo == '2'):
             $result = $this->lyceum->loginDocente($request->login, $request->password);
+            $papel = 'docente';
         endif;
 
         //Funcionário
@@ -295,6 +299,7 @@ class UserController extends Controller
             if(Auth::guard('custom')->attempt(['email' => $request->login, 'password' => $request->password])){
                 $result[0] = (object) [ 'NOME' => $request->login, 'LOGIN' => $request->login, 'SENHA' => $request->password ];
             }
+            $papel = 'funcionário';
         endif;
 
         //Se a variavel $result retornar um array vazio, é porque não foi encontrado nenhum usuário na base do Lyceum 
@@ -307,7 +312,10 @@ class UserController extends Controller
         //verifica se já existe na base, se existir ele atualiza a senha de acordo com o lyceum
         $isExist = $this->model->where('email', $result[0]->LOGIN)->first();
 
-        //Se o usuário existir na base, ele atualiza a senha, se não, ele cria o novo usuário na base
+        /**
+         * Se o usuário não existir na base ele cria,
+         * Agora o usuário existir na base ele só irá atualizar a senha
+         */
         if($isExist):
             $this->model->where('email', $result[0]->LOGIN)->update(['password' => Hash::make($result[0]->SENHA)]);
         else:
@@ -321,6 +329,36 @@ class UserController extends Controller
         endif;
 
         $user = Auth::user(); //ou  $user = $request->user();
+
+        /**
+         * Verificar se o usuário já possuí um papel
+         * Se não possuir papel ele adiciona um papel pra ele de acordo com o perfil selecionado no formúlario
+         * no Ato do login (aluno, docente ou funcionário)
+         */
+        if(count($user->papeis) < 1){
+            $papelUser = $papeis->where(['Papel' => $papel])->get();
+            
+            $request->merge(['id_papeis' => $papelUser[0]->ID]);
+            $request->merge(['id_usuario' => $user->id]);
+
+            $this->model = $papeisUsuario;
+
+            $validatePapeis = $this->validateInputs($request);
+                
+            //Verifica se já existe o papel que foi informado
+            $rulePapel = (Object) $this->model->ruleUnique($request->id_papeis, "Papeis"); 
+            $ruleUsuario = (Object) $this->model->ruleUnique($request->id_usuario, "Usuarios"); 
+            
+            if(!isset($validatePapeis->getData()->response->content->error) && !isset($rulePapel->error) && !isset($ruleUsuario->error))
+            {
+                $values = $this->columnsInsert($request);
+
+                $this->model->create($values);
+            }
+
+        }
+
+        $this->model = $userModel;
 
         //cria o token com base em uma string randomica, o time e o id do usuário
         $token = $user->createToken(Str::random(10) . time() . $user->id);
@@ -396,7 +434,7 @@ class UserController extends Controller
 
         if(count($result) > 0){
 
-            if($result[0]->aluno){
+            if(isset($result[0]->aluno)){
                 
                 $class = $user->papeis[0]->collection;
                 
@@ -411,7 +449,7 @@ class UserController extends Controller
                 $class = $user->papeis[0]->collection;
                 
                 $query = $papeis->whereIn('Papel', ['docente'])->get();
-                
+
                 $result = $class($query)->collect();
 
                 $user->papelPrincipal = $result;
@@ -421,7 +459,7 @@ class UserController extends Controller
         
         $funcionario = \Adldap\Laravel\Facades\Adldap::search()->users()->find($user->email);
 
-        if($funcionario->exists){
+        if(isset($funcionario->exists)){
             
             $class = $user->papeis[0]->collection;
                 

@@ -42,11 +42,11 @@ class Lyceum extends Model
     public function loginDocente($docente, $senha) {
 
         $sql = "SELECT  NUM_FUNC                    LOGIN,
-                        DBO.DECRYPT(P.SENHA_DOL)    SENHA, 
+                        DBO.DECRYPT(SENHA_DOL)      SENHA, 
                         NOME_COMPL                  NOME
                 FROM    LY_DOCENTE     
                 WHERE   NUM_FUNC = :docente
-                AND     DBO.DECRYPT(P.SENHA_DOL) = :senha";
+                AND     DBO.DECRYPT(SENHA_DOL) = :senha";
 
         return DB::connection($this->connection)->select($sql, ['docente' => $docente, 'senha' => $senha]);
     }
@@ -56,7 +56,7 @@ class Lyceum extends Model
         $result = [];
 
         $sql = "SELECT	A.ALUNO         aluno
-                        ,A.NOME_COMPL   nome_compl
+                        ,A.NOME_COMPL   nome
                         ,A.TURNO        turno
                         ,A.SERIE        serie
                         ,A.SIT_ALUNO    sit_aluno
@@ -77,7 +77,7 @@ class Lyceum extends Model
         }
 
         $sql = "SELECT	NUM_FUNC        num_func
-                        ,NOME_COMPL     nome_compl
+                        ,NOME_COMPL     nome
                         ,E_MAIL         e_mail
                 FROM	LY_DOCENTE
                 WHERE   NUM_FUNC = :usuario";
