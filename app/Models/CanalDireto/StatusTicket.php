@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\canalDireto;
+namespace App\Models\CanalDireto;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
