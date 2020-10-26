@@ -1,0 +1,139 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sistemas Acadêmicos API",
+        "description": "Api do sistemas acadêmicos",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "gerencia os usuários do sistema",
+                "description": "Returns list of projects",
+                "operationId": "getProjectsList",
+                "parameters": [
+                    {
+                        "name": "listar",
+                        "in": "path",
+                        "description": "",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "gerencia os usuários do sistema",
+                "description": "Logar para acessar as endpoints",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "login": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "tipo": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "login": "email@email.com",
+                                    "password": "12345",
+                                    "tipo": "1 (aluno) ou 2 (docente) ou 3 (funcionario)"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "usuário logado",
+                "description": "retorna o usuário logado de acordo com o token passado",
+                "operationId": "getProjectsList",
+                "responses": {
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "type": "http",
+                "description": "<p>\n                                            Para acessar a API, um token JWT válido deve ser passado em todas as consultas em\n                                            o cabeçalho 'Authorization'. \n                                        </p>\n                                        <p>\n                                            Um token JWT válido é gerado pela API e retornado como resposta a uma chamada\n                                            aos parâmetros de preenchimento de rota /login corretamente. \n                                        </p>\n                                        <p>\n                                            A seguinte sintaxe deve ser usada no cabeçalho 'Authorization': \n                                        </p>\n                                        <p>\n                                            Bearer xxxxxx.yyyyyyy.zzzzzz\n                                        </p>\n                                        ",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

@@ -66,19 +66,40 @@ class UserController extends Controller
      */
      protected $relationships = [];
      
-     /**
+    /**
      * <b>__construct</b> Método construtor da classe. O mesmo é utilizado, para que atribuir qual a model será utilizada.
      * Essa informação atribuida aqui, fica disponivel na ApiControllerTrait e é utilizada pelos seus metodos.
      */
-     public function __construct(User $model, Lyceum $lyceum, AdldapInterface $ldap)
-     {
+    public function __construct(User $model, Lyceum $lyceum, AdldapInterface $ldap)
+    {
         $this->model = $model;
         $this->lyceum = $lyceum;
         $this->ldap = $ldap;
-     }
-     /**
-     * Display a listing of the resource.
-     *
+    }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/usuarios",
+     *      operationId="getProjectsList",
+     *      tags={"Usuários"},
+     *      summary="gerencia os usuários do sistema",
+     *      description="Returns list of projects",
+     *      @OA\Parameter(
+     *          name="listar",
+     *          description="",
+     *          required=false,
+     *          in="path",
+     *      ),
+     *      @OA\Response(response=404, description="Not found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=200, description="Success"),
+     *      @OA\Response(response=500, description="Internal Server Error"),
+     *      security={
+     *         {"bearer": {}}
+     *      }
+     *  )
+     * Returns list of users
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -267,6 +288,37 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\POST(
+     *      path="/api/login",
+     *      tags={"Login"},
+     *      summary="gerencia os usuários do sistema",
+     *      description="Logar para acessar as endpoints",
+     *      @OA\RequestBody(
+     *            @OA\MediaType(
+     *                mediaType="application/json",
+     *                @OA\Schema(
+     *                    @OA\Property(
+     *                        property="login",
+     *                        type="string"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="password",
+     *                        type="string"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="tipo",
+     *                        type="integer"
+     *                    ),
+     *                    example={"login": "email@email.com", "password": "12345", "tipo": "1 (aluno) ou 2 (docente) ou 3 (funcionario)"}
+     *                )
+     *            )
+     *       ),
+     * 
+     *       @OA\Response(response=404, description="Not found"),
+     *       @OA\Response(response=422, description="Unprocessable Entity"),
+     *       @OA\Response(response=200, description="Success"),
+     *       @OA\Response(response=500, description="Internal Server Error"),
+     *  )
      * Responsável pelo processo de login da API
      */
     public function login(Request $request, Papeis $papeis, PapeisUsuario $papeisUsuario, User $userModel)
@@ -419,6 +471,21 @@ class UserController extends Controller
 
 
     /**
+     * @OA\Get(
+     *      path="/api/user",
+     *      operationId="getProjectsList",
+     *      tags={"Login"},
+     *      summary="usuário logado",
+     *      description="retorna o usuário logado de acordo com o token passado",
+     *      @OA\Response(response=404, description="Not found"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=200, description="Success"),
+     *      @OA\Response(response=500, description="Internal Server Error"),
+     *      security={
+     *        {"bearer": {}}
+     *      }
+     *  )
+     * 
      * <b>user</b> Método responsável por informar os dados do usuário logado
      *  @param Request $request
      *  @return JSON user object
