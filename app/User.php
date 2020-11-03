@@ -149,6 +149,27 @@ class User extends Authenticatable
         ]);
     }
 
+    /**
+     * <b>roles</b> Metodo responsável por realizar o relacionamento de muitos para muitos entre as tabelas de users e Categoria
+     * Sendo o primeiro parametro a model e o segundo a tabela
+     */
+    public function categoriaAtendente()
+    {
+        return $this->belongsToMany(Models\CanalDireto\Categoria::class, 'cd.USER_CATEGORIA_ATENDENTES', 'FK_USER', 'FK_CATEGORIA')
+        ->join('cd.SETOR', 'SETOR.ID', '=', 'CATEGORIA.ID_SETOR')
+        ->select([
+            'CATEGORIA.ID as id', 
+            'SETOR.ID as id_setor',
+            'SETOR.DESCRICAO as setor',
+            'SETOR.ATIVO as ativo',
+            'CATEGORIA.DESCRICAO as descricao',
+            'CATEGORIA.PERMITE_ABERTURA_TICKET as permite_abertura_ticket',
+            'CATEGORIA.PERMITE_INTERACAO as permite_interacao',
+            'CATEGORIA.PERMITE_N_TICKETS_ABERTOS as permite_n_tickets_abertos',
+            'CATEGORIA.ATIVO as ativo'
+        ]);
+    }
+
     /****************************************************************
     ************************* ACL METHODS *************************** 
     *****************************************************************

@@ -8,6 +8,7 @@ use App\Models\Lyceum;
 use App\Models\Papeis;
 use App\Models\PermissoesUsuario;
 use App\Models\PapeisUsuario;
+use App\Models\CanalDireto\UserCategoriaAtendente;
 
 use Adldap\AdldapInterface;
 
@@ -136,7 +137,7 @@ class UserController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, PermissoesUsuario $permissoesUsuario, PapeisUsuario $papeisUsuario, User $user)
+    public function update(Request $request, $id, PermissoesUsuario $permissoesUsuario, PapeisUsuario $papeisUsuario, UserCategoriaAtendente $UserCategoriaAtendente, User $user)
     {
         $result = $this->model->findOrFail($id);
 
@@ -171,6 +172,42 @@ class UserController extends Controller
         }
 
         $result->update($values);
+
+        /**************************************************************
+         ****** CASO FOR PASSADO AS CATEGORIAS PARA ATENDIMENTO *******
+         **************************************************************/
+        $categoriaAtendimento = (array) $request->categoriaAtendimento;
+
+        if(count($categoriaAtendimento) > 0){
+            
+            //Assume model de User Categoria Atendente
+            $this->model = $UserCategoriaAtendente;
+            
+            $this->model->where('FK_USER', $result->id)->delete();
+            
+            foreach($categoriaAtendimento as $key => $value ):
+                
+                $request->merge(['id_categoria' => $value]);
+                $request->merge(['id_usuario' => $result->id]);
+                
+                $validatePermissoes = $this->validateInputs($request);
+
+                //Verifica se já existe a permissao que foi informado
+                $ruleCategoria = (Object) $this->model->ruleUnique($request->id_categoria, "Categoria"); 
+                $ruleUsuario = (Object) $this->model->ruleUnique($request->id_usuario, "Usuarios"); 
+
+                if(!isset($validatePermissoes->getData()->response->content->error) && !isset($ruleCategoria->error) && !isset($ruleUsuario->error))
+                {
+                    $values = $this->columnsInsert($request);
+
+                    $this->model->create($values);
+                }
+
+            endforeach;
+
+        }
+
+        die();
 
         /**************************************************************
          ********** CASO FOR PASSADO PERMISSAO ****************
