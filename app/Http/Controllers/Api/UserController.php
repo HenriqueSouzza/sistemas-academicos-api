@@ -6,6 +6,7 @@ use App\User;
 
 use App\Models\Lyceum;
 use App\Models\Papeis;
+use App\Models\CanalDireto\Categoria;
 use App\Models\PermissoesUsuario;
 use App\Models\PapeisUsuario;
 use App\Models\CanalDireto\UserCategoriaAtendente;
@@ -525,7 +526,7 @@ class UserController extends Controller
      *  @param Request $request
      *  @return JSON user object
      */
-    public function user(Request $request, Papeis $papeis)
+    public function user(Request $request, Papeis $papeis, Categoria $categoria)
     {
         $user = $request->user();
 
@@ -590,6 +591,27 @@ class UserController extends Controller
             unset($user->papeis, $user->updated_at, $user->deleted_at);
     
             $user->papeis = $result;
+
+        endif;
+
+        
+        if(isset($user->categoriaAtendente) && count($user->categoriaAtendente) > 0):
+            
+            $id = [];
+            
+            foreach($user->categoriaAtendente as $key => $value):
+                $id[] = $value->id;
+            endforeach;
+            
+            $class = $user->categoriaAtendente[0]->collection;
+            
+            $query = $categoria->whereIn('ID', $id)->get();
+            
+            $result = $class($query)->collect();
+            
+            unset($user->categoriaAtendente, $user->updated_at, $user->deleted_at);
+    
+            $user->categoriaAtendente = $result;
 
         endif;
 
