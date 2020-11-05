@@ -31,22 +31,23 @@ class Ticket extends JsonResource
         endforeach;
 
         return [
-            'id'                    => $this->ID,
-            // 'usuario_abertura'      => $this->USUARIO,
-            'usuario_abertura'      => $this->dadosUsuario(),
-            'papel_usuario'         => $this->ID_PAPEL_USUARIO,
-            'setor'                 => $this->SETOR->DESCRICAO,
-            'categoria'             => $this->CATEGORIA->DESCRICAO,
-            'assunto'               => $this->ASSUNTO,
-            'mensagem'              => $this->MENSAGEM,
-            'arquivo'               => $arquivo,
-            'usuario_atendente'     => $this->USUARIO_ATENDENTE,
-            'usuario_fechamento'    => $this->USUARIO_FECHAMENTO,
-            'dt_fechamento'         => $this->DT_FECHAMENTO,
-            'dt_interacao'          => $dt_interacao,
-            'status'                => ['nome' => $this->status->NOME, 'ordem' => $this->STATUS],
-            'dt_criacao'            => $this->CREATED_AT,
-            'quantidade_ticket'     => $this->getCountTicketStatus()
+            'id'                            => $this->ID,
+            // 'usuario_abertura'           => $this->USUARIO,
+            'usuario_abertura'              => $this->dadosUsuario(),
+            'papel_usuario'                 => $this->ID_PAPEL_USUARIO,
+            'setor'                         => $this->SETOR->DESCRICAO,
+            'categoria'                     => $this->CATEGORIA->DESCRICAO,
+            'assunto'                       => $this->ASSUNTO,
+            'mensagem'                      => $this->MENSAGEM,
+            'arquivo'                       => $arquivo,
+            'usuario_atendente'             => $this->USUARIO_ATENDENTE,
+            'usuario_fechamento'            => $this->USUARIO_FECHAMENTO,
+            'dt_fechamento'                 => $this->DT_FECHAMENTO,
+            'dt_interacao'                  => $dt_interacao,
+            'status'                        => ['nome' => $this->status->NOME, 'ordem' => $this->STATUS],
+            'dt_criacao'                    => $this->CREATED_AT,
+            'quantidade_ticket'             => $this->getCountTicketStatus(),
+            'quantidade_ticket_usuario'     => $this->getCountTicketStatusUsuario()
         ];
 
     }

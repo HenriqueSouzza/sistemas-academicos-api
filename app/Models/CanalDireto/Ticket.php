@@ -138,6 +138,27 @@ class Ticket extends Model
     }
 
     /**
+     * <b>getPrimaryKey</b> Método responsável em retornar a quantidade de tickets por status e usuário.
+     */
+    public function getCountTicketStatusUsuario()
+    {
+        $status = StatusTicket::get();
+
+        $result = [];
+
+        if(count($status) > 0){
+            foreach($status as $key => $value):
+                $result[$key]['ordem'] = (int) $value->ORDEM;
+                $result[$key]['nome'] = $value->NOME;
+                $result[$key]['quantidade']['usuario'] = $this->USUARIO;
+                $result[$key]['quantidade']['count'] = $this->where([['status', $value->ORDEM], ['usuario', $this->USUARIO]])->count();
+            endforeach;
+        }
+
+        return $result;
+    }
+
+    /**
      * <b>papeis</b> Método responsável em definir o relacionamento entre as de Ticket e Papeis e suas
      * respectivas tabelas.
      */
