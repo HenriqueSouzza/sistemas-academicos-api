@@ -128,7 +128,9 @@ class Ticket extends Model
 
         if(count($status) > 0){
             foreach($status as $key => $value):
-                $result[$value->NOME] = $this->where('status', $value->ORDEM)->count();
+                $result[$key]['ordem'] = (int) $value->ORDEM;
+                $result[$key]['nome'] = $value->NOME;
+                $result[$key]['quantidade'] = $this->where('status', $value->ORDEM)->count();
             endforeach;
         }
 
