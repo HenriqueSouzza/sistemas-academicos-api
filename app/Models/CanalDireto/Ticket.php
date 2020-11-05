@@ -142,7 +142,7 @@ class Ticket extends Model
      */
     public function getCountTicketStatusUsuario()
     {
-        $status = StatusTicket::get();
+        $status = StatusTicket::whereNotIn('ordem', [1])->get();
 
         $result = [];
 
@@ -150,8 +150,8 @@ class Ticket extends Model
             foreach($status as $key => $value):
                 $result[$key]['ordem'] = (int) $value->ORDEM;
                 $result[$key]['nome'] = $value->NOME;
-                $result[$key]['quantidade']['usuario'] = $this->USUARIO;
-                $result[$key]['quantidade']['count'] = $this->where([['status', $value->ORDEM], ['usuario', $this->USUARIO]])->count();
+                $result[$key]['quantidade'][$key]['usuario'] = $this->USUARIO;
+                $result[$key]['quantidade'][$key]['count'] = $this->where([['status', $value->ORDEM], ['usuario', $this->USUARIO]])->count();
             endforeach;
         }
 
