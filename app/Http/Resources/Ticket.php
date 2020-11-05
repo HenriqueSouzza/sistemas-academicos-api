@@ -45,7 +45,8 @@ class Ticket extends JsonResource
             'dt_fechamento'         => $this->DT_FECHAMENTO,
             'dt_interacao'          => $dt_interacao,
             'status'                => ['nome' => $this->status->NOME, 'ordem' => $this->STATUS],
-            'dt_criacao'            => $this->CREATED_AT
+            'dt_criacao'            => $this->CREATED_AT,
+            'quantidade_ticket'     => $this->getCountTicketStatus()
         ];
 
     }
