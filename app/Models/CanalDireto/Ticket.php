@@ -151,7 +151,7 @@ class Ticket extends Model
                 $result[$key]['ordem'] = (int) $value->ORDEM;
                 $result[$key]['nome'] = $value->NOME;
                 $result[$key]['quantidade'][$key]['usuario'] = $this->USUARIO;
-                $result[$key]['quantidade'][$key]['count'] = $this->where([['status', $value->ORDEM], ['usuario', $this->USUARIO]])->count();
+                $result[$key]['quantidade'][$key]['count'] = $this->where([['status', $value->ORDEM], ['usuario_atendente', $this->USUARIO]])->count();
             endforeach;
         }
 
