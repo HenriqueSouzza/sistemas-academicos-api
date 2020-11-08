@@ -41,7 +41,7 @@ class Menu extends Model
     public $rules = [
         'NOME'          => 'bail|required|max:20',
         'LINK'          => 'bail|required|max:150',
-        'ICON'          => 'bail|max:20',
+        'ICON'          => 'bail|max:100',
         'ORDEM'         => 'bail|required|integer',
     ];   
     
