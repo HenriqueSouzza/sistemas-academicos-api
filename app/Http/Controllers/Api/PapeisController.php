@@ -84,19 +84,21 @@ class PapeisController extends Controller
         //Verifica se já existe o sistema que foi informado
         $ruleSistema = (Object) $this->model->ruleUnique($request->sistema, "Sistema");         
 
-        //Verifica se já existe o formulario que foi informado
-        $ruleFormulario = (Object) $this->model->ruleUnique($request->formulario, "Formulario");         
-
         if(isset($ruleSistema->error))
         {
             return $this->createResponse($ruleSistema, 422);
         }
 
-        if(isset($ruleFormulario->error))
-        {
-            return $this->createResponse($ruleFormulario, 422);
-        }
+        if($request->formulario){
+            //Verifica se já existe o formulario que foi informado
+            $ruleFormulario = (Object) $this->model->ruleUnique($request->formulario, "Formulario");         
 
+            if(isset($ruleFormulario->error))
+            {
+                return $this->createResponse($ruleFormulario, 422);
+            }
+        }
+            
         $values = $this->columnsInsert($request);
 
         $resultPapeis = $this->model->create($values);
