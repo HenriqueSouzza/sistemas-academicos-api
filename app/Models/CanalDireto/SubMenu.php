@@ -44,7 +44,7 @@ class SubMenu extends Model
         'ID_MENU'       => 'bail|required|integer',
         'NOME'          => 'bail|required|max:20',
         'LINK'          => 'bail|required|max:150',
-        'ICON'          => 'bail|max:20',
+        'ICON'          => 'bail|max:100',
         'ATIVO'         => 'bail|required|boolean',
         'ORDEM'         => 'bail|required|integer',
     ];   
