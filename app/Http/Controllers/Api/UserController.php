@@ -455,8 +455,8 @@ class UserController extends Controller
 
         //cria o response com os dados do token tais como: access_token (token de acesso) expires_at (data e hora de expiração do token)
         $response['access_token'] = $token->accessToken;
-        $response['token_type']   = 'Bearer';
-        $response['expires_at']   = Carbon::parse($token->token->expires_at)->toDateTimeString();
+        // $response['token_type']   = 'Bearer';
+        // $response['expires_at']   = Carbon::parse($token->token->expires_at)->toDateTimeString();
         $response['SigleSignOn']   = env('APP_URL') . '/checkout?key=' . Crypt::encrypt($response);
 
         return $this->createResponse($response);
