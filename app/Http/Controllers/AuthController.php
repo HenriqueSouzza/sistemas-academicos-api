@@ -32,7 +32,7 @@ class AuthController extends Controller
 
             echo "<script> 
                     sessionStorage.setItem('dataLogged', '" . json_encode($data) . "');
-                    window.location.href= 'http://sistemas-academicos.desenv.br/canal-direto'
+                    window.location.href= '". env('APP_URL_FRONTEND') ."'
                 </script>";
         }
     }
