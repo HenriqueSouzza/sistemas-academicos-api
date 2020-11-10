@@ -3,14 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Api\UserController;
 use App\User;
 // use Socialite;
 use Auth;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
 {
+    private $model;
+
+    public function __construct(User $model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * 
+     */
+    public function checkout(Request $request, UserController $userController)
+    {
+        if(isset($request['key'])){
+
+            $data = Crypt::decrypt($request['key']);
+
+            echo "<script> 
+                    sessionStorage.setItem('dataLogged', '" . json_encode($data) . "');
+                    window.location.href= 'http://sistemas-academicos.desenv.br/canal-direto'
+                </script>";
+        }
+    }
+
     /**
      * 
      */

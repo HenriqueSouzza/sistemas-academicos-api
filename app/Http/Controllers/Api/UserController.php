@@ -24,6 +24,8 @@ use Carbon\Carbon;
 
 use Validator;
 
+use Illuminate\Support\Facades\Crypt;
+
 class UserController extends Controller
 {
 
@@ -357,7 +359,7 @@ class UserController extends Controller
      *  )
      * Responsável pelo processo de login da API
      */
-    public function login(Request $request, Papeis $papeis, PapeisUsuario $papeisUsuario, User $userModel)
+    public function login(Request $request, Papeis $papeis, PapeisUsuario $papeisUsuario, User $userModel, Categoria $categoria)
     {   
         $result = [];
 
@@ -455,7 +457,8 @@ class UserController extends Controller
         $response['access_token'] = $token->accessToken;
         $response['token_type']   = 'Bearer';
         $response['expires_at']   = Carbon::parse($token->token->expires_at)->toDateTimeString();
-        
+        $response['SigleSignOn']   = env('APP_URL') . '/checkout?key=' . Crypt::encrypt($response);
+
         return $this->createResponse($response);
     }
 
@@ -617,7 +620,6 @@ class UserController extends Controller
 
         return $this->createResponse($user);
     }
-
 
     /**
      * 

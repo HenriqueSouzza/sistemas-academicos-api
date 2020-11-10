@@ -18,7 +18,8 @@ Route::get('/', function () {
 
 // Auth::routes();
 
-Route::get('/redirect', 'AuthController@redirect');
+Route::get('/checkout', 'AuthController@checkout');
+// Route::get('/redirect', 'AuthController@redirect');
 Route::get('/callback', 'AuthController@callback');
 Route::get('/home', 'HomeController@index')->name('home');
 
