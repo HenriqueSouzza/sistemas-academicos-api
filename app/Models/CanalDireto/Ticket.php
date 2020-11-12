@@ -41,6 +41,7 @@ class Ticket extends Model
         'ASSUNTO',
         'MENSAGEM',
         'USUARIO_ATENDENTE',
+        'CATEGORIA_ATENDIMENTO',
         'USUARIO_FECHAMENTO',
         'DT_FECHAMENTO',
         'STATUS'
@@ -58,6 +59,7 @@ class Ticket extends Model
         'ASSUNTO'               => 'bail|required|max:200',
         'MENSAGEM'              => 'bail|required|max:500',
         'USUARIO_ATENDENTE'     => 'bail|max:50|nullable',
+        'CATEGORIA_ATENDIMENTO' => 'bail|nullable',
         'USUARIO_FECHAMENTO'    => 'bail|max:50|nullable',
         'DT_FECHAMENTO'         => 'bail|date|nullable',
         'STATUS'                => 'bail|required|integer',
@@ -102,6 +104,7 @@ class Ticket extends Model
         'assunto'               => 'ASSUNTO',
         'mensagem'              => 'MENSAGEM',
         'usuario_atendente'     => 'USUARIO_ATENDENTE',
+        'categoria_atendimento' => 'CATEGORIA_ATENDIMENTO',
         'usuario_fechamento'    => 'USUARIO_FECHAMENTO',
         'dt_fechamento'         => 'DT_FECHAMENTO',
         'status'                => 'STATUS',

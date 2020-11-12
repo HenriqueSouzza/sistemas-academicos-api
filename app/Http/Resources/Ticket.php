@@ -41,6 +41,7 @@ class Ticket extends JsonResource
             'mensagem'                      => $this->MENSAGEM,
             'arquivo'                       => $arquivo,
             'usuario_atendente'             => $this->USUARIO_ATENDENTE,
+            'categoria_atendimento'         => $this->CATEGORIA_ATENDIMENTO,
             'usuario_fechamento'            => $this->USUARIO_FECHAMENTO,
             'dt_fechamento'                 => $this->DT_FECHAMENTO,
             'dt_interacao'                  => $dt_interacao,
