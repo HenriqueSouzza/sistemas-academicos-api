@@ -39,14 +39,18 @@ Route::group(['middleware' => ['auth:api', 'check.user.acl']], function() {
     ]);
 
     Route::get('/permissoes/update/all', 'Api\PermissoesController@updateAllPermissions');
-        
+    
 });
+
 
 Route::post('login', 'Api\UserController@login');
 Route::post('register', 'Api\UserController@register');
 // Route::post('callback', 'Api\UserController@callback');
 
 Route::group(['middleware' => 'auth:api'], function() {
+    
+    Route::post('/canal-direto/dashboard', 'Api\CanalDireto\DashboardController@index');
+
     Route::get('logout', 'Api\UserController@logout');
     Route::get('user', 'Api\UserController@user');
 });
