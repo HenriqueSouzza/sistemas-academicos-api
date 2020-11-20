@@ -99,10 +99,12 @@ class DashboardController extends Controller
                 $countUsuario = 1;
             }
 
-            $data['ticketFechadosUsuario'][$value->USUARIO_FECHAMENTO] = [
-                'usuario' => $value->USUARIO_FECHAMENTO,
-                'quantidade' => $countUsuario++
-            ];
+            if($value->USUARIO_FECHAMENTO){
+                $data['ticketFechadosUsuario'][$value->USUARIO_FECHAMENTO] = [
+                    'usuario' => $value->USUARIO_FECHAMENTO,
+                    'quantidade' => $countUsuario++
+                ];
+            }
 
             /****************** TICKETS POR CATEGORIA ******************/
             if(!key_exists($value->ID_CATEGORIA, $data['ticketCategoria'])){
